@@ -25,6 +25,10 @@ MySceneGraph.prototype.onXMLReady=function()
 {
 	console.log("XML Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
+
+	this.components = new Components();
+	this.materials	= [];
+	this.lights		= [];
 	
 	// Here should go the calls for different functions to parse the various blocks
 	var error = this.parseScene(rootElement);
@@ -43,7 +47,7 @@ MySceneGraph.prototype.onXMLReady=function()
 
 
 /*
- * Example of method that parses elements of one block and stores information in a specific data structure
+ * Example of method that parses components of one block and stores information in a specific data structure
  */
 MySceneGraph.prototype.parseScene= function(rootElement) {
 	
@@ -58,33 +62,10 @@ MySceneGraph.prototype.parseScene= function(rootElement) {
 
 	var scene = elems[0];
 
-	// // various examples of different types of access
-	// var globals = elems[0];
-	// this.background = this.reader.getRGBA(globals, 'background');
-	// this.drawmode = this.reader.getItem(globals, 'drawmode', ["fill","line","point"]);
-	// this.cullface = this.reader.getItem(globals, 'cullface', ["back","front","none", "frontandback"]);
-	// this.cullorder = this.reader.getItem(globals, 'cullorder', ["ccw","cw"]);
-    //
-	// console.log("Globals read from file: {background=" + this.background + ", drawmode=" + this.drawmode + ", cullface=" + this.cullface + ", cullorder=" + this.cullorder + "}");
-    //
-	// var tempList=rootElement.getElementsByTagName('list');
-    //
-	// if (tempList == null  || tempList.length==0) {
-	// 	return "list element is missing.";
-	// }
-	//
-	// this.list=[];
-	// // iterate over every element
-	// var nnodes=tempList[0].children.length;
-	// for (var i=0; i< nnodes; i++)
-	// {
-	// 	var e=tempList[0].children[i];
-    //
-	// 	// process each element and store its information
-	// 	this.list[e.id]=e.attributes.getNamedItem("coords").value;
-	// 	console.log("Read list item id "+ e.id+" with value "+this.list[e.id]);
-	// };
+	var id = this.reader.getString(scene, "root");
+	this.components.addComponent(id);
 
+	this.axisLength = this.reader.getFloat(scene, "axis_length");
 };
 	
 /*

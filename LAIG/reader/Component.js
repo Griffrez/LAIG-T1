@@ -1,4 +1,7 @@
-function Component(filename, scene) {
+function Component(id) {
+
+    this.id = id;
+
     this.loadedOk = null;
 
     this.tranformationref = null;
