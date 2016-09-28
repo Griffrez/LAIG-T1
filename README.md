@@ -5,7 +5,7 @@ Trabalho LAIG Parte 1
 
 ###Parser
 
-- [X] Scene
+- [x] Scene
 - [] Views
 - [] Illumination
 - [] Lights
