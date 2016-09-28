@@ -6,16 +6,16 @@ Trabalho LAIG Parte 1
 ###Parser
 
 - [x] Scene
-- [] Views
-- [] Illumination
-- [] Lights
-- [] Textures
-- [] Materials
-- [] Transformation
-- [] Primitives
-- [] Components
+- [ ] Views
+- [ ] Illumination
+- [ ] Lights
+- [ ] Textures
+- [ ] Materials
+- [ ] Transformation
+- [ ] Primitives
+- [ ] Components
 
 ###Engine
 
-- [] Define Primitives
-- [] Everything else
+- [ ] Define Primitives
+- [ ] Everything else
