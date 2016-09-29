@@ -27,8 +27,7 @@ MySceneGraph.prototype.onXMLReady=function()
 	console.log("XML Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
 
-	/*
-	this.components = new Components();
+	this.components = new Elements();
 	this.materials	= [];
 	this.lights		= [];
 	*/
