@@ -4,8 +4,8 @@ function Perspective(id, near, far, angle, from_x, from_y, from_z, to_x, to_y, t
 	this.near = near;
 	this.far = far;
 	this.angle = angle;
-	this.from = new CartesianValues(from_x, from_y, from_z);
-	this.to = new CartesianValues(from_x, from_y, from_z);
+	this.from = new CartesianValues3(from_x, from_y, from_z);
+	this.to = new CartesianValues3(from_x, from_y, from_z);
 }
 
 Perspective.getID = function()

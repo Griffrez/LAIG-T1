@@ -5,7 +5,7 @@ function CartesianValues3(x, y, z)
 	this.z = z;
 }
 
-CartesianValues3.getX = function()
+CartesianValues3.prototype.getX = function()
 {
 	return this.x;
 };
