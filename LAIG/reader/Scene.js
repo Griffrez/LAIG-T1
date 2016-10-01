@@ -2,8 +2,8 @@
 function Scene(root, axisLength)
 {
 	this.root = root;
-	this.axisLength;
-};
+	this.axisLength = axisLength;
+}
 
 // Gets
 Scene.prototype.getRoot = function()
@@ -11,18 +11,7 @@ Scene.prototype.getRoot = function()
 	return this.root;
 };
 
-Scene.prototype.getRoot = function()
+Scene.prototype.getAxisLength = function()
 {
-	return this.root;
-};
-
-// Sets
-Scene.prototype.getRoot = function(root)
-{
-	this.root = root;
-};
-
-Scene.prototype.getRoot = function(axisLenght)
-{
-	this.axisLength;
+	return this.axisLength;
 };
