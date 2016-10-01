@@ -1,13 +1,23 @@
-/* Target: CartesianValues3 */
+/*
+	Location: CartesianValues3
+ 	Target: CartesianValues3
+ */
 function SpotLight(id, enabled, location, ambient, diffuse, specular, angle, exponent, target)
 {
-	Light.call(id, enabled, location, ambient, diffuse, specular);
+	Light.call(id, enabled, ambient, diffuse, specular);
+
+	this.location = location;
 	this.angle = angle;
 	this.exponent = exponent;
 	this.target = target;
 }
 
 SpotLight.prototype = new Light();
+
+SpotLight.prototype.getLocation = function()
+{
+	return this.location;
+};
 
 SpotLight.prototype.getAngle = function()
 {

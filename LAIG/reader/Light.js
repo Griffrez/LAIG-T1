@@ -1,15 +1,13 @@
 /*
-	Location: CartesianValues4
 	Ambient: Color
 	Diffuse: Color
 	Specular: Color
  */
-function Light(id, enabled, location, ambient, diffuse, specular)
+function Light(id, enabled, ambient, diffuse, specular)
 {
 	this.id = id;
 	this.enabled = enabled;
 
-	this.location = location;
 	this.ambient = ambient;
 	this.diffuse = diffuse;
 	this.specular = specular;
@@ -23,11 +21,6 @@ Light.prototype.getID = function()
 Light.prototype.isEnabled = function()
 {
 	return this.enabled;
-};
-
-Light.prototype.getLocation = function()
-{
-	return this.location;
 };
 
 Light.prototype.getAmbient = function()
