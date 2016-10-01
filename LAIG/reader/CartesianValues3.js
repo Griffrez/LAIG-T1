@@ -10,12 +10,12 @@ CartesianValues3.prototype.getX = function()
 	return this.x;
 };
 
-CartesianValues3.getY = function()
+CartesianValues3.prototype.getY = function()
 {
 	return this.y;
 };
 
-CartesianValues3.getZ = function()
+CartesianValues3.prototype.getZ = function()
 {
 	return this.z;
 };

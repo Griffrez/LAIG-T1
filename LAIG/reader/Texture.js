@@ -6,22 +6,22 @@ function Texture(id, file, length_s, length_t)
 	this.length_t = length_t;
 }
 
-Texture.getID = function()
+Texture.prototype.getID = function()
 {
 	return this.id;
 };
 
-Texture.getFile = function()
+Texture.prototype.getFile = function()
 {
 	return this.file;
 };
 
-Texture.getLengthS = function()
+Texture.prototype.getLengthS = function()
 {
 	return this.length_s;
 };
 
-Texture.getLengthT = function()
+Texture.prototype.getLengthT = function()
 {
 	return this.length_t;
 };

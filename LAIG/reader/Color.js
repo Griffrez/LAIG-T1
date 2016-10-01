@@ -8,22 +8,22 @@ function Color(r, g, b, a)
 	this.a = a;
 }
 
-Color.getRed = function()
+Color.prototype.getRed = function()
 {
 	return this.r;
 };
 
-Color.getGreen = function()
+Color.prototype.getGreen = function()
 {
 	return this.g;
 };
 
-Color.getBlue = function()
+Color.prototype.getBlue = function()
 {
 	return this.b;
 };
 
-Color.getAlpha = function()
+Color.prototype.getAlpha = function()
 {
 	return this.a;
 };

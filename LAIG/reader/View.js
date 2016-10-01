@@ -4,17 +4,17 @@ function View(_default)
 	this.default = _default;
 }
 
-View.getDefault = function()
+View.prototype.getDefault = function()
 {
 	return this.default;
 };
 
-View.addPerspective = function(perspective)
+View.prototype.addPerspective = function(perspective)
 {
 	this.perspectives.push(perspective);
 };
 
-View.getPerspectives = function()
+View.prototype.getPerspectives = function()
 {
 	return this.perspectives;
 };

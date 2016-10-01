@@ -1,26 +1,30 @@
-function Illumination(doublesided, local, amb_r, amb_g, amb_b, amb_a, bgd_r, bgd_g, bgd_b, bgd_a) {
+/*
+	Ambient: Color
+	Background: Color
+ */
+function Illumination(doublesided, local, ambient, background) {
 	this.doublesided = doublesided;
 	this.local = local;
-	this.ambient = new Color(amb_r, amb_b, amb_b, amb_a);
-	this.background = new Color(bgd_r, bgd_g, bgd_b, bgd_a);
+	this.ambient = ambient;
+	this.background = background;
 }
 
-Illumination.isDoubleSided = function()
+Illumination.prototype.isDoubleSided = function()
 {
 	return this.doublesided;
 };
 
-Illumination.isLocal = function()
+Illumination.prototype.isLocal = function()
 {
 	return this.local;
 };
 
-Illumination.getAmbient = function()
+Illumination.prototype.getAmbient = function()
 {
 	return this.ambient;
 };
 
-Illumination.getBackground = function()
+Illumination.prototype.getBackground = function()
 {
 	return this.background;
 };

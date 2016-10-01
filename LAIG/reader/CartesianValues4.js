@@ -6,22 +6,22 @@ function CartesianValues4(x, y, z, w)
 	this.w = w;
 }
 
-CartesianValues4.getX = function()
+CartesianValues4.prototype.getX = function()
 {
 	return this.x;
 };
 
-CartesianValues4.getY = function()
+CartesianValues4.prototype.getY = function()
 {
 	return this.y;
 };
 
-CartesianValues4.getZ = function()
+CartesianValues4.prototype.getZ = function()
 {
 	return this.z;
 };
 
-CartesianValues4.getW = function()
+CartesianValues4.prototype.getW = function()
 {
 	return this.w;
 };

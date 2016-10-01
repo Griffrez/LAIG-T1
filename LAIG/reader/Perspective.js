@@ -1,39 +1,43 @@
-function Perspective(id, near, far, angle, from_x, from_y, from_z, to_x, to_y, to_z)
+/*
+	From: CartesianValues3
+	To: CartesianValues3
+ */
+function Perspective(id, near, far, angle, from, to)
 {
 	this.id = id;
 	this.near = near;
 	this.far = far;
 	this.angle = angle;
-	this.from = new CartesianValues3(from_x, from_y, from_z);
-	this.to = new CartesianValues3(from_x, from_y, from_z);
+	this.from = from;
+	this.to = to;
 }
 
-Perspective.getID = function()
+Perspective.prototype.getID = function()
 {
 	return this.id;
 };
 
-Perspective.getNear = function()
+Perspective.prototype.getNear = function()
 {
 	return this.near;
 };
 
-Perspective.getFar = function()
+Perspective.prototype.getFar = function()
 {
 	return this.far;
 };
 
-Perspective.getAngle = function()
+Perspective.prototype.getAngle = function()
 {
 	return this.angle;
 };
 
-Perspective.getFrom = function()
+Perspective.prototype.getFrom = function()
 {
 	return this.from;
 };
 
-Perspective.getTo = function()
+Perspective.prototype.getTo = function()
 {
 	return this.to;
 };

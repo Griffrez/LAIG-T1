@@ -1,12 +1,39 @@
-function Component(id) {
+function Component(id, transformationref, materials, texture, children) {
 
     this.id = id;
 
-    this.tranformationref = null;
-    this.translate = null;
-    this.rotate = null;
-    this.scale = null;
-    this.materials = null;
-    this.texture = null;
-    this.children = null;
+    this.transformationref = transformationref;
+    this.materials = materials;
+    this.texture = texture;
+	this.children = children;
 }
+
+Component.prototype.getID = function()
+{
+	return this.id;
+};
+
+Component.prototype.getTransformationRef = function()
+{
+	return this.transformationref;
+};
+
+Component.prototype.getMaterials = function()
+{
+	return this.materials;
+};
+
+Component.prototype.texture = function()
+{
+	return this.texture;
+};
+
+Component.prototype.children = function()
+{
+	return this.children;
+};
+
+Component.prototype.addTransformation = function(transformation)
+{
+	this.transformation = transformation;
+};
