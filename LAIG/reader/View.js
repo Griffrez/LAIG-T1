@@ -1,12 +1,12 @@
-function View(_default)
+function View()
 {
 	this.perspectives = [];
-	this.default = _default;
+	this.defaultView = null;
 }
 
 View.prototype.getDefault = function()
 {
-	return this.default;
+	return this.defaultView;
 };
 
 View.prototype.addPerspective = function(perspective)
