@@ -57,7 +57,7 @@ Elements.prototype.checkValid = function(item, array, constructor, nameType)
 
 	var check = array[id];
 
-	if(check !== null)
+	if(check !== undefined)
 		return nameType + " id " + id + " already exists.";
 	else
 		return null;
@@ -73,6 +73,7 @@ Elements.prototype.addPerspective = function (item)
 	}
 
 	this.perspectives[item.getID()] = item;
+	this.perspectives.length++;
 	return null;
 };
 
@@ -86,6 +87,7 @@ Elements.prototype.addLight = function (item)
 	}
 
 	this.lights[item.getID()] = item;
+	this.lights.length++;
 	return null;
 };
 
@@ -99,6 +101,7 @@ Elements.prototype.addTexture = function (item)
 	}
 
 	this.textures[item.getID()] = item;
+	this.textures.length++;
 	return null;
 };
 
@@ -112,6 +115,7 @@ Elements.prototype.addMaterial = function (item)
 	}
 
 	this.materials[item.getID()] = item;
+	this.materials.length++;
 	return null;
 };
 
@@ -125,6 +129,7 @@ Elements.prototype.addTransformation = function(item)
 	}
 
 	this.transformations[item.getID()] = item;
+	this.transformations.length++;
 	return null;
 };
 
@@ -138,6 +143,7 @@ Elements.prototype.addPrimitive = function(item)
 	}
 
 	this.primitives[item.getID()] = item;
+	this.primitives.length++;
 	return null;
 };
 
@@ -151,6 +157,7 @@ Elements.prototype.addComponent = function (item)
 	}
 
 	this.components[item.getID()] = item;
+	this.components.length++;
 	return null;
 };
 

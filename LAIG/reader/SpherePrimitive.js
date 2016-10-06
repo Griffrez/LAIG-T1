@@ -1,6 +1,6 @@
 function SpherePrimitive(id, radius, slices, stacks)
 {
-	Primitive.call(id);
+	Primitive.call(this, id);
 
 	this.radius = radius;
 	this.slices = slices;

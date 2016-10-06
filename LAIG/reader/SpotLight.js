@@ -4,7 +4,7 @@
  */
 function SpotLight(id, enabled, location, ambient, diffuse, specular, angle, exponent, target)
 {
-	Light.call(id, enabled, ambient, diffuse, specular);
+	Light.call(this, id, enabled, ambient, diffuse, specular);
 
 	this.location = location;
 	this.angle = angle;

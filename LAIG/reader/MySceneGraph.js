@@ -17,18 +17,19 @@ function MySceneGraph(filename, scene)
 	 */
 	 
 	this.reader.open('scenes/'+filename, this);  
-};
+}
 
 /*
  * Callback to be executed after successful reading
  */
-MySceneGraph.prototype.onXMLReady=function() 
+MySceneGraph.prototype.onXMLReady  = function()
 {
 	console.log("XML Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
 
-	this.myScene;
-	this.myIllumination;
+	this.myScene = null;
+	this.myIllumination = null;
+	this.defaultView = null;
 	this.elements = new Elements();
 	
 	// Here should go the calls for different functions to parse the various blocks
@@ -54,47 +55,47 @@ MySceneGraph.prototype.parseDSX = function(rootElement)
 	var result;
 	
 	// Parse Scene TO TEST
-	result = parseScene(rootElement);
+	result = this.parseScene(rootElement);
 	if(result != null)
 		return result;
 	
 	// Parse View TO TEST
-	result = parseView(rootElement);
+	result = this.parseView(rootElement);
 	if(result != null)
 		return result;
 	
 	// Parse Illumination TO TEST
-	result = parseIllumination(rootElement);
+	result = this.parseIllumination(rootElement);
 	if(result != null)
 		return result;
 	
 	// Parse Lights TO TEST
-	result = parseLights(rootElement);
+	result = this.parseLights(rootElement);
 	if(result != null)
 		return result;
 	
 	// Parse Textures TO TEST
-	result = parseTextures(rootElement);
+	result = this.parseTextures(rootElement);
 	if(result != null)
 		return result;
 
-	// Parse Materials TODO
-	result = parseMaterials(rootElement);
+	// Parse Materials TO TEST
+	result = this.parseMaterials(rootElement);
 	if(result != null)
 		return result;
 	
 	// Parse Transformations TODO
-	result = parseTransformations(rootElement);
+	result = this.parseTransformations(rootElement);
 	if(result != null)
 		return result;
 	
 	// Parse Primitives TODO
-	result = parsePrimitives(rootElement);
+	result = this.parsePrimitives(rootElement);
 	if(result != null)
 		return result;
 	
 	// Parse Components TODO
-	result = parseComponents(rootElement);
+	result = this.parseComponents(rootElement);
 	if(result != null)
 		return result;
 	
@@ -109,14 +110,14 @@ MySceneGraph.prototype.parseScene = function(rootElement)
 {
 	var elems = rootElement.getElementsByTagName('scene');
 	
-	// Uniqueness Testing goes here
-	// If something goes bad return "Error Parsing Scene, not Unique"
+	if(elems.length != 1)
+		return "Error Parsing Scene, not Unique";
 	
 	var root = this.reader.getString(elems[0], 'root');
 	var axisLength = this.reader.getFloat(elems[0], 'axis_length');
 	
-	// Test for negative axis values here
-	// If something goes bad return "Error Parsing Scene, not positive axis"
+	if(axisLength < 0)
+		return "Error Parsing Scene, not positive axis";
 	
 	this.myScene = new MyScene(root,axisLength);
 	
@@ -128,12 +129,12 @@ MySceneGraph.prototype.parseView = function(rootElement)
 {
 	var elems = rootElement.getElementsByTagName('views');
 	
-	// Uniqueness Testing goes here
-	// If something goes bad return "Error Parsing Views, not Unique"
+	if(elems.length != 1)
+		return "Error Parsing View, not Unique";
 	
 	var viewElems = elems[0];
 	
-	var defaultView = this.reader.getString(viewElems, 'default');
+	this.defaultView = this.reader.getString(viewElems, 'default');
 	
 	var perspectiveCount = viewElems.children.length;
 	if(perspectiveCount < 1)
@@ -144,16 +145,13 @@ MySceneGraph.prototype.parseView = function(rootElement)
 	{
 		var currentPerspective = viewElems.children[i];
 		
-		if(currentPerspective.nodeName != 'perspective');
+		if(currentPerspective.nodeName != 'perspective')
 			return "Error Parsing Views, not a Perspective";
 			
 		var id = this.reader.getString(currentPerspective, 'id');
 		var near = this.reader.getString(currentPerspective, 'near');
 		var far = this.reader.getFloat(currentPerspective, 'far');
 		var angle = this.reader.getFloat(currentPerspective, 'angle');
-		
-		if(usedIDs.contains(id))
-			return "Error Parsing Views, Perspective ID is not unique";
 		
 		// To and From
 		
@@ -163,16 +161,20 @@ MySceneGraph.prototype.parseView = function(rootElement)
 		var fromElems = currentPerspective.getElementsByTagName('from');
 		var toElems = currentPerspective.getElementsByTagName('to');
 		
-		// Uniqueness Testing goes here
-		// If something goes bad return "Error Parsing Views, from/to not Unique"
+		// Uniqueness Test
+		if(fromElems.length != 1)
+			return "Error Parsing Views, from not Unique";
+			
+		if(toElems.length != 1)
+			return "Error Parsing Views, to not Unique";
 		
-		var from = new CartesianValues3((this.reader.getFloat(fromElems, 'x'))
-				,(this.reader.getFloat(fromElems, 'y'))
-				, (this.reader.getFloat(fromElems, 'z')));
+		var from = new CartesianValues3((this.reader.getFloat(fromElems[0], 'x'))
+				,(this.reader.getFloat(fromElems[0], 'y'))
+				, (this.reader.getFloat(fromElems[0], 'z')));
 		
-		var to = new CartesianValues3((this.reader.getFloat(toElems, 'x'))
-				, (this.reader.getFloat(toElems, 'y'))
-				, (this.reader.getFloat(toElems, 'z')));
+		var to = new CartesianValues3((this.reader.getFloat(toElems[0], 'x'))
+				, (this.reader.getFloat(toElems[0], 'y'))
+				, (this.reader.getFloat(toElems[0], 'z')));
 		
 		// Add perspective
 		
@@ -183,6 +185,10 @@ MySceneGraph.prototype.parseView = function(rootElement)
 	}
 	
 	// Test for default perspective goes here
+	if(this.elements.getPerspective(this.defaultView) === undefined)
+	{
+		return "Error Parsing Views, no default perspective";
+	}
 	
 	return null;
 };
@@ -192,8 +198,8 @@ MySceneGraph.prototype.parseIllumination = function(rootElement)
 {
 	var elems = rootElement.getElementsByTagName('illumination');
 	
-	// Uniqueness Testing goes here
-	// If something goes bad return "Error Parsing Illumination, not Unique"
+	if(elems.length != 1)
+		return "Error Parsing Illumination, not Unique";
 	
 	var illuminationElems = elems[0];
 	
@@ -201,26 +207,30 @@ MySceneGraph.prototype.parseIllumination = function(rootElement)
 	if(illuminationCount != 2)
 		return "Error Parsing Illumination, Illumination child not size 2 (ambient,background)";
 	
-	var doublesided = this.reader.getString(viewElems, 'doublesided');
-	var local = this.reader.getString(viewElems, 'local');
+	var doublesided = this.reader.getString(illuminationElems, 'doublesided');
+	var local = this.reader.getString(illuminationElems, 'local');
 	
-	var ambientElems = currentPerspective.getElementsByTagName('ambient');
-	var backgroundElems = currentPerspective.getElementsByTagName('background');
+	var ambientElems = illuminationElems.getElementsByTagName('ambient');
+	var backgroundElems = illuminationElems.getElementsByTagName('background');
 	
-	// Uniqueness Testing goes here
-	// If something goes bad return "Error Parsing Views, ambient/background not Unique"
+	// Uniqueness Test
+	if(ambientElems.length != 1)
+		return "Error Parsing Illumination, ambient not Unique";
+		
+	if(backgroundElems.length != 1)
+		return "Error Parsing Illumination, background not Unique";
 	
-	var ambientColor = new Color((this.reader.getFloat(ambientElems, 'r'))
-			, (this.reader.getFloat(ambientElems, 'g'))
-			, (this.reader.getFloat(ambientElems, 'b'))
-			, (this.reader.getFloat(ambientElems, 'a')));
+	var ambientColor = new Color((this.reader.getFloat(ambientElems[0], 'r'))
+			, (this.reader.getFloat(ambientElems[0], 'g'))
+			, (this.reader.getFloat(ambientElems[0], 'b'))
+			, (this.reader.getFloat(ambientElems[0], 'a')));
 	
-	var backgroundColor = new Color((this.reader.getFloat(backgroundElems, 'r'))
-			, (this.reader.getFloat(backgroundElems, 'g'))
-			, (this.reader.getFloat(backgroundElems, 'b'))
-			, (this.reader.getFloat(backgroundElems, 'a')));
+	var backgroundColor = new Color((this.reader.getFloat(backgroundElems[0], 'r'))
+			, (this.reader.getFloat(backgroundElems[0], 'g'))
+			, (this.reader.getFloat(backgroundElems[0], 'b'))
+			, (this.reader.getFloat(backgroundElems[0], 'a')));
 	
-	myIllumination = new Illumination (doublesided, local, ambientColor, backgroundColor);
+	this.myIllumination = new Illumination (doublesided, local, ambientColor, backgroundColor);
 	
 	return null;
 };
@@ -230,8 +240,8 @@ MySceneGraph.prototype.parseLights = function(rootElement)
 {
 	var elems = rootElement.getElementsByTagName('lights');
 	
-	// Uniqueness Testing goes here
-	// If something goes bad return "Error Parsing Lights, not Unique"
+	if(elems.length != 1)
+		return "Error Parsing Lights, not Unique";
 	
 	var lightElems = elems[0];
 	
@@ -248,7 +258,18 @@ MySceneGraph.prototype.parseLights = function(rootElement)
 		// Control
 		var id = this.reader.getString(currentLight, 'id');
 		var enabled = this.reader.getBoolean(currentLight, 'enabled');
-		
+
+		// Variables
+		var locationElems = currentLight.getElementsByTagName('location');
+		var ambientElems = currentLight.getElementsByTagName('ambient');
+		var diffuseElems = currentLight.getElementsByTagName('diffuse');
+		var specularElems = currentLight.getElementsByTagName('specular');
+
+        var location = null;
+        var ambient = null;
+        var diffuse = null;
+        var specular = null;
+
 		if(isSpot)
 		{
 			// Control
@@ -259,42 +280,52 @@ MySceneGraph.prototype.parseLights = function(rootElement)
 				return "Error Parsing Lights, Spot Child not size 5 (location, target, ambient, diffuse, specular)";
 			
 			// Elems
-			var locationElems = currentLight.getElementsByTagName('location');
 			var targetElems = currentLight.getElementsByTagName('target');
-			var ambientElems = currentLight.getElementsByTagName('ambient');
-			var diffuseElems = currentLight.getElementsByTagName('diffuse');
-			var specularElems = currentLight.getElementsByTagName('specular');
 			
-			// Uniqueness Test here
+			// Uniqueness Test
+			if(locationElems.length != 1)
+				return "Error Parsing Lights, location not Unique";
+				
+			if(targetElems.length != 1)
+				return "Error Parsing Lights, target not Unique";
+			
+			if(ambientElems.length != 1)
+				return "Error Parsing Lights, ambient not Unique";
+			
+			if(diffuseElems.length != 1)
+				return "Error Parsing Lights, diffuse not Unique";
+			
+			if(specularElems.length != 1)
+				return "Error Parsing Lights, specular not Unique";
 			
 			// Cartesian Value 3
-			var location = new CartesianValues3((this.reader.getFloat(locationElems, 'x'))
-					,(this.reader.getFloat(fromElems, 'y'))
-					, (this.reader.getFloat(fromElems, 'z')));
+			location = new CartesianValues3((this.reader.getFloat(locationElems[0], 'x'))
+					,(this.reader.getFloat(locationElems[0], 'y'))
+					, (this.reader.getFloat(locationElems[0], 'z')));
 					
-			var target = new CartesianValues3((this.reader.getFloat(targetElems, 'x'))
-					,(this.reader.getFloat(fromElems, 'y'))
-					, (this.reader.getFloat(fromElems, 'z')));
+			var target = new CartesianValues3((this.reader.getFloat(targetElems[0], 'x'))
+					,(this.reader.getFloat(targetElems[0], 'y'))
+					, (this.reader.getFloat(targetElems[0], 'z')));
 			
 			// Colors
-			var ambient =  new Color((this.reader.getFloat(ambientElems, 'r'))
-					, (this.reader.getFloat(ambientElems, 'g'))
-					, (this.reader.getFloat(ambientElems, 'b'))
-					, (this.reader.getFloat(ambientElems, 'a')));
+			ambient =  new Color((this.reader.getFloat(ambientElems[0], 'r'))
+					, (this.reader.getFloat(ambientElems[0], 'g'))
+					, (this.reader.getFloat(ambientElems[0], 'b'))
+					, (this.reader.getFloat(ambientElems[0], 'a')));
 			
-			var diffuse =  new Color((this.reader.getFloat(diffuseElems, 'r'))
-					, (this.reader.getFloat(diffuseElems, 'g'))
-					, (this.reader.getFloat(diffuseElems, 'b'))
-					, (this.reader.getFloat(diffuseElems, 'a')));
+			diffuse =  new Color((this.reader.getFloat(diffuseElems[0], 'r'))
+					, (this.reader.getFloat(diffuseElems[0], 'g'))
+					, (this.reader.getFloat(diffuseElems[0], 'b'))
+					, (this.reader.getFloat(diffuseElems[0], 'a')));
 			
-			var specular =  new Color((this.reader.getFloat(specularElems, 'r'))
-					, (this.reader.getFloat(specularElems, 'g'))
-					, (this.reader.getFloat(specularElems, 'b'))
-					, (this.reader.getFloat(specularElems, 'a')));
+			specular =  new Color((this.reader.getFloat(specularElems[0], 'r'))
+					, (this.reader.getFloat(specularElems[0], 'g'))
+					, (this.reader.getFloat(specularElems[0], 'b'))
+					, (this.reader.getFloat(specularElems[0], 'a')));
 			
 			var spotLight = new SpotLight(id, enabled, location, ambient, diffuse, specular, angle, exponent, target);
 			
-			var error = myElements.addLight(spotLight);
+			var error = this.elements.addLight(spotLight);
 			if(error != null)
 				return error;
 		}
@@ -303,39 +334,44 @@ MySceneGraph.prototype.parseLights = function(rootElement)
 			if(currentLight.children.length != 4)
 				return "Error Parsing Lights, Omni Child not size 4 (location, ambient, diffuse, specular)";
 			
-			// Elems
-			var locationElems = currentLight.getElementsByTagName('location');
-			var ambientElems = currentLight.getElementsByTagName('ambient');
-			var diffuseElems = currentLight.getElementsByTagName('diffuse');
-			var specularElems = currentLight.getElementsByTagName('specular');
+			// Uniqueness Test
+			if(locationElems.length != 1)
+				return "Error Parsing Lights, location not Unique";
+					
+			if(ambientElems.length != 1)
+				return "Error Parsing Lights, ambient not Unique";
 			
-			// Uniqueness Test here
+			if(diffuseElems.length != 1)
+				return "Error Parsing Lights, diffuse not Unique";
+			
+			if(specularElems.length != 1)
+				return "Error Parsing Lights, specular not Unique";
 			
 			// Cartesian Value 4
-			var location = new CartesianValues4((this.reader.getFloat(locationElems, 'x'))
-					,(this.reader.getFloat(fromElems, 'y'))
-					, (this.reader.getFloat(fromElems, 'z'))
-					, (this.reader.getFloat(fromElems, 'w')));
+			location = new CartesianValues4((this.reader.getFloat(locationElems[0], 'x'))
+					,(this.reader.getFloat(locationElems[0], 'y'))
+					, (this.reader.getFloat(locationElems[0], 'z'))
+					, (this.reader.getFloat(locationElems[0], 'w')));
 			
 			// Colors
-			var ambient =  new Color((this.reader.getFloat(ambientElems, 'r'))
-					, (this.reader.getFloat(ambientElems, 'g'))
-					, (this.reader.getFloat(ambientElems, 'b'))
-					, (this.reader.getFloat(ambientElems, 'a')));
+			ambient =  new Color((this.reader.getFloat(ambientElems[0], 'r'))
+					, (this.reader.getFloat(ambientElems[0], 'g'))
+					, (this.reader.getFloat(ambientElems[0], 'b'))
+					, (this.reader.getFloat(ambientElems[0], 'a')));
 			
-			var diffuse =  new Color((this.reader.getFloat(diffuseElems, 'r'))
-					, (this.reader.getFloat(diffuseElems, 'g'))
-					, (this.reader.getFloat(diffuseElems, 'b'))
-					, (this.reader.getFloat(diffuseElems, 'a')));
+			diffuse =  new Color((this.reader.getFloat(diffuseElems[0], 'r'))
+					, (this.reader.getFloat(diffuseElems[0], 'g'))
+					, (this.reader.getFloat(diffuseElems[0], 'b'))
+					, (this.reader.getFloat(diffuseElems[0], 'a')));
 			
-			var specular =  new Color((this.reader.getFloat(specularElems, 'r'))
-					, (this.reader.getFloat(specularElems, 'g'))
-					, (this.reader.getFloat(specularElems, 'b'))
-					, (this.reader.getFloat(specularElems, 'a')));
+			specular =  new Color((this.reader.getFloat(specularElems[0], 'r'))
+					, (this.reader.getFloat(specularElems[0], 'g'))
+					, (this.reader.getFloat(specularElems[0], 'b'))
+					, (this.reader.getFloat(specularElems[0], 'a')));
 			
 			var omniLight = new OmniLight(id, enabled, location, ambient, diffuse, specular);
 			
-			var error = myElements.addLight(omniLight);
+			error = this.elements.addLight(omniLight);
 			if(error != null)
 				return error;
 		}
@@ -348,12 +384,12 @@ MySceneGraph.prototype.parseTextures = function(rootElement)
 {
 	var elems = rootElement.getElementsByTagName('textures');
 	
-	// Uniqueness Testing goes here
-	// If something goes bad return "Error Parsing Lights, not Unique"
+	if(elems.length != 1)
+		return "Error Parsing Textures, not Unique";
 	
 	var textureElems = elems[0];
 	
-	var textureCount = lightElems.children.length;
+	var textureCount = textureElems.children.length;
 	if(textureCount < 1)
 		return "Error Parsing Textures, no Textures";
 	
@@ -374,6 +410,78 @@ MySceneGraph.prototype.parseTextures = function(rootElement)
 	return null;
 };
 
+/* -------------------- MATERIALS -------------------- */
+MySceneGraph.prototype.parseMaterials = function(rootElement)
+{
+	var elems = rootElement.get
+	
+	if(elems.length != 1)
+		return "Error Parsing Materials, not Unique";
+	
+	var materialElems = elems[0];
+	
+	var materialCount = materialElems.children.length;
+	if(materialCount < 1)
+		return "Error Parsing Materials, no Materials";
+	
+	for(var i = 0; i < materialCount; i++)
+	{
+		var currentMaterial = materialElems.children[i];
+		
+		var id = this.reader.getString(currentMaterial, 'id');	
+		var shininess = this.reader.getFloat(currentMaterial, 'shininess');
+		
+		if(currentMaterial.children.length != 5)
+			return "Error Parsing Lights, Spot Child not size 5 (location, target, ambient, diffuse, specular)";
+		
+		// Elems
+		var emissionElems = currentMaterial.getElementsByTagName('emission');
+		var ambientElems = currentMaterial.getElementsByTagName('ambient');
+		var diffuseElems = currentMaterial.getElementsByTagName('diffuse');
+		var specularElems = currentMaterial.getElementsByTagName('specular');
+		
+		// Uniqueness Test
+		if(emissionElems.length != 1)
+			return "Error Parsing Materials, emission not Unique";
+				
+		if(ambientElems.length != 1)
+            return "Error Parsing Materials, ambient not Unique";
+		
+		if(diffuseElems.length != 1)
+            return "Error Parsing Materials, diffuse not Unique";
+		
+		if(specularElems.length != 1)
+            return "Error Parsing Materials, specular not Unique";
+		
+		// Colors
+		var emission =  new Color((this.reader.getFloat(emissionElems[0], 'r'))
+				, (this.reader.getFloat(emissionElems[0], 'g'))
+				, (this.reader.getFloat(emissionElems[0], 'b'))
+				, (this.reader.getFloat(emissionElems[0], 'a')));
+		
+		var ambient =  new Color((this.reader.getFloat(ambientElems[0], 'r'))
+				, (this.reader.getFloat(ambientElems[0], 'g'))
+				, (this.reader.getFloat(ambientElems[0], 'b'))
+				, (this.reader.getFloat(ambientElems[0], 'a')));
+		
+		var diffuse =  new Color((this.reader.getFloat(diffuseElems[0], 'r'))
+				, (this.reader.getFloat(diffuseElems[0], 'g'))
+				, (this.reader.getFloat(diffuseElems[0], 'b'))
+				, (this.reader.getFloat(diffuseElems[0], 'a')));
+		
+		var specular =  new Color((this.reader.getFloat(specularElems[0], 'r'))
+				, (this.reader.getFloat(specularElems[0], 'g'))
+				, (this.reader.getFloat(specularElems[0], 'b'))
+				, (this.reader.getFloat(specularElems[0], 'a')));
+		
+		var material = new Material(id, emission, ambient, diffuse, specular, shininess);
+		
+		var error = this.elements.addMaterial(material);
+		if(error != null)
+			return error;
+	}
+	return null;
+};
 
 /*
  * Callback to be executed on any read error

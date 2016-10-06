@@ -3,7 +3,7 @@
  */
 function OmniLight(id, enabled, location, ambient, diffuse, specular)
 {
-	Light.call(id, enabled, ambient, diffuse, specular);
+	Light.call(this, id, enabled, ambient, diffuse, specular);
 
 	this.location = location;
 }

@@ -5,7 +5,7 @@
  */
 function TrianglePrimitive(id, p1, p2, p3)
 {
-	Primitive.call(id);
+	Primitive.call(this, id);
 
 	this.point1 = p1;
 	this.point2 = p2;

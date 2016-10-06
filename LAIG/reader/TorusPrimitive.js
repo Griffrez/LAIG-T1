@@ -1,6 +1,6 @@
 function TorusPrimitive(id, inner, outer, slices, loops)
 {
-	Primitive.call(id);
+	Primitive.call(this, id);
 
 	this.inner = inner;
 	this.outer = outer;

@@ -1,6 +1,6 @@
 function CylinderPrimitive(id, base, top, height, slices, stacks)
 {
-	Primitive.call(id);
+	Primitive.call(this, id);
 
 	this.base = base;
 	this.top = top;

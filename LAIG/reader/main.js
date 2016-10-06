@@ -11,7 +11,7 @@ function getUrlVars() {
     return vars;
 }	 
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Component.js',
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'CartesianValues2.js', 'CartesianValues3.js', 'CartesianValues4.js', 'Color.js', 'Component.js', 'CylinderPrimitive.js', 'Elements.js', 'Illumination.js', 'Light.js', 'Material.js', 'Matrix4.js', 'MyScene.js', 'OmniLight.js', 'Perspective.js', 'Primitive.js', 'RectanglePrimitive.js', 'Scene.js', 'SpherePrimitive.js', 'SpotLight.js', 'Texture.js', 'TorusPrimitive.js', 'Tranformation.js', 'TrianglePrimitive.js',
 
 main=function()
 {
