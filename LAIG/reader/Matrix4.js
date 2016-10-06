@@ -6,15 +6,23 @@ function Matrix4(data)
 /* matrixB * this */
 Matrix4.prototype.multiply = function(matrixB)
 {
-	for(var i = 0; i < 3; i++)
+	var temp = new Array(4);
+	for(var k = 0; k < 4; k++)
 	{
-		for(var j = 0; j < 3; j++)
+		temp[k] = new Array(4);
+	}
+
+	for(var i = 0; i < 4; i++)
+	{
+		for(var j = 0; j < 4; j++)
 		{
-			var value1 = matrixB[i][j] * this.data[0][j];
-			var value2 = matrixB[i][j] * this.data[1][j];
-			var value3 = matrixB[i][j] * this.data[2][j];
-			var value4 = matrixB[i][j] * this.data[3][j];
-			this.data[i][j] = value1 + value2 + value3 + value4;
+			var value1 = matrixB[i][0] * this.data[0][j];
+			var value2 = matrixB[i][1] * this.data[1][j];
+			var value3 = matrixB[i][2] * this.data[2][j];
+			var value4 = matrixB[i][3] * this.data[3][j];
+			temp[i][j] = value1 + value2 + value3 + value4;
 		}
 	}
+
+	this.data = temp;
 };
