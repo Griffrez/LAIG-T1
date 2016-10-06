@@ -1,11 +1,11 @@
-function Component(id, transformationref, materials, texture, children) {
-
+function Component(id) {
     this.id = id;
+	this.loadedOK = false;
 
-    this.transformationref = transformationref;
-    this.materials = materials;
-    this.texture = texture;
-	this.children = children;
+	this.transformation = null;
+	this.materials = null;
+	this.texture = null;
+	this.children = null;
 }
 
 Component.prototype.getID = function()
@@ -13,9 +13,14 @@ Component.prototype.getID = function()
 	return this.id;
 };
 
-Component.prototype.getTransformationRef = function()
+Component.prototype.isLoadedOK = function()
 {
-	return this.transformationref;
+	return this.loadedOK;
+}
+
+Component.prototype.getTransformation = function()
+{
+	return this.transformation;
 };
 
 Component.prototype.getMaterials = function()
@@ -33,7 +38,12 @@ Component.prototype.children = function()
 	return this.children;
 };
 
-Component.prototype.addTransformation = function(transformation)
+Component.prototype.setData = function(transformation, materials, texture, children)
 {
+	this.loadedOK = true;
+
 	this.transformation = transformation;
+	this.materials = materials;
+	this.texture = texture;
+	this.children = children;
 };
