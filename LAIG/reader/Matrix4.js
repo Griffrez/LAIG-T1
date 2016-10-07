@@ -3,6 +3,11 @@ function Matrix4(data)
 	this.data = data;
 }
 
+Matrix4.prototype.getData = function()
+{
+	return this.data;
+};
+
 /* matrixB * this */
 Matrix4.prototype.multiply = function(matrixB)
 {

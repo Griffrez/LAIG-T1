@@ -647,6 +647,117 @@ MySceneGraph.prototype.parseTransformations = function (rootElement)
 	}
 };
 
+MySceneGraph.prototype.parsePrimitives = function (rootElement)
+{
+	var elems = rootElement.children[7];
+
+	if (elems.nodeName !== "primitives")
+	{
+		return "Error Parsing Eighth Child, not Primitives";
+	}
+
+	var primitiveCount = elems.children.length;
+	if (primitiveCount < 1)
+	{
+		return "Error Parsing Primitives, no Primitives";
+	}
+
+	for (var i = 0; i < primitiveCount; i++)
+	{
+		var currentPrimitive = elems.children[i];
+
+		var id = this.reader.getString(currentPrimitive, 'id');
+
+		if (currentPrimitive.children.length !== 1)
+		{
+			return "Error Parsing Primitive, amount of tags found is different from 1";
+		}
+
+		var transformation = new Transformation(id);
+
+		var primitive = currentPrimitive.children[0];
+
+		var result;
+
+		if(primitive.nodeName === "rectangle")
+		{
+			let x1 = this.reader.getFloat(primitive, 'x1');
+			let y1 = this.reader.getFloat(primitive, 'y1');
+
+			let x2 = this.reader.getFloat(primitive, 'x2');
+			let y2 = this.reader.getFloat(primitive, 'y2');
+
+			let p1 = new CartesianValues2(x1, y1);
+
+			let p2 = new CartesianValues2(x2, y2);
+
+			result = new RectanglePrimitive(id, p1, p2);
+		}
+		else if(primitive.nodeName === "triangle")
+		{
+			let x1 = this.reader.getFloat(primitive, 'x1');
+			let y1 = this.reader.getFloat(primitive, 'y1');
+			let z1 = this.reader.getFloat(primitive, 'z1');
+
+			let x2 = this.reader.getFloat(primitive, 'x2');
+			let y2 = this.reader.getFloat(primitive, 'y2');
+			let z2 = this.reader.getFloat(primitive, 'z2');
+
+			let x3 = this.reader.getFloat(primitive, 'x3');
+			let y3 = this.reader.getFloat(primitive, 'y3');
+			let z3 = this.reader.getFloat(primitive, 'z3');
+
+			let p1 = new CartesianValues3(x1, y1, z1);
+
+			let p2 = new CartesianValues3(x2, y2, z2);
+
+			let p3 = new CartesianValues3(x3, y3, z3);
+
+			result = new TrianglePrimitive(id, p1, p2, p3);
+		}
+		else if(primitive.nodeName === "cylinder")
+		{
+			let base = this.reader.getFloat(primitive, 'base');
+			let top = this.reader.getFloat(primitive, 'top');
+			let height = this.reader.getFloat(primitive, 'height');
+
+			let slices = this.reader.getInteger(primitive, 'slices');
+			let stacks = this.reader.getInteger(primitive, 'stacks');
+
+			result = new CylinderPrimitive(id, base, top, height, slices, stacks);
+		}
+		else if(primitive.nodeName === "sphere")
+		{
+			let radius = this.reader.getFloat(primitive, 'radius');
+
+			let slices = this.reader.getInteger(primitive, 'slices');
+			let stacks = this.reader.getInteger(primitive, 'stacks');
+
+			result = new SpherePrimitive(id, radius, slices, stacks);
+		}
+		else if(primitive.nodeName === "torus")
+		{
+			let inner = this.reader.getFloat(primitive, 'inner');
+			let outer = this.reader.getFloat(primitive, 'outer');
+
+			let slices = this.reader.getInteger(primitive, 'slices');
+			let loops = this.reader.getInteger(primitive, 'loops');
+
+			result = new TorusPrimitive(id, inner, outer, slices, loops);
+		}
+		else
+		{
+			return "Error Parsing Primitive, unknown primitive found."
+		}
+
+		var error = this.elements.addPrimitive(result);
+		if (error != null)
+		{
+			return error;
+		}
+	}
+};
+
 /*
  * Callback to be executed on any read error
  */

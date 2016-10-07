@@ -11,6 +11,16 @@ function Transformation(id)
 	this.matrix = new Matrix4(data);
 }
 
+Transformation.prototype.getID = function()
+{
+	return this.id;
+};
+
+Transformation.prototype.getMatrix = function()
+{
+	return this.matrix;
+};
+
 Transformation.prototype.addTranslation = function(x, y, z)
 {
 	var data = [
