@@ -66,6 +66,7 @@ Elements.prototype.getComponent = function (id)
 	if (element === undefined)
 	{
 		this.components[id] = new Component(id);
+		this.components.length++;
 	}
 
 	return this.components[id];
@@ -225,16 +226,16 @@ Elements.prototype.addComponent = function (id)
 	return null;
 };
 
-Elements.prototype.setComponentData = function (id, transformation, materials, texture, children)
+Elements.prototype.setComponentData = function (id, transformation, materials, texture, childComponents, childPrimitives)
 {
-	var check = this.components[id];
+	var check = this.getComponent(id);
 
-	if (check === undefined)
+	if (check.isLoadedOK())
 	{
-		return "Component id " + id + " does not exist.";
+		return "Component id " + id + " is already loaded";
 	}
 
-	check.setData(transformation, materials, texture, children);
+	check.setData(transformation, materials, texture, childComponents, childPrimitives);
 	return null;
 };
 

@@ -631,11 +631,15 @@ MySceneGraph.prototype.parseTransformations = function (rootElement)
 					transformation.addScaling(x, y, z);
 				}
 			}
-			else
+			else if(nodeName === "rotate")
 			{
 				var axis = this.reader.getString(inner_currentTransformation, 'axis');
 				var angle = this.reader.getFloat(inner_currentTransformation, 'angle');
 				transformation.addRotation(axis, angle);
+			}
+			else
+			{
+				return "Error Parsing Transformation, unknown transformation type" + nodeName;
 			}
 		}
 	}
@@ -672,8 +676,6 @@ MySceneGraph.prototype.parsePrimitives = function (rootElement)
 		{
 			return "Error Parsing Primitive, amount of tags found is different from 1";
 		}
-
-		var transformation = new Transformation(id);
 
 		var primitive = currentPrimitive.children[0];
 
@@ -758,6 +760,230 @@ MySceneGraph.prototype.parsePrimitives = function (rootElement)
 	}
 };
 
+MySceneGraph.prototype.parseComponents = function (rootElement)
+{
+	var elems = rootElement.children[8];
+
+	if (elems.nodeName !== "components")
+	{
+		return "Error Parsing Ninth Child, not Components";
+	}
+
+	var componentCount = elems.children.length;
+	if (componentCount < 1)
+	{
+		return "Error Parsing Components, no Component";
+	}
+
+	for (var i = 0; i < componentCount; i++)
+	{
+		var currentComponent = elems.children[i];
+
+		var id = this.reader.getString(currentComponent, 'id');
+
+		if (currentComponent.children.length !== 4)
+		{
+			return "Error Parsing Component, tag amount different than 4 (transformation, materials, texture, children)";
+		}
+
+		var transformationElements = currentComponent.getElementsByTagName('transformation');
+
+		if(transformationElements.length !== 1)
+		{
+			return "Error Parsing Component, should have one and just one transformation element";
+		}
+
+		var materialsElements = currentComponent.getElementsByTagName('materials');
+
+		if(materialsElements.length !== 1)
+		{
+			return "Error Parsing Component, should have one and just one materials element";
+		}
+
+		var textureElements = currentComponent.getElementsByTagName('texture');
+
+		if(textureElements.length !== 1)
+		{
+			return "Error Parsing Component, should have one and just one texture element";
+		}
+
+		var childrenElements = currentComponent.getElementsByTagName('children');
+
+		if(childrenElements.length !== 1)
+		{
+			return "Error Parsing Component, should have one and just one children element";
+		}
+
+		var transformationElement = transformationElements[0];
+		var materialsElement = materialsElements[0];
+		var textureElement = textureElements[0];
+		var childrenElement = childrenElements[0];
+
+		var transformation;
+
+		if(transformationElement.children.length < 1)
+		{
+			return "Error Parsing Component, its transformation element should have at least one child";
+		}
+
+		if(transformationElement.children.length > 1)
+		{
+			transformation = new Transformation(id);
+
+			var transformationCount = transformationElement.children.length;
+
+			for (var j = 0; j < transformationCount; j++)
+			{
+				var currentTransformation = transformationElement.children[j];
+
+				var nodeName = currentTransformation.nodeName;
+
+				if ((nodeName === "translate") || (nodeName === "scale"))
+				{
+					var x = this.reader.getFloat(currentTransformation, 'x');
+					var y = this.reader.getFloat(currentTransformation, 'y');
+					var z = this.reader.getFloat(currentTransformation, 'z');
+
+					if (nodeName === "translate")
+					{
+						transformation.addTranslation(x, y, z);
+					}
+					else
+					{
+						transformation.addScaling(x, y, z);
+					}
+				}
+				else if(nodeName === "rotate")
+				{
+					var axis = this.reader.getString(currentTransformation, 'axis');
+					var angle = this.reader.getFloat(currentTransformation, 'angle');
+					transformation.addRotation(axis, angle);
+				}
+				else
+				{
+					return "Error Parsing Transformation in Component, unknown transformation type" + nodeName;
+				}
+			}
+		}
+		else
+		{
+			var transformationRef = transformationElement.children[0];
+
+			if(transformationRef.nodeName !== 'transformationref')
+			{
+				return "Error Parsing Transformation in Component, only one child, not a transformationref";
+			}
+
+			var transformationID = this.reader.getString(transformationRef, 'id');
+
+			transformation = this.elements.getTransformation(transformationID);
+
+			if(transformation === undefined)
+			{
+				return "Error Parsing Transformation in Component, transformation referred doesn't exist";
+			}
+		}
+
+		var materials = [];
+
+		if(materialsElement.children.length < 1)
+		{
+			return "Error Parsing Materials in Component, there must be at least one";
+		}
+
+		var materialElements = materialsElement.children;
+
+		var materialCount = materialElements.length;
+
+		for(let i = 0; i < materialCount; i++)
+		{
+			let materialElement = materialElements[i];
+
+			let materialID = this.reader.getString(materialElement, 'id');
+
+			if(materialID === "inherit")
+			{
+				materials.push(materialID);
+			}
+			else
+			{
+
+				let material = this.elements.getMaterial(materialID);
+
+				if (material === undefined)
+				{
+					return "Error Parsing Material in Component, id referred doesn't match any material."
+				}
+
+				materials.push(material);
+			}
+		}
+
+		var texture;
+
+		var textureID = this.reader.getString(textureElement, 'id');
+
+		if((textureID === "inherit") || (textureID === "none"))
+		{
+			texture = textureID;
+		}
+		else
+		{
+			var textureItem = this.elements.getTexture(textureID);
+
+			if(textureItem === undefined)
+			{
+				return "Error Parsing Texture in Component, id referred doesn't match any texture";
+			}
+
+			texture = textureItem;
+		}
+
+		var childrenPrimitives = [];
+		var childrenComponents = [];
+
+		var children = childrenElement.children;
+		var childrenCount = children.length;
+
+		for(let i = 0; i < childrenCount; i++)
+		{
+			var child = children[i];
+
+			if(child.nodeName === "componentref")
+			{
+				var componentID = this.reader.getString(child, 'id');
+
+				var component = this.elements.getComponent(componentID);
+
+				childrenComponents.push(component);
+			}
+			else if(child.nodeName === "primitiveref")
+			{
+				var primitiveID = this.reader.getString(child, 'id');
+
+				var primitive = this.elements.getPrimitive(primitiveID);
+
+				if(primitive === undefined)
+				{
+					return "Error Parsing Child Primitive in Component, id referred doesn't match any primitive";
+				}
+
+				childrenPrimitives.push(primitive);
+			}
+			else
+			{
+				return "Error Parsing Child in Component, unknown child type" + child.nodeName;
+			}
+		}
+
+		var error = this.elements.setComponentData(id, transformation, materials, texture, childrenComponents, childrenPrimitives);
+		if (error != null)
+		{
+			return error;
+		}
+	}
+};
+
 /*
  * Callback to be executed on any read error
  */
@@ -767,5 +993,3 @@ MySceneGraph.prototype.onXMLError = function (message)
 	console.error("XML Loading Error: " + message);
 	this.loadedOk = false;
 };
-
-

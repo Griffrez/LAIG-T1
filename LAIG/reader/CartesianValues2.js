@@ -1,4 +1,4 @@
-function CartesianValues2(x, y)
+function CartesianValues2(/*number*/x, /*number*/y)
 {
 	this.x = x;
 	this.y = y;

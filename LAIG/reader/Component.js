@@ -5,7 +5,7 @@ function Component(id) {
 	this.transformation = null;
 	this.materials = null;
 	this.texture = null;
-	this.children = null;
+	this.children = {'components': [], 'primitives': []};
 }
 
 Component.prototype.getID = function()
@@ -16,7 +16,7 @@ Component.prototype.getID = function()
 Component.prototype.isLoadedOK = function()
 {
 	return this.loadedOK;
-}
+};
 
 Component.prototype.getTransformation = function()
 {
@@ -38,12 +38,13 @@ Component.prototype.children = function()
 	return this.children;
 };
 
-Component.prototype.setData = function(transformation, materials, texture, children)
+Component.prototype.setData = function(transformation, materials, texture, childComponents, childPrimitives)
 {
 	this.loadedOK = true;
 
 	this.transformation = transformation;
 	this.materials = materials;
 	this.texture = texture;
-	this.children = children;
+	this.children.components = childComponents;
+	this.children.primitives = childPrimitives;
 };
