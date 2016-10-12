@@ -1,6 +1,8 @@
 
 function XMLscene() {
     CGFscene.call(this);
+	/*MySceneGraph*/this.graph = null;
+	/*CGFinterface*/this.interface = null;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -41,13 +43,100 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);	
 };
 
+XMLscene.prototype.illuminationInit = function()
+{
+	var illumination = this.graph.elements.getIllumination();
+
+	var ambient = illumination.getAmbient();
+	this.setGlobalAmbientLight(
+		ambient.getRed(),
+		ambient.getGreen(),
+		ambient.getBlue(),
+		ambient.getAlpha()
+	);
+
+	var background = illumination.getBackground();
+	this.gl.clearColor(
+		background.getRed(),
+		background.getGreen(),
+		background.getBlue(),
+		background.getAlpha()
+	);
+};
+
+XMLscene.prototype.perspectivesInit = function()
+{
+	var perspectives = this.graph.elements.getPerspectives();
+
+	this.cameras = [];
+
+	for(let perspective of perspectives)
+	{
+		var fov = perspective.getAngle();
+		var near = perspective.getNear();
+		var far = perspective.getFar();
+		var position = perspective.getFrom();
+		var target = perspective.getTo();
+
+		var camera = new CGFlight(fov, near, far, position, target);
+
+		this.cameras.push(camera);
+	}
+
+	this.interface.setActiveCamera(this.cameras[0]);
+};
+
+XMLscene.prototype.lightsInit = function()
+{
+
+};
+
+XMLscene.prototype.textureInit = function()
+{
+
+};
+
+XMLscene.prototype.materialsInit = function()
+{
+
+};
+
+XMLscene.prototype.transformationsInit = function()
+{
+
+};
+
+XMLscene.prototype.primitivesInit = function()
+{
+
+};
+
+XMLscene.prototype.componentsInit = function()
+{
+
+};
+
+XMLscene.prototype.sceneInit = function()
+{
+
+};
+
+
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () 
 {
-	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
+	this.illuminationInit();
+	this.perspectivesInit();
+	this.lightsInit();
+	this.textureInit();
+	this.materialsInit();
+	this.transformationsInit();
+	this.primitivesInit();
+	this.componentsInit();
+	this.sceneInit();
 	this.lights[0].setVisible(true);
-    this.lights[0].enable();
+	this.lights[0].enable();
 };
 
 XMLscene.prototype.display = function () {
@@ -77,6 +166,6 @@ XMLscene.prototype.display = function () {
 	if (this.graph.loadedOk)
 	{
 		this.lights[0].update();
-	};	
+	}
 };
 

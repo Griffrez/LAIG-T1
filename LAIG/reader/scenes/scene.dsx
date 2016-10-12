@@ -37,8 +37,8 @@
 
     <illumination doublesided="0" local="0" >
     
-        <ambient r="1.0" g="1.0" b="1.0" a="1.0" />
-        <background r="1.0" g="1.0" b="1.0" a="1.0" />
+        <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+        <background r="0.1" g="0.1" b="0.1" a="1.0" />
         
     </illumination>
     
