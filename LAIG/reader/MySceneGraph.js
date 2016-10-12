@@ -93,21 +93,21 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 		return result;
 	}
 
-	// Parse Transformations TODO
+	// Parse Transformations
 	result = this.parseTransformations(rootElement);
 	if (result != null)
 	{
 		return result;
 	}
 
-	// Parse Primitives TODO
+	// Parse Primitives
 	result = this.parsePrimitives(rootElement);
 	if (result != null)
 	{
 		return result;
 	}
 
-	// Parse Components TODO
+	// Parse Components
 	result = this.parseComponents(rootElement);
 	if (result != null)
 	{
@@ -174,7 +174,7 @@ MySceneGraph.prototype.parseView = function (rootElement)
 		}
 
 		var id = this.reader.getString(currentPerspective, 'id');
-		var near = this.reader.getString(currentPerspective, 'near');
+		var near = this.reader.getFloat(currentPerspective, 'near');
 		var far = this.reader.getFloat(currentPerspective, 'far');
 		var angle = this.reader.getFloat(currentPerspective, 'angle');
 
