@@ -1,27 +1,15 @@
-function Texture(id, file, length_s, length_t)
+function Texture(scene, data)
 {
-	this.id = id;
-	this.file = file;
-	this.length_s = length_s;
-	this.length_t = length_t;
+	this.data = data;
+	this.appearance = new CGFtexture(scene, data.file);
 }
 
-Texture.prototype.getID = function()
+Texture.prototype.getData = function()
 {
-	return this.id;
+	return this.data;
 };
 
-Texture.prototype.getFile = function()
+Texture.prototype.getAppearance = function()
 {
-	return this.file;
-};
-
-Texture.prototype.getLengthS = function()
-{
-	return this.length_s;
-};
-
-Texture.prototype.getLengthT = function()
-{
-	return this.length_t;
+	return this.appearance;
 };
