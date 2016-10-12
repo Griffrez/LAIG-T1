@@ -95,11 +95,10 @@ Elements.prototype.getComponent = function (id)
 
 	if (element === undefined)
 	{
-		this.components[id] = new Component(id);
-		this.components.length++;
+		this.components.set(id, new Component(id));
 	}
 
-	return this.components[id];
+	return this.components.get(id);
 };
 
 Elements.prototype.getComponents = function ()
@@ -191,7 +190,7 @@ Elements.prototype.addLight = function (item)
 
 Elements.prototype.addTexture = function (item)
 {
-	var error = this.checkValid(item, this.textures, Texture, "texture");
+	var error = this.checkValid(item, this.textures, TextureData, "texture");
 
 	if (error)
 	{

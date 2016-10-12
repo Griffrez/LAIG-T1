@@ -199,11 +199,11 @@ MySceneGraph.prototype.parseView = function (rootElement)
 			return "Error Parsing Views, to not Unique";
 		}
 
-		var from = new CartesianValues3((this.reader.getFloat(fromElems[0], 'x'))
+		var from = vec3.fromValues((this.reader.getFloat(fromElems[0], 'x'))
 			, (this.reader.getFloat(fromElems[0], 'y'))
 			, (this.reader.getFloat(fromElems[0], 'z')));
 
-		var to = new CartesianValues3((this.reader.getFloat(toElems[0], 'x'))
+		var to = vec3.fromValues((this.reader.getFloat(toElems[0], 'x'))
 			, (this.reader.getFloat(toElems[0], 'y'))
 			, (this.reader.getFloat(toElems[0], 'z')));
 
@@ -356,12 +356,11 @@ MySceneGraph.prototype.parseLights = function (rootElement)
 				return "Error Parsing Lights, specular not Unique";
 			}
 
-			// Cartesian Value 3
-			location = new CartesianValues3((this.reader.getFloat(locationElems[0], 'x'))
+			location = vec3.fromValues((this.reader.getFloat(locationElems[0], 'x'))
 				, (this.reader.getFloat(locationElems[0], 'y'))
 				, (this.reader.getFloat(locationElems[0], 'z')));
 
-			var target = new CartesianValues3((this.reader.getFloat(targetElems[0], 'x'))
+			var target = vec3.fromValues((this.reader.getFloat(targetElems[0], 'x'))
 				, (this.reader.getFloat(targetElems[0], 'y'))
 				, (this.reader.getFloat(targetElems[0], 'z')));
 
@@ -417,8 +416,7 @@ MySceneGraph.prototype.parseLights = function (rootElement)
 				return "Error Parsing Lights, specular not Unique";
 			}
 
-			// Cartesian Value 4
-			location = new CartesianValues4((this.reader.getFloat(locationElems[0], 'x'))
+			location = vec4.fromValues((this.reader.getFloat(locationElems[0], 'x'))
 				, (this.reader.getFloat(locationElems[0], 'y'))
 				, (this.reader.getFloat(locationElems[0], 'z'))
 				, (this.reader.getFloat(locationElems[0], 'w')));
@@ -476,7 +474,7 @@ MySceneGraph.prototype.parseTextures = function (rootElement)
 		var length_s = this.reader.getFloat(currentTexture, 'length_s');
 		var length_t = this.reader.getFloat(currentTexture, 'length_t');
 
-		var texture = new Texture(id, file, length_s, length_t);
+		var texture = new TextureData(id, file, length_s, length_t);
 		var error = this.elements.addTexture(texture);
 		if (error != null)
 		{
@@ -689,9 +687,9 @@ MySceneGraph.prototype.parsePrimitives = function (rootElement)
 			let x2 = this.reader.getFloat(primitive, 'x2');
 			let y2 = this.reader.getFloat(primitive, 'y2');
 
-			let p1 = new CartesianValues2(x1, y1);
+			let p1 = new vec2.fromValues(x1, y1);
 
-			let p2 = new CartesianValues2(x2, y2);
+			let p2 = new vec2.fromValues(x2, y2);
 
 			result = new RectanglePrimitive(id, p1, p2);
 		}
@@ -709,11 +707,11 @@ MySceneGraph.prototype.parsePrimitives = function (rootElement)
 			let y3 = this.reader.getFloat(primitive, 'y3');
 			let z3 = this.reader.getFloat(primitive, 'z3');
 
-			let p1 = new CartesianValues3(x1, y1, z1);
+			let p1 = vec3.fromValues(x1, y1, z1);
 
-			let p2 = new CartesianValues3(x2, y2, z2);
+			let p2 = vec3.fromValues(x2, y2, z2);
 
-			let p3 = new CartesianValues3(x3, y3, z3);
+			let p3 = vec3.fromValues(x3, y3, z3);
 
 			result = new TrianglePrimitive(id, p1, p2, p3);
 		}
@@ -933,7 +931,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 			if(textureItem === undefined)
 			{
-				return "Error Parsing Texture in Component, id referred doesn't match any texture";
+				return "Error Parsing TextureData in Component, id referred doesn't match any texture";
 			}
 
 			texture = textureItem;

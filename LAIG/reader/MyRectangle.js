@@ -6,7 +6,7 @@ function MyRectangle(scene, rectPrim, minS, maxS, minT, maxT)
 {
 	CGFobject.call(this,scene);
 
-	// Texture Values
+	// TextureData Values
 	this.minS = minS || 0;
 	this.maxS = maxS || 1;
 	this.minT = minT || 0;

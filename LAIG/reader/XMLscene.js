@@ -1,6 +1,47 @@
 
 function XMLscene() {
 	CGFscene.call(this);
+	this.graph = null;
+	this.interface = null;
+}
+
+function setMaterial(appearance, data)
+{
+	let emission = data.getEmission();
+	let ambient = data.getAmbient();
+	let diffuse = data.getDiffuse();
+	let specular = data.getSpecular();
+	let shininess = data.getShininess();
+
+	appearance.setEmission(
+		emission.getRed(),
+		emission.getGreen(),
+		emission.getBlue(),
+		emission.getAlpha()
+	);
+
+	appearance.setAmbient(
+		ambient.getRed(),
+		ambient.getGreen(),
+		ambient.getBlue(),
+		ambient.getAlpha()
+	);
+
+	appearance.setDiffuse(
+		diffuse.getRed(),
+		diffuse.getGreen(),
+		diffuse.getBlue(),
+		diffuse.getAlpha()
+	);
+
+	appearance.setSpecular(
+		specular.getRed(),
+		specular.getGreen(),
+		specular.getBlue(),
+		specular.getAlpha()
+	);
+
+	appearance.setShininess(shininess);
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -9,11 +50,7 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) {
 	CGFscene.prototype.init.call(this, application);
 
-	this.initCameras();
-
 	this.initLights();
-
-	this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
 	this.gl.clearDepth(100.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
@@ -28,10 +65,6 @@ XMLscene.prototype.initLights = function () {
 	this.lights[0].setPosition(2, 3, 3, 1);
 	this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
 	this.lights[0].update();
-};
-
-XMLscene.prototype.initCameras = function () {
-	this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -76,17 +109,9 @@ XMLscene.prototype.perspectivesInit = function ()
 
 		let fov = perspective.getAngle();
 
-		var fromCV3 = perspective.getFrom();
-		var fromx = fromCV3.getX();
-		var fromy = fromCV3.getY();
-		var fromz = fromCV3.getZ();
-		var from = vec3.fromValues(fromx, fromy, fromz);
+		var from = perspective.getFrom();
 
-		var toCV3 = perspective.getTo();
-		var tox = toCV3.getX();
-		var toy = toCV3.getY();
-		var toz = toCV3.getZ();
-		var to = vec3.fromValues(tox, toy, toz);
+		var to = perspective.getTo();
 
 		let camera = new CGFcamera(fov, near, far, from, to);
 
@@ -97,17 +122,127 @@ XMLscene.prototype.perspectivesInit = function ()
 	this.interface.setActiveCamera(this.cameras[0]);
 };
 
+XMLscene.prototype.texturesInit = function ()
+{
+	let texturesData = this.graph.elements.getTextures();
+
+	this.textures = [];
+
+	for(let textureData of texturesData)
+	{
+		let texture = new Texture(this, textureData);
+
+		this.textures.push(texture);
+	}
+};
+
+XMLscene.prototype.lightsInit = function ()
+{
+	let lightsData = this.graph.elements.getLights();
+
+	this.lights = [];
+
+	for(let i = 0; i < lightsData.size; i++)
+	{
+		let lightData = lightsData[i];
+
+		let light = new CGFlight(this, i);
+
+		let ambient = lightData.getAmbient();
+		light.setAmbient(
+			ambient.getRed(),
+			ambient.getGreen(),
+			ambient.getBlue(),
+			ambient.getAlpha()
+		);
+
+		let diffuse = lightData.getDiffuse();
+		light.setDiffuse(
+			diffuse.getRed(),
+			diffuse.getGreen(),
+			diffuse.getBlue(),
+			diffuse.getAlpha()
+		);
+
+		let specular = lightData.getSpecular();
+		light.setSpecular(
+			specular.getRed(),
+			specular.getGreen(),
+			specular.getBlue(),
+			specular.getAlpha()
+		);
+
+		if(lightData instanceof OmniLight)
+		{
+			let location = lightData.getLocation();
+			light.setPosition(
+				location[0],
+				location[1],
+				location[2],
+				location[3]
+			);
+		}
+		else
+		{
+			let location = lightData.getLocation();
+			light.setPosition(
+				location[0],
+				location[1],
+				location[2],
+				0.0
+			);
+
+			let target = lightData.getTarget();
+			let directionSpot;
+			vec3.subtract(directionSpot, target, location);
+			vec3.normalize(directionSpot, directionSpot);
+			light.setSpotDirection(
+				directionSpot[0],
+				directionSpot[1],
+				directionSpot[2]
+			);
+
+			let exponent = lightData.getExponent();
+			light.setSpotExponent(exponent);
+
+			let angle = lightData.getAngle();
+			light.setSpotCutOff(angle);
+		}
+
+		if(lightData.isEnabled())
+		{
+			light.enable();
+		}
+		else
+		{
+			light.disable();
+		}
+
+		light.setVisible(true);
+
+		this.lights[i] = light;
+		this.lights[i].update();
+	}
+};
+
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function ()
 {
 	this.illuminationInit();
 	this.perspectivesInit();
+	this.texturesInit();
+	this.lightsInit();
 	//this.lights[0].setVisible(true);
 	//this.lights[0].enable();
+	this.dataLoaded = true;
 };
 
 XMLscene.prototype.display = function () {
+	if(!this.dataLoaded)
+	{
+		return;
+	}
 	// ---- BEGIN Background, camera and axis setup
 
 	// Clear image and depth buffer everytime we update the scene
@@ -133,7 +268,7 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
-		this.lights[0].update();
+		//this.lights[0].update();
 	}
 };
 
