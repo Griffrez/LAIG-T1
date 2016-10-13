@@ -2,15 +2,13 @@
  * MyRectangle
  * @constructor
  */
-function MyRectangle(scene, rectPrim, minS, maxS, minT, maxT)
+function MyRectangle(scene, rectPrim, sLenght, tLenght)
 {
 	CGFobject.call(this,scene);
 
 	// Texture Values
-	this.minS = minS || 0;
-	this.maxS = maxS || 1;
-	this.minT = minT || 0;
-	this.maxT = maxT || 1;
+	this.sLen = sLenght || 1;
+	this.tLen = tLenght || 1;
 
 	// Rectangle Primitive Data
 	this.rectPrim = rectPrim;
@@ -18,10 +16,10 @@ function MyRectangle(scene, rectPrim, minS, maxS, minT, maxT)
 	this.initBuffers();
 };
 
-MyQuad.prototype = Object.create(CGFobject.prototype);
-MyQuad.prototype.constructor = MyQuad;
+MyRectangle.prototype = Object.create(CGFobject.prototype);
+MyRectangle.prototype.constructor = MyRectangle;
 
-MyQuad.prototype.initBuffers = function()
+MyRectangle.prototype.initBuffers = function()
 {
 	var p1 = this.rectPrim.getPoint1();
 	var p2 = this.rectPrim.getPoint2();
@@ -37,13 +35,13 @@ MyQuad.prototype.initBuffers = function()
 			x2, y2, 0,
 			x2, y1, 0,
 			x1, y2, 0,
-			x1, y1, 0,
+			x1, y1, 0
 		];
 
 	this.indices =
 		[
 			2, 1, 0,
-			2, 3, 1,
+			2, 3, 1
 		];
 
 	this.normals =
@@ -54,12 +52,15 @@ MyQuad.prototype.initBuffers = function()
 			0,0,1
 		];
 
+	var deltaX = x2 - x1;
+	var deltaY = y2 - y1;
+		
 	this.texCoords =
 		[
-			this.maxS, this.minT,
-			this.maxS, this.maxT,
-			this.minS, this.minT,
-			this.minS, this.maxT
+			deltaX/this.sLen, 0,
+			deltaX/this.sLen, deltaY/this.tLen,
+			0, 0,
+			0, deltaY/this.tLen
 		];
 
 	this.primitiveType = this.scene.gl.TRIANGLES;
