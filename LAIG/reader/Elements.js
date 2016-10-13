@@ -2,14 +2,14 @@ function Elements()
 {
 	this.scene = null;
 	this.illumination = null;
-	this.perspectives = [];
+	this.perspectives = new Map();
 	this.defaultPerspective = null;
-	this.lights = [];
-	this.textures = [];
-	this.materials = [];
-	this.transformations = [];
-	this.primitives = [];
-	this.components = [];
+	this.lights = new Map();
+	this.textures = new Map();
+	this.materials = new Map();
+	this.transformations = new Map();
+	this.primitives = new Map();
+	this.components = new Map();
 }
 
 // Getters
@@ -26,7 +26,12 @@ Elements.prototype.getIllumination = function ()
 
 Elements.prototype.getPerspective = function (id)
 {
-	return this.perspectives[id];
+	return this.perspectives.get(id);
+};
+
+Elements.prototype.getPerspectives = function ()
+{
+	return this.perspectives.values();
 };
 
 Elements.prototype.getDefaultPerspective = function ()
@@ -36,40 +41,69 @@ Elements.prototype.getDefaultPerspective = function ()
 
 Elements.prototype.getLight = function (id)
 {
-	return this.lights[id];
+	return this.lights.get(id);
+};
+
+Elements.prototype.getLights = function ()
+{
+	return this.lights.values();
 };
 
 Elements.prototype.getTexture = function (id)
 {
-	return this.textures[id];
+	return this.textures.get(id);
+};
+
+Elements.prototype.getTextures = function ()
+{
+	return this.textures.values();
 };
 
 Elements.prototype.getMaterial = function (id)
 {
-	return this.materials[id];
+	return this.materials.get(id);
+};
+
+Elements.prototype.getMaterials = function ()
+{
+	return this.materials.values();
 };
 
 Elements.prototype.getTransformation = function (id)
 {
-	return this.transformations[id];
+	return this.transformations.get(id);
+};
+
+Elements.prototype.getTransformations = function ()
+{
+	return this.transformations.values();
 };
 
 Elements.prototype.getPrimitive = function (id)
 {
-	return this.primitives[id];
+	return this.primitives.get(id);
+};
+
+Elements.prototype.getPrimitives = function ()
+{
+	return this.primitives.values();
 };
 
 Elements.prototype.getComponent = function (id)
 {
-	var element = this.components[id];
+	var element = this.components.get(id);
 
 	if (element === undefined)
 	{
-		this.components[id] = new Component(id);
-		this.components.length++;
+		this.components.set(id, new ComponentData(id));
 	}
 
-	return this.components[id];
+	return this.components.get(id);
+};
+
+Elements.prototype.getComponents = function ()
+{
+	return this.components.values();
 };
 
 // Setters
@@ -96,7 +130,7 @@ Elements.prototype.setIllumination = function (item)
 	return null;
 };
 
-Elements.prototype.checkValid = function (item, array, constructor, nameType)
+Elements.prototype.checkValid = function (item, map, constructor, nameType)
 {
 	if (!(item instanceof constructor))
 	{
@@ -105,7 +139,7 @@ Elements.prototype.checkValid = function (item, array, constructor, nameType)
 
 	var id = item.getID();
 
-	var check = array[id];
+	var check = map.get(id);
 
 	if (check !== undefined)
 	{
@@ -126,8 +160,7 @@ Elements.prototype.addPerspective = function (item)
 		return error;
 	}
 
-	this.perspectives[item.getID()] = item;
-	this.perspectives.length++;
+	this.perspectives.set(item.getID(), item);
 	return null;
 };
 
@@ -151,22 +184,20 @@ Elements.prototype.addLight = function (item)
 		return error;
 	}
 
-	this.lights[item.getID()] = item;
-	this.lights.length++;
+	this.lights.set(item.getID(), item);
 	return null;
 };
 
 Elements.prototype.addTexture = function (item)
 {
-	var error = this.checkValid(item, this.textures, Texture, "texture");
+	var error = this.checkValid(item, this.textures, TextureData, "texture");
 
 	if (error)
 	{
 		return error;
 	}
 
-	this.textures[item.getID()] = item;
-	this.textures.length++;
+	this.textures.set(item.getID(), item);
 	return null;
 };
 
@@ -179,8 +210,7 @@ Elements.prototype.addMaterial = function (item)
 		return error;
 	}
 
-	this.materials[item.getID()] = item;
-	this.materials.length++;
+	this.materials.set(item.getID(), item);
 	return null;
 };
 
@@ -193,8 +223,7 @@ Elements.prototype.addTransformation = function (item)
 		return error;
 	}
 
-	this.transformations[item.getID()] = item;
-	this.transformations.length++;
+	this.transformations.set(item.getID(), item);
 	return null;
 };
 
@@ -207,8 +236,7 @@ Elements.prototype.addPrimitive = function (item)
 		return error;
 	}
 
-	this.primitives[item.getID()] = item;
-	this.primitives.length++;
+	this.primitives.set(item.getID(), item);
 	return null;
 };
 
@@ -218,11 +246,10 @@ Elements.prototype.addComponent = function (id)
 
 	if (check !== undefined)
 	{
-		return "Component id " + id + " already exists.";
+		return "ComponentData id " + id + " already exists.";
 	}
 
-	this.components[id] = new Component(id);
-	this.components.length++;
+	this.components.set(item.getID(), item);
 	return null;
 };
 
@@ -232,7 +259,7 @@ Elements.prototype.setComponentData = function (id, transformation, materials, t
 
 	if (check.isLoadedOK())
 	{
-		return "Component id " + id + " is already loaded";
+		return "ComponentData id " + id + " is already loaded";
 	}
 
 	check.setData(transformation, materials, texture, childComponents, childPrimitives);

@@ -93,21 +93,21 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 		return result;
 	}
 
-	// Parse Transformations TODO
+	// Parse Transformations
 	result = this.parseTransformations(rootElement);
 	if (result != null)
 	{
 		return result;
 	}
 
-	// Parse Primitives TODO
+	// Parse Primitives
 	result = this.parsePrimitives(rootElement);
 	if (result != null)
 	{
 		return result;
 	}
 
-	// Parse Components TODO
+	// Parse Components
 	result = this.parseComponents(rootElement);
 	if (result != null)
 	{
@@ -174,7 +174,7 @@ MySceneGraph.prototype.parseView = function (rootElement)
 		}
 
 		var id = this.reader.getString(currentPerspective, 'id');
-		var near = this.reader.getString(currentPerspective, 'near');
+		var near = this.reader.getFloat(currentPerspective, 'near');
 		var far = this.reader.getFloat(currentPerspective, 'far');
 		var angle = this.reader.getFloat(currentPerspective, 'angle');
 
@@ -199,11 +199,11 @@ MySceneGraph.prototype.parseView = function (rootElement)
 			return "Error Parsing Views, to not Unique";
 		}
 
-		var from = new CartesianValues3((this.reader.getFloat(fromElems[0], 'x'))
+		var from = vec3.fromValues((this.reader.getFloat(fromElems[0], 'x'))
 			, (this.reader.getFloat(fromElems[0], 'y'))
 			, (this.reader.getFloat(fromElems[0], 'z')));
 
-		var to = new CartesianValues3((this.reader.getFloat(toElems[0], 'x'))
+		var to = vec3.fromValues((this.reader.getFloat(toElems[0], 'x'))
 			, (this.reader.getFloat(toElems[0], 'y'))
 			, (this.reader.getFloat(toElems[0], 'z')));
 
@@ -356,12 +356,11 @@ MySceneGraph.prototype.parseLights = function (rootElement)
 				return "Error Parsing Lights, specular not Unique";
 			}
 
-			// Cartesian Value 3
-			location = new CartesianValues3((this.reader.getFloat(locationElems[0], 'x'))
+			location = vec3.fromValues((this.reader.getFloat(locationElems[0], 'x'))
 				, (this.reader.getFloat(locationElems[0], 'y'))
 				, (this.reader.getFloat(locationElems[0], 'z')));
 
-			var target = new CartesianValues3((this.reader.getFloat(targetElems[0], 'x'))
+			var target = vec3.fromValues((this.reader.getFloat(targetElems[0], 'x'))
 				, (this.reader.getFloat(targetElems[0], 'y'))
 				, (this.reader.getFloat(targetElems[0], 'z')));
 
@@ -417,8 +416,7 @@ MySceneGraph.prototype.parseLights = function (rootElement)
 				return "Error Parsing Lights, specular not Unique";
 			}
 
-			// Cartesian Value 4
-			location = new CartesianValues4((this.reader.getFloat(locationElems[0], 'x'))
+			location = vec4.fromValues((this.reader.getFloat(locationElems[0], 'x'))
 				, (this.reader.getFloat(locationElems[0], 'y'))
 				, (this.reader.getFloat(locationElems[0], 'z'))
 				, (this.reader.getFloat(locationElems[0], 'w')));
@@ -476,7 +474,7 @@ MySceneGraph.prototype.parseTextures = function (rootElement)
 		var length_s = this.reader.getFloat(currentTexture, 'length_s');
 		var length_t = this.reader.getFloat(currentTexture, 'length_t');
 
-		var texture = new Texture(id, file, length_s, length_t);
+		var texture = new TextureData(id, file, length_s, length_t);
 		var error = this.elements.addTexture(texture);
 		if (error != null)
 		{
@@ -689,9 +687,9 @@ MySceneGraph.prototype.parsePrimitives = function (rootElement)
 			let x2 = this.reader.getFloat(primitive, 'x2');
 			let y2 = this.reader.getFloat(primitive, 'y2');
 
-			let p1 = new CartesianValues2(x1, y1);
+			let p1 = new vec2.fromValues(x1, y1);
 
-			let p2 = new CartesianValues2(x2, y2);
+			let p2 = new vec2.fromValues(x2, y2);
 
 			result = new RectanglePrimitive(id, p1, p2);
 		}
@@ -709,11 +707,11 @@ MySceneGraph.prototype.parsePrimitives = function (rootElement)
 			let y3 = this.reader.getFloat(primitive, 'y3');
 			let z3 = this.reader.getFloat(primitive, 'z3');
 
-			let p1 = new CartesianValues3(x1, y1, z1);
+			let p1 = vec3.fromValues(x1, y1, z1);
 
-			let p2 = new CartesianValues3(x2, y2, z2);
+			let p2 = vec3.fromValues(x2, y2, z2);
 
-			let p3 = new CartesianValues3(x3, y3, z3);
+			let p3 = vec3.fromValues(x3, y3, z3);
 
 			result = new TrianglePrimitive(id, p1, p2, p3);
 		}
@@ -772,7 +770,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 	var componentCount = elems.children.length;
 	if (componentCount < 1)
 	{
-		return "Error Parsing Components, no Component";
+		return "Error Parsing Components, no ComponentData";
 	}
 
 	for (var i = 0; i < componentCount; i++)
@@ -783,35 +781,35 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 		if (currentComponent.children.length !== 4)
 		{
-			return "Error Parsing Component, tag amount different than 4 (transformation, materials, texture, children)";
+			return "Error Parsing ComponentData, tag amount different than 4 (transformation, materials, texture, children)";
 		}
 
 		var transformationElements = currentComponent.getElementsByTagName('transformation');
 
 		if(transformationElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one transformation element";
+			return "Error Parsing ComponentData, should have one and just one transformation element";
 		}
 
 		var materialsElements = currentComponent.getElementsByTagName('materials');
 
 		if(materialsElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one materials element";
+			return "Error Parsing ComponentData, should have one and just one materials element";
 		}
 
 		var textureElements = currentComponent.getElementsByTagName('texture');
 
 		if(textureElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one texture element";
+			return "Error Parsing ComponentData, should have one and just one texture element";
 		}
 
 		var childrenElements = currentComponent.getElementsByTagName('children');
 
 		if(childrenElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one children element";
+			return "Error Parsing ComponentData, should have one and just one children element";
 		}
 
 		var transformationElement = transformationElements[0];
@@ -823,7 +821,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 		if(transformationElement.children.length < 1)
 		{
-			return "Error Parsing Component, its transformation element should have at least one child";
+			return "Error Parsing ComponentData, its transformation element should have at least one child";
 		}
 
 		if(transformationElement.children.length > 1)
@@ -861,7 +859,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 				}
 				else
 				{
-					return "Error Parsing Transformation in Component, unknown transformation type" + nodeName;
+					return "Error Parsing Transformation in ComponentData, unknown transformation type" + nodeName;
 				}
 			}
 		}
@@ -871,7 +869,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 			if(transformationRef.nodeName !== 'transformationref')
 			{
-				return "Error Parsing Transformation in Component, only one child, not a transformationref";
+				return "Error Parsing Transformation in ComponentData, only one child, not a transformationref";
 			}
 
 			var transformationID = this.reader.getString(transformationRef, 'id');
@@ -880,7 +878,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 			if(transformation === undefined)
 			{
-				return "Error Parsing Transformation in Component, transformation referred doesn't exist";
+				return "Error Parsing Transformation in ComponentData, transformation referred doesn't exist";
 			}
 		}
 
@@ -888,7 +886,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 		if(materialsElement.children.length < 1)
 		{
-			return "Error Parsing Materials in Component, there must be at least one";
+			return "Error Parsing Materials in ComponentData, there must be at least one";
 		}
 
 		var materialElements = materialsElement.children;
@@ -912,7 +910,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 				if (material === undefined)
 				{
-					return "Error Parsing Material in Component, id referred doesn't match any material."
+					return "Error Parsing Material in ComponentData, id referred doesn't match any material."
 				}
 
 				materials.push(material);
@@ -933,7 +931,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 			if(textureItem === undefined)
 			{
-				return "Error Parsing Texture in Component, id referred doesn't match any texture";
+				return "Error Parsing TextureData in ComponentData, id referred doesn't match any texture";
 			}
 
 			texture = textureItem;
@@ -965,14 +963,14 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 				if(primitive === undefined)
 				{
-					return "Error Parsing Child Primitive in Component, id referred doesn't match any primitive";
+					return "Error Parsing Child Primitive in ComponentData, id referred doesn't match any primitive";
 				}
 
 				childrenPrimitives.push(primitive);
 			}
 			else
 			{
-				return "Error Parsing Child in Component, unknown child type" + child.nodeName;
+				return "Error Parsing Child in ComponentData, unknown child type" + child.nodeName;
 			}
 		}
 

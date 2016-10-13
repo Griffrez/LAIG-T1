@@ -1,6 +1,3 @@
-/*
-	Location: CartesianValues4
- */
 function OmniLight(id, enabled, location, ambient, diffuse, specular)
 {
 	Light.call(this, id, enabled, ambient, diffuse, specular);

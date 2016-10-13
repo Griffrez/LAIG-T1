@@ -4,41 +4,42 @@ serialInclude=function(a){var b=console,c=serialInclude.l;if(a.length>0)c.splice
 
 function getUrlVars() {
     var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
-    function(m,key,value) {
-      vars[decodeURIComponent(key)] = decodeURIComponent(value);
-    });
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        function(m,key,value) {
+            vars[decodeURIComponent(key)] = decodeURIComponent(value);
+        });
     return vars;
-}	 
-
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Primitive.js', 'CartesianValues2.js', 'CartesianValues3.js', 'CartesianValues4.js', 'Color.js', 'Component.js', 'CylinderPrimitive.js', 'Elements.js', 'Illumination.js', 'Light.js', 'Material.js', 'Matrix4.js', 'OmniLight.js', 'Perspective.js', 'RectanglePrimitive.js', 'Scene.js', 'SpherePrimitive.js', 'SpotLight.js', 'Texture.js', 'TorusPrimitive.js', 'Transformation.js', 'TrianglePrimitive.js',
-
-main=function()
-{
-	// Standard application, scene and interface setup
-    var app = new CGFapplication(document.body);
-    var myScene = new XMLscene();
-    var myInterface = new CGFinterface();
-
-    app.init();
-
-    app.setScene(myScene);
-    app.setInterface(myInterface);
-
-    myInterface.setActiveCamera(myScene.camera);
-
-	// get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
-	// or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-	
-	// dsx to be loaded
-	var filename=getUrlVars()['file'] || "scene.dsx";
-
-	// create and load graph, and associate it to scene. 
-	// Check console for loading errors
-	var myGraph = new MySceneGraph(filename, myScene);
-	
-	// start
-    app.run();
 }
+
+serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Color.js', 'Scene.js', 'Perspective.js', 'Illumination.js', 'Light.js', 'SpotLight.js', 'OmniLight.js', 'TextureData.js', 'Material.js', 'Transformation.js', 'Primitive.js', 'RectanglePrimitive.js', 'TrianglePrimitive.js', 'CylinderPrimitive.js', 'SpherePrimitive.js', 'TorusPrimitive.js', 'ComponentData.js', 'Elements.js', 'Texture.js',
+
+    main=function()
+    {
+        // Standard application, scene and interface setup
+        var app = new CGFapplication(document.body);
+        var myScene = new XMLscene();
+        var myInterface = new CGFinterface();
+
+        myScene.interface = myInterface;
+
+        app.init();
+
+        app.setScene(myScene);
+        app.setInterface(myInterface);
+
+        myInterface.setActiveCamera(myScene.camera);
+
+        // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
+        // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
+
+        var filename=getUrlVars()['file'] || "scene.dsx";
+
+        // create and load graph, and associate it to scene.
+        // Check console for loading errors
+        var myGraph = new MySceneGraph(filename, myScene);
+
+        // start
+        app.run();
+    }
 
 ]);
