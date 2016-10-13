@@ -770,7 +770,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 	var componentCount = elems.children.length;
 	if (componentCount < 1)
 	{
-		return "Error Parsing Components, no Component";
+		return "Error Parsing Components, no ComponentData";
 	}
 
 	for (var i = 0; i < componentCount; i++)
@@ -781,35 +781,35 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 		if (currentComponent.children.length !== 4)
 		{
-			return "Error Parsing Component, tag amount different than 4 (transformation, materials, texture, children)";
+			return "Error Parsing ComponentData, tag amount different than 4 (transformation, materials, texture, children)";
 		}
 
 		var transformationElements = currentComponent.getElementsByTagName('transformation');
 
 		if(transformationElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one transformation element";
+			return "Error Parsing ComponentData, should have one and just one transformation element";
 		}
 
 		var materialsElements = currentComponent.getElementsByTagName('materials');
 
 		if(materialsElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one materials element";
+			return "Error Parsing ComponentData, should have one and just one materials element";
 		}
 
 		var textureElements = currentComponent.getElementsByTagName('texture');
 
 		if(textureElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one texture element";
+			return "Error Parsing ComponentData, should have one and just one texture element";
 		}
 
 		var childrenElements = currentComponent.getElementsByTagName('children');
 
 		if(childrenElements.length !== 1)
 		{
-			return "Error Parsing Component, should have one and just one children element";
+			return "Error Parsing ComponentData, should have one and just one children element";
 		}
 
 		var transformationElement = transformationElements[0];
@@ -821,7 +821,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 		if(transformationElement.children.length < 1)
 		{
-			return "Error Parsing Component, its transformation element should have at least one child";
+			return "Error Parsing ComponentData, its transformation element should have at least one child";
 		}
 
 		if(transformationElement.children.length > 1)
@@ -859,7 +859,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 				}
 				else
 				{
-					return "Error Parsing Transformation in Component, unknown transformation type" + nodeName;
+					return "Error Parsing Transformation in ComponentData, unknown transformation type" + nodeName;
 				}
 			}
 		}
@@ -869,7 +869,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 			if(transformationRef.nodeName !== 'transformationref')
 			{
-				return "Error Parsing Transformation in Component, only one child, not a transformationref";
+				return "Error Parsing Transformation in ComponentData, only one child, not a transformationref";
 			}
 
 			var transformationID = this.reader.getString(transformationRef, 'id');
@@ -878,7 +878,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 			if(transformation === undefined)
 			{
-				return "Error Parsing Transformation in Component, transformation referred doesn't exist";
+				return "Error Parsing Transformation in ComponentData, transformation referred doesn't exist";
 			}
 		}
 
@@ -886,7 +886,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 		if(materialsElement.children.length < 1)
 		{
-			return "Error Parsing Materials in Component, there must be at least one";
+			return "Error Parsing Materials in ComponentData, there must be at least one";
 		}
 
 		var materialElements = materialsElement.children;
@@ -910,7 +910,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 				if (material === undefined)
 				{
-					return "Error Parsing Material in Component, id referred doesn't match any material."
+					return "Error Parsing Material in ComponentData, id referred doesn't match any material."
 				}
 
 				materials.push(material);
@@ -931,7 +931,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 			if(textureItem === undefined)
 			{
-				return "Error Parsing TextureData in Component, id referred doesn't match any texture";
+				return "Error Parsing TextureData in ComponentData, id referred doesn't match any texture";
 			}
 
 			texture = textureItem;
@@ -963,14 +963,14 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 				if(primitive === undefined)
 				{
-					return "Error Parsing Child Primitive in Component, id referred doesn't match any primitive";
+					return "Error Parsing Child Primitive in ComponentData, id referred doesn't match any primitive";
 				}
 
 				childrenPrimitives.push(primitive);
 			}
 			else
 			{
-				return "Error Parsing Child in Component, unknown child type" + child.nodeName;
+				return "Error Parsing Child in ComponentData, unknown child type" + child.nodeName;
 			}
 		}
 

@@ -62,9 +62,11 @@ XMLscene.prototype.init = function (application) {
 
 XMLscene.prototype.initLights = function () {
 
-	this.lights[0].setPosition(2, 3, 3, 1);
-	this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-	this.lights[0].update();
+	//this.lights[0].setPosition(2, 3, 3, 1);
+	//this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
+	//this.lights[0].setVisible(true);
+	//this.lights[0].enable();
+	//this.lights[0].update();
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -142,9 +144,11 @@ XMLscene.prototype.lightsInit = function ()
 
 	this.lights = [];
 
-	for(let i = 0; i < lightsData.size; i++)
+	let index = 0;
+
+	for(let lightData of lightsData)
 	{
-		let lightData = lightsData[i];
+		let i = index++;
 
 		let light = new CGFlight(this, i);
 
@@ -193,7 +197,7 @@ XMLscene.prototype.lightsInit = function ()
 			);
 
 			let target = lightData.getTarget();
-			let directionSpot;
+			let directionSpot = vec3.create();
 			vec3.subtract(directionSpot, target, location);
 			vec3.normalize(directionSpot, directionSpot);
 			light.setSpotDirection(
@@ -208,6 +212,10 @@ XMLscene.prototype.lightsInit = function ()
 			let angle = lightData.getAngle();
 			light.setSpotCutOff(angle);
 		}
+
+		light.setConstantAttenuation(0);
+		light.setLinearAttenuation(1);
+		light.setQuadraticAttenuation(0);
 
 		if(lightData.isEnabled())
 		{
@@ -225,6 +233,15 @@ XMLscene.prototype.lightsInit = function ()
 	}
 };
 
+XMLscene.prototype.componentsInit = function ()
+{
+	let componentsData = this.graph.elements.getComponents();
+
+	this.components = new Map();
+
+
+};
+
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function ()
@@ -233,8 +250,8 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.perspectivesInit();
 	this.texturesInit();
 	this.lightsInit();
-	//this.lights[0].setVisible(true);
-	//this.lights[0].enable();
+	this.componentsInit();
+
 	this.dataLoaded = true;
 };
 
@@ -268,7 +285,10 @@ XMLscene.prototype.display = function () {
 	// This is one possible way to do it
 	if (this.graph.loadedOk)
 	{
-		//this.lights[0].update();
+		for(let light of this.lights)
+		{
+			light.update();
+		}
 	}
 };
 

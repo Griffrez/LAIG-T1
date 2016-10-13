@@ -95,7 +95,7 @@ Elements.prototype.getComponent = function (id)
 
 	if (element === undefined)
 	{
-		this.components.set(id, new Component(id));
+		this.components.set(id, new ComponentData(id));
 	}
 
 	return this.components.get(id);
@@ -246,7 +246,7 @@ Elements.prototype.addComponent = function (id)
 
 	if (check !== undefined)
 	{
-		return "Component id " + id + " already exists.";
+		return "ComponentData id " + id + " already exists.";
 	}
 
 	this.components.set(item.getID(), item);
@@ -259,7 +259,7 @@ Elements.prototype.setComponentData = function (id, transformation, materials, t
 
 	if (check.isLoadedOK())
 	{
-		return "Component id " + id + " is already loaded";
+		return "ComponentData id " + id + " is already loaded";
 	}
 
 	check.setData(transformation, materials, texture, childComponents, childPrimitives);
