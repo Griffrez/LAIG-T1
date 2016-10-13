@@ -24,11 +24,10 @@ MyRectangle.prototype.initBuffers = function()
 	var p1 = this.rectPrim.getPoint1();
 	var p2 = this.rectPrim.getPoint2();
 
-	var x1 = p1.getX();
-	var y1 = p1.getY();
-	var x2 = p2.getX();
-	var y2 = p2.getY();
-
+	var x1 = p1[0];
+	var y1 = p1[1];
+	var x2 = p2[0];
+	var y2 = p2[1];
 
 	this.vertices =
 		[

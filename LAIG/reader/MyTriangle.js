@@ -25,17 +25,17 @@
 	var p2 = this.trianglePrim.getPoint2();
 	var p3 = this.trianglePrim.getPoint3();
 	
-	var x1 = p1.getX();
-	var y1 = p1.getY();
-	var z1 = p1.getZ();
+	var x1 = p1[0];
+	var y1 = p1[1];
+	var z1 = p1[2];
 	
-	var x2 = p2.getX();
-	var y2 = p2.getY();
-	var z2 = p2.getZ();
+	var x2 = p2[0];
+	var y2 = p2[1];
+	var z2 = p2[2];
 	
-	var x3 = p3.getX();
-	var y3 = p3.getY();
-	var z3 = p3.getZ();
+	var x3 = p3[0];
+	var y3 = p3[1];
+	var z3 = p3[2];
 	 
 	this.vertices =
 	[
@@ -49,26 +49,40 @@
 		0,1,2
 	 ];
 	
-	var vec1 = new CartesianValues3(Math.abs(x1 - x2), Math.abs(y1 - y2), Math.abs(z1 - z2));
-	var vec2 = new CartesianValues3(Math.abs(x1 - x3), Math.abs(y1 - y3), Math.abs(z1 - z3));
+	/*
+	var vec1 = new CartesianValues3(Math.abs(x1 - x2), Math.abs(y1 - y2), Math.abs(z1 - z2)); v1-v2
+	var vec2 = new CartesianValues3(Math.abs(x1 - x3), Math.abs(y1 - y3), Math.abs(z1 - z3)); v1-v3
 	
-	var i = vec1.getY() * vec2.getZ() - vec1.getZ() * vec2.getY();
-	var j = vec1.getZ() * vec2.getX() - vec1.getX() * vec2.getZ();
-	var k = vec1.getX() * vec2.getY() - vec1.getY() * vec2.getX();
+	var i = vec1[1] * vec2[2] - vec1[2] * vec2[1];
+	var j = vec1[2] * vec2[0] - vec1[0] * vec2[2];
+	var k = vec1[0] * vec2[1] - vec1[1] * vec2[0];
 	
 	var magnitude = Math.sqrt(i*i + j*j + k*k);
+	*/
+	
+	// Refac
+	
+	var vecA = vec3.create();
+	vec3.subtract(vecA, p1, p2);
+	
+	var vecB = vec3.create();
+	vec3.subtract(vecB, p1, p3);
+	
+	var vecNormal = vec3.create();
+	vec3.cross(vecNormal, vecA, vecB);
+	vec3.normalize(vecNormal, vecNormal);
 	
  	this.normals =
  	[
-		i/magnitude,
-		j/magnitude,
-		k/magnitude,
-		i/magnitude,
-		j/magnitude,
-		k/magnitude,
-		i/magnitude,
-		j/magnitude,
-		k/magnitude
+		vecNormal[0],
+		vecNormal[1],
+		vecNormal[2],
+		vecNormal[0],
+		vecNormal[1],
+		vecNormal[2],
+		vecNormal[0],
+		vecNormal[1],
+		vecNormal[2]
 	];
 
 	var a = Math.sqrt( (x1 - x3)*(x1 - x3) + (y1 - y3)*(y1 - y3) + (z1 - z3)*(z1 - z3) );
