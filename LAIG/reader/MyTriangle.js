@@ -60,8 +60,6 @@
 	var magnitude = Math.sqrt(i*i + j*j + k*k);
 	*/
 	
-	// Refac
-	
 	var vecA = vec3.create();
 	vec3.subtract(vecA, p1, p2);
 	
@@ -85,9 +83,18 @@
 		vecNormal[2]
 	];
 
+	/*
 	var a = Math.sqrt( (x1 - x3)*(x1 - x3) + (y1 - y3)*(y1 - y3) + (z1 - z3)*(z1 - z3) );
 	var b = Math.sqrt( (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1) + (z2 - z1)*(z2 - z1) );
 	var c = Math.sqrt( (x3 - x2)*(x3 - x2) + (y3 - y2)*(y3 - y2) + (z3 - z2)*(z3 - z2) );
+	*/
+	
+	var vecC = vec3.create();
+	vec3.subtract(vecC, p2, p3);
+	
+	var a = vec3.length(vecB);
+	var b = vec3.length(vecA);
+	var c = vec3.length(vecC);
 	
 	var cosBeta = (a*a - b*b + c*c) / (2 * a * c);
 	var sinBeta = Math.sqrt(1 - cosBeta^2);
