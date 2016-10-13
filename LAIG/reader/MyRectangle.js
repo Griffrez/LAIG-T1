@@ -54,13 +54,16 @@ MyRectangle.prototype.initBuffers = function()
 
 	var deltaX = x2 - x1;
 	var deltaY = y2 - y1;
+	
+	var xtc = deltaX/this.sLen;
+	var xty = deltaY/this.tLen;
 		
 	this.texCoords =
 		[
-			deltaX/this.sLen, 0,
-			deltaX/this.sLen, deltaY/this.tLen,
+			xtc, 0,
+			xtc, xty,
 			0, 0,
-			0, deltaY/this.tLen
+			0, xty
 		];
 
 	this.primitiveType = this.scene.gl.TRIANGLES;
