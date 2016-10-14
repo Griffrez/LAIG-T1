@@ -1,7 +1,7 @@
 function Texture(scene, data)
 {
 	this.data = data;
-	this.appearance = new CGFtexture(scene, data.file);
+	this.texture = new CGFtexture(scene, data.file);
 }
 
 Texture.prototype.getData = function()
@@ -9,7 +9,7 @@ Texture.prototype.getData = function()
 	return this.data;
 };
 
-Texture.prototype.getAppearance = function()
+Texture.prototype.getTexture = function()
 {
-	return this.appearance;
+	return this.texture;
 };

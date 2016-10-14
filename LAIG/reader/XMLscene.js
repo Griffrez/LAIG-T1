@@ -74,6 +74,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 	this.setDiffuse(0.2, 0.4, 0.8, 1.0);
 	this.setSpecular(0.2, 0.4, 0.8, 1.0);
 	this.setShininess(10.0);
+	this.activeTexture = null;
 };
 
 XMLscene.prototype.illuminationInit = function ()
@@ -128,13 +129,13 @@ XMLscene.prototype.texturesInit = function ()
 {
 	let texturesData = this.graph.elements.getTextures();
 
-	this.textures = [];
+	this.textures = new Map();
 
 	for(let textureData of texturesData)
 	{
 		let texture = new Texture(this, textureData);
 
-		this.textures.push(texture);
+		this.textures.set(textureData.getID(), texture);
 	}
 };
 
@@ -233,13 +234,36 @@ XMLscene.prototype.lightsInit = function ()
 	}
 };
 
+function processComponent(id)
+{
+	let compData = this.graph.elements.getComponent(id);
+	let transformation = compData.getTransformation();
+	let materials = compData.getMaterials();
+	let textureID = compData.getTexture().getID();
+	let texture = null;
+	if((textureID === "inherit") || (textureID === "none"))
+	{
+		texture = textureID;
+	}
+	else
+	{
+		texture = this.textures.get(textureID);
+	}
+	let childComponents = [];
+	for(let childData of compData.getChildren().components)
+	{
+		let childID = childData.getID();
+		let child = processComponent(childID);
+		childComponents.push(child);
+	}
+	let childPrimitives = compData.getChildren().primitives;
+	return new Component(id, transformation, materials, texture, childComponents, childPrimitives);
+}
+
 XMLscene.prototype.componentsInit = function ()
 {
-	let componentsData = this.graph.elements.getComponents();
-
-	this.components = new Map();
-
-
+	let rootID = this.graph.elements.getScene().getRoot();
+	this.root = processComponent(rootID);
 };
 
 // Handler called when the graph is finally loaded.
@@ -251,6 +275,8 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.texturesInit();
 	this.lightsInit();
 	this.componentsInit();
+
+	this.materialsIndex = 0;
 
 	this.dataLoaded = true;
 };
@@ -275,8 +301,100 @@ XMLscene.prototype.display = function () {
 
 	// Draw axis
 	this.axis.display();
-
 	this.setDefaultAppearance();
+
+	let componentStack = [];
+	let indexStack = [];
+	let materialStack = [];
+	let textureStack = [];
+	let currentComponent = this.root;
+	let index = 0;
+	let running = true;
+	while(running)
+	{
+		if(index === 0)
+		{
+			componentStack.push(currentComponent);
+			let appearance = new CGFappearance(this);
+			let material = currentComponent.getMaterials()[this.materialsIndex];
+			if((material === "inherit"))
+			{
+				material = materialStack.pop();
+				materialStack.push(material);
+				setMaterial(appearance, material);
+			}
+			else
+			{
+				setMaterial(appearance, material);
+			}
+			let texture = currentComponent.getTexture();
+			if((texture === "none"))
+			{
+				texture = null;
+			}
+			else if((texture === "inherit"))
+			{
+				let texture = textureStack.pop();
+				textureStack.push(texture);
+				if(texture !== null)
+				{
+					texture.apply();
+				}
+			}
+			else
+			{
+				texture.texture.apply();
+			}
+			appearance.apply();
+			let matrix = currentComponent.getTransformation().getMatrix();
+			this.multMatrix(matrix);
+			materialStack.push(material);
+			textureStack.push(texture);
+			this.pushMatrix();
+
+			let primitiveChildren = currentComponent.getChildren().primitives;
+			let sLength = null;
+			let tLength = null;
+			if(texture !== null)
+			{
+				sLength = texture.getData().getLengthS();
+				tLength = texture.getData().getLengthT();
+			}
+			for(let prim of primitiveChildren)
+			{
+				let primitive = null;
+				if(prim instanceof RectanglePrimitive)
+				{
+					primitive = new MyRectangle(this, prim, sLength, tLength);
+				}
+				else if(prim instanceof TrianglePrimitive)
+				{
+
+				}
+				else if(prim instanceof CylinderPrimitive)
+				{
+
+				}
+				else if(prim instanceof SpherePrimitive)
+				{
+
+				}
+				else if(prim instanceof TorusPrimitive)
+				{
+
+				}
+				primitive.display();
+			}
+		}
+
+		if(currentComponent.getChildren().components.length !== 0)
+		{
+			let childComponent = currentComponent.getChildren().components[index];
+			indexStack.push(index);
+			index = 0;
+			currentComponent = childComponent;
+		}
+	}
 
 	// ---- END Background, camera and axis setup
 
