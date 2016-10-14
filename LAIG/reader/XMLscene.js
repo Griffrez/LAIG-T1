@@ -234,7 +234,7 @@ XMLscene.prototype.lightsInit = function ()
 	}
 };
 
-function processComponent(id)
+XMLscene.prototype.processComponent = function(id)
 {
 	let compData = this.graph.elements.getComponent(id);
 	let transformation = compData.getTransformation();
@@ -253,17 +253,17 @@ function processComponent(id)
 	for(let childData of compData.getChildren().components)
 	{
 		let childID = childData.getID();
-		let child = processComponent(childID);
+		let child = this.processComponent(childID);
 		childComponents.push(child);
 	}
 	let childPrimitives = compData.getChildren().primitives;
 	return new Component(id, transformation, materials, texture, childComponents, childPrimitives);
-}
+};
 
 XMLscene.prototype.componentsInit = function ()
 {
 	let rootID = this.graph.elements.getScene().getRoot();
-	this.root = processComponent(rootID);
+	this.root = this.processComponent(rootID);
 };
 
 // Handler called when the graph is finally loaded.
@@ -321,12 +321,8 @@ XMLscene.prototype.display = function () {
 			{
 				material = materialStack.pop();
 				materialStack.push(material);
-				setMaterial(appearance, material);
 			}
-			else
-			{
-				setMaterial(appearance, material);
-			}
+			setMaterial(appearance, material);
 			let texture = currentComponent.getTexture();
 			if((texture === "none"))
 			{
@@ -336,14 +332,10 @@ XMLscene.prototype.display = function () {
 			{
 				let texture = textureStack.pop();
 				textureStack.push(texture);
-				if(texture !== null)
-				{
-					texture.apply();
-				}
 			}
-			else
+			if(texture !== null)
 			{
-				texture.texture.apply();
+				appearance.setTexture(texture.texture);
 			}
 			appearance.apply();
 			let matrix = currentComponent.getTransformation().getMatrix();
@@ -369,7 +361,7 @@ XMLscene.prototype.display = function () {
 				}
 				else if(prim instanceof TrianglePrimitive)
 				{
-
+					primitive = new MyTriangle(this, prim, sLength, tLength);
 				}
 				else if(prim instanceof CylinderPrimitive)
 				{
@@ -387,12 +379,25 @@ XMLscene.prototype.display = function () {
 			}
 		}
 
-		if(currentComponent.getChildren().components.length !== 0)
+		if(index < currentComponent.getChildren().components.length)
 		{
 			let childComponent = currentComponent.getChildren().components[index];
 			indexStack.push(index);
 			index = 0;
 			currentComponent = childComponent;
+		}
+		else
+		{
+			componentStack.pop();
+			materialStack.pop();
+			textureStack.pop();
+			this.popMatrix();
+			index = indexStack.pop();
+			currentComponent = componentStack[componentStack.length - 1];
+			if(currentComponent === undefined)
+			{
+				running = false;
+			}
 		}
 	}
 
