@@ -51,6 +51,16 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 {
 	var result;
 
+	if(rootElement.nodeName !== "dsx")
+	{
+		return "Main element isn't named dsx.";
+	}
+
+	if(rootElement.children.length !== 9)
+	{
+		return "dsx doesn't have exactly 9 children.";
+	}
+
 	// Parse Scene TO TEST
 	result = this.parseScene(rootElement);
 	if (result != null)
@@ -114,6 +124,12 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 		return result;
 	}
 
+	result = this.postProcess();
+	if (result != null)
+	{
+		return result;
+	}
+
 	// All is good
 	return null;
 };
@@ -124,18 +140,30 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 MySceneGraph.prototype.parseScene = function (rootElement)
 {
 	var elems = rootElement.children[0];
-
 	if (elems.nodeName !== "scene")
 	{
-		return "Error Parsing First Child, Not Scene";
+		return "Error Parsing First Child, Doesn't Exist or Not Scene";
 	}
 
 	var root = this.reader.getString(elems, 'root');
-	var axisLength = this.reader.getFloat(elems, 'axis_length');
-
-	if (axisLength < 0)
+	if(null === root)
 	{
-		return "Error Parsing Scene, not positive axis";
+		return "Error Parsing Scene, root doesn't exist.";
+	}
+
+	var axisLength = this.reader.getFloat(elems, 'axis_length');
+	if(null === axisLength)
+	{
+		return "Error Parsing Scene, axis length doesn't exist or not a float.";
+	}
+	if(axisLength < 0)
+	{
+		return "Error Parsing Scene, axis length must be non-negative.";
+	}
+
+	if(0 !== elems.children.length)
+	{
+		console.error("Warning: Scene shouldn't have any children, doesn't affect final result.");
 	}
 
 	this.elements.setScene(new Scene(root, axisLength));
@@ -147,17 +175,18 @@ MySceneGraph.prototype.parseScene = function (rootElement)
 MySceneGraph.prototype.parseView = function (rootElement)
 {
 	var elems = rootElement.children[1];
-
 	if (elems.nodeName !== "views")
 	{
 		return "Error Parsing Second Child, Not Views";
 	}
 
-	var viewElems = elems;
+	var defaultViewID = this.reader.getString(elems, 'default');
+	if (defaultViewID === null)
+	{
+		return "Error Parsing Views, default view doesn't exist.";
+	}
 
-	var defaultViewID = this.reader.getString(viewElems, 'default');
-
-	var perspectiveCount = viewElems.children.length;
+	var perspectiveCount = elems.children.length;
 	if (perspectiveCount < 1)
 	{
 		return "Error Parsing Views, no Perspectives";
@@ -166,7 +195,7 @@ MySceneGraph.prototype.parseView = function (rootElement)
 	// Parse Perspectives
 	for (var i = 0; i < perspectiveCount; i++)
 	{
-		var currentPerspective = viewElems.children[i];
+		var currentPerspective = elems.children[i];
 
 		if (currentPerspective.nodeName != 'perspective')
 		{
@@ -174,9 +203,44 @@ MySceneGraph.prototype.parseView = function (rootElement)
 		}
 
 		var id = this.reader.getString(currentPerspective, 'id');
+		if (id === null)
+		{
+			return "Error Parsing perspective, id doesn't exist.";
+		}
+
 		var near = this.reader.getFloat(currentPerspective, 'near');
+		if (near === null)
+		{
+			return "Error Parsing perspective, near doesn't exist or not a float."
+		}
+		if (near < 0)
+		{
+			return "Error Parsing perspective, near must be non-negative.";
+		}
+
 		var far = this.reader.getFloat(currentPerspective, 'far');
+		if (far === null)
+		{
+			return "Error Parsing perspective, far doesn't exist or not a float."
+		}
+		if (far < 0)
+		{
+			return "Error Parsing perspective, far must be non-negative.";
+		}
+		if (!(far > near))
+		{
+			return "Error Parsing perspective, far must be greater than near.";
+		}
+
 		var angle = this.reader.getFloat(currentPerspective, 'angle');
+		if (angle === null)
+		{
+			return "Error Parsing perspective, far doesn't exist or not a float."
+		}
+		if (angle < 0)
+		{
+			return "Error Parsing perspective, far must be non-negative.";
+		}
 
 		// To and From
 
@@ -819,12 +883,25 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 
 		var transformation;
 
-		if(transformationElement.children.length < 1)
+		if((transformationElement.children.length === 1) && (transformationElement.children[0].nodeName === "transformationref"))
 		{
-			return "Error Parsing ComponentData, its transformation element should have at least one child";
-		}
+			var transformationRef = transformationElement.children[0];
 
-		if(transformationElement.children.length > 1)
+			if(transformationRef.nodeName !== 'transformationref')
+			{
+				return "Error Parsing Transformation in ComponentData, only one child, not a transformationref";
+			}
+
+			var transformationID = this.reader.getString(transformationRef, 'id');
+
+			transformation = this.elements.getTransformation(transformationID);
+
+			if(transformation === undefined)
+			{
+				return "Error Parsing Transformation in ComponentData, transformation referred doesn't exist";
+			}
+		}
+		else
 		{
 			transformation = new Transformation(id);
 
@@ -861,24 +938,6 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 				{
 					return "Error Parsing Transformation in ComponentData, unknown transformation type" + nodeName;
 				}
-			}
-		}
-		else
-		{
-			var transformationRef = transformationElement.children[0];
-
-			if(transformationRef.nodeName !== 'transformationref')
-			{
-				return "Error Parsing Transformation in ComponentData, only one child, not a transformationref";
-			}
-
-			var transformationID = this.reader.getString(transformationRef, 'id');
-
-			transformation = this.elements.getTransformation(transformationID);
-
-			if(transformation === undefined)
-			{
-				return "Error Parsing Transformation in ComponentData, transformation referred doesn't exist";
 			}
 		}
 
@@ -979,6 +1038,23 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 		{
 			return error;
 		}
+	}
+};
+
+MySceneGraph.prototype.postProcess = function ()
+{
+	let rootID = this.elements.getScene().getRoot();
+
+	let rootComponent = this.elements.getComponent(rootID);
+
+	if(rootComponent.getMaterials().includes("inherit"))
+	{
+		return "Root cannot inherit a material.";
+	}
+
+	if(rootComponent.getTexture() === "inherit")
+	{
+		return "Root cannot inherit a texture.";
 	}
 };
 
