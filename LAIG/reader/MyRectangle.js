@@ -14,7 +14,7 @@ function MyRectangle(scene, rectPrim, sLenght, tLenght)
 	this.rectPrim = rectPrim;
 
 	this.initBuffers();
-};
+}
 
 MyRectangle.prototype = Object.create(CGFobject.prototype);
 MyRectangle.prototype.constructor = MyRectangle;
