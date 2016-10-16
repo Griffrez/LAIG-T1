@@ -315,6 +315,7 @@ XMLscene.prototype.display = function () {
 		if(index === 0)
 		{
 			componentStack.push(currentComponent);
+
 			let appearance = new CGFappearance(this);
 			let material = currentComponent.getMaterials()[this.materialsIndex];
 			if((material === "inherit"))
@@ -338,6 +339,7 @@ XMLscene.prototype.display = function () {
 				appearance.setTexture(texture.texture);
 			}
 			appearance.apply();
+
 			let matrix = currentComponent.getTransformation().getMatrix();
 			this.multMatrix(matrix);
 			materialStack.push(material);
