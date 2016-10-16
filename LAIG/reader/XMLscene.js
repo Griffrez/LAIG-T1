@@ -239,14 +239,10 @@ XMLscene.prototype.processComponent = function(id)
 	let compData = this.graph.elements.getComponent(id);
 	let transformation = compData.getTransformation();
 	let materials = compData.getMaterials();
-	let textureID = compData.getTexture().getID();
-	let texture = null;
-	if((textureID === "inherit") || (textureID === "none"))
+	let texture = compData.getTexture();
+	if(!((texture === "inherit") || (texture === "none")))
 	{
-		texture = textureID;
-	}
-	else
-	{
+		let textureID = texture.getID();
 		texture = this.textures.get(textureID);
 	}
 	let childComponents = [];
