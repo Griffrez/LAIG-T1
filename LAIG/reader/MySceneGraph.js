@@ -704,12 +704,12 @@ MySceneGraph.prototype.parseTransformations = function (rootElement)
 				return "Error Parsing Transformation, unknown transformation type" + nodeName;
 			}
 		}
-	}
 
-	var error = this.elements.addTransformation(transformation);
-	if (error != null)
-	{
-		return error;
+		var error = this.elements.addTransformation(transformation);
+		if (error != null)
+		{
+			return error;
+		}
 	}
 };
 
