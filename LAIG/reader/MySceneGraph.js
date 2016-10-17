@@ -697,7 +697,7 @@ MySceneGraph.prototype.parseTransformations = function (rootElement)
 			{
 				var axis = this.reader.getString(inner_currentTransformation, 'axis');
 				var angle = this.reader.getFloat(inner_currentTransformation, 'angle');
-				transformation.addRotation(axis, angle);
+				transformation.addRotation(axis, angle*Math.PI/180);
 			}
 			else
 			{
@@ -932,7 +932,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 				{
 					var axis = this.reader.getString(currentTransformation, 'axis');
 					var angle = this.reader.getFloat(currentTransformation, 'angle');
-					transformation.addRotation(axis, angle);
+					transformation.addRotation(axis, angle*Math.PI/180);
 				}
 				else
 				{

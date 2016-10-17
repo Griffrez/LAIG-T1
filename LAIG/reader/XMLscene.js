@@ -327,7 +327,7 @@ XMLscene.prototype.display = function () {
 			}
 			else if((texture === "inherit"))
 			{
-				let texture = textureStack.pop();
+				texture = textureStack.pop();
 				textureStack.push(texture);
 			}
 			if(texture !== null)
@@ -363,15 +363,15 @@ XMLscene.prototype.display = function () {
 				}
 				else if(prim instanceof CylinderPrimitive)
 				{
-
+					primitive = new MyCylinder(this, prim);
 				}
 				else if(prim instanceof SpherePrimitive)
 				{
-
+					primitive = new MySphere(this, prim);
 				}
 				else if(prim instanceof TorusPrimitive)
 				{
-
+					primitive = new MyTorus(this, prim);
 				}
 				primitive.display();
 			}
@@ -380,7 +380,7 @@ XMLscene.prototype.display = function () {
 		if(index < currentComponent.getChildren().components.length)
 		{
 			let childComponent = currentComponent.getChildren().components[index];
-			indexStack.push(index);
+			indexStack.push(++index);
 			index = 0;
 			currentComponent = childComponent;
 		}
