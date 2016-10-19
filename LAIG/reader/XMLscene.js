@@ -52,6 +52,8 @@ XMLscene.prototype.init = function (application) {
 
 	this.initLights();
 
+	this.enableTextures(true);
+
 	this.gl.clearDepth(100.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
@@ -262,6 +264,86 @@ XMLscene.prototype.componentsInit = function ()
 	this.root = this.processComponent(rootID);
 };
 
+XMLscene.prototype.primitivesInit = function()
+{
+	let texturesData = this.graph.elements.getTextures();
+
+	let texturesLengths = [];
+
+	for(let textureData of texturesData)
+	{
+		let sLength = textureData.getLengthS();
+		let tLength = textureData.getLengthT();
+		let i;
+		for(i = 0; i < texturesLengths.length; i++)
+		{
+			if((texturesLengths[i][0] === sLength) &&
+				(texturesLengths[i][1] === tLength))
+			{
+				break;
+			}
+		}
+		if(i === texturesLengths.length)
+		{
+			texturesLengths.push([sLength, tLength])
+		}
+	}
+
+	let primitivesData = this.graph.elements.getPrimitives();
+
+	this.primitives = new Map();
+
+	for(let primitiveData of primitivesData)
+	{
+		if(primitiveData instanceof RectanglePrimitive)
+		{
+			let lengthsToPrimitive = [];
+			for(let textureLength of texturesLengths)
+			{
+				let sLength = textureLength[0];
+				let tLength = textureLength[1];
+
+				let primitive = new MyRectangle(this, primitiveData, sLength, tLength);
+
+				lengthsToPrimitive.push([sLength, tLength, primitive]);
+			}
+			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
+		}
+		else if(primitiveData instanceof TrianglePrimitive)
+		{
+			let lengthsToPrimitive = [];
+			for(let textureLength of texturesLengths)
+			{
+				let sLength = textureLength[0];
+				let tLength = textureLength[1];
+
+				let primitive = new MyTriangle(this, primitiveData, sLength, tLength);
+
+				lengthsToPrimitive.push([sLength, tLength, primitive]);
+			}
+			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
+		}
+		else if(primitiveData instanceof CylinderPrimitive)
+		{
+			let primitive = new MyCylinder(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if(primitiveData instanceof SpherePrimitive)
+		{
+			let primitive = new MySphere(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if(primitiveData instanceof TorusPrimitive)
+		{
+			let primitive = new MyTorus(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+	}
+};
+
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function ()
@@ -271,6 +353,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.texturesInit();
 	this.lightsInit();
 	this.componentsInit();
+	this.primitivesInit();
 
 	this.materialsIndex = 0;
 
@@ -353,25 +436,28 @@ XMLscene.prototype.display = function () {
 			for(let prim of primitiveChildren)
 			{
 				let primitive = null;
-				if(prim instanceof RectanglePrimitive)
+				if((prim instanceof RectanglePrimitive) || (prim instanceof TrianglePrimitive))
 				{
-					primitive = new MyRectangle(this, prim, sLength, tLength);
+					let data = this.primitives.get(prim.getID());
+
+					if(texture === null)
+					{
+						primitive = data[0][2];
+					}
+					else
+					{
+						for (let dataElement of data)
+						{
+							if ((dataElement[0] === sLength) && (dataElement[1] === tLength))
+							{
+								primitive = dataElement[2];
+							}
+						}
+					}
 				}
-				else if(prim instanceof TrianglePrimitive)
+				else
 				{
-					primitive = new MyTriangle(this, prim, sLength, tLength);
-				}
-				else if(prim instanceof CylinderPrimitive)
-				{
-					primitive = new MyCylinder(this, prim);
-				}
-				else if(prim instanceof SpherePrimitive)
-				{
-					primitive = new MySphere(this, prim);
-				}
-				else if(prim instanceof TorusPrimitive)
-				{
-					primitive = new MyTorus(this, prim);
+					primitive = this.primitives.get(prim.getID());
 				}
 				primitive.display();
 			}

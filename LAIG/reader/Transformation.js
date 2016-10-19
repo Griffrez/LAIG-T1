@@ -39,4 +39,8 @@ Transformation.prototype.addRotation = function(axis, angle)
 	{
 		mat4.rotateZ(this.matrix, this.matrix, angle);
 	}
+	else
+	{
+		return "Invalid rotation axis.";
+	}
 };
