@@ -101,9 +101,9 @@
 	
 	this.texCoords =
 	[
-		(c - a * cosBeta) / this.sLen, 0,
+		c/ this.sLen, (a * sinBeta) / this.tLen,
 		0, (a * sinBeta) / this.tLen,
-		c/ this.sLen, (a * sinBeta) / this.tLen
+		(c - a * cosBeta) / this.sLen, 0
 	];
 
  	this.primitiveType = this.scene.gl.TRIANGLES;
