@@ -1,11 +1,11 @@
-function ComponentData(id) {
-    this.id = id;
-	this.loadedOK = false;
-
+function ComponentData(id)
+{
+	this.id             = id;
+	this.loadedOK       = false;
 	this.transformation = null;
-	this.materials = null;
-	this.texture = null;
-	this.children = {'components': [], 'primitives': []};
+	this.materials      = null;
+	this.texture        = null;
+	this.children       = {'components': [], 'primitives': []};
 }
 
 ComponentData.prototype.getID = function()
@@ -40,11 +40,10 @@ ComponentData.prototype.getChildren = function()
 
 ComponentData.prototype.setData = function(transformation, materials, texture, childComponents, childPrimitives)
 {
-	this.loadedOK = true;
-
-	this.transformation = transformation;
-	this.materials = materials;
-	this.texture = texture;
+	this.loadedOK            = true;
+	this.transformation      = transformation;
+	this.materials           = materials;
+	this.texture             = texture;
 	this.children.components = childComponents;
 	this.children.primitives = childPrimitives;
 };

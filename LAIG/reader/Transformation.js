@@ -43,4 +43,5 @@ Transformation.prototype.addRotation = function(axis, angle)
 	{
 		return "Invalid rotation axis.";
 	}
+	return null;
 };

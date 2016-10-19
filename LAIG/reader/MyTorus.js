@@ -15,7 +15,7 @@
 		console.log("Warning: outer < inner");
 
  	this.initBuffers();
- };
+ }
 MyTorus.prototype = Object.create(CGFobject.prototype);
 MyTorus.prototype.constructor=MyTorus;
 
@@ -60,7 +60,7 @@ MyTorus.prototype.initBuffers = function ()
 			var center = vec3.fromValues(Math.cos(angSlice) * centerDist, Math.sin(angSlice) * centerDist, 0);
 			var normal = vec3.create();
 			vec3.subtract(normal, vertex, center);
-			this.normals.push(normal[0], normal[1], normal[2])
+			this.normals.push(normal[0], normal[1], normal[2]);
 			
 			// Adds the Indices
 			if(i > 0 && j > 0)

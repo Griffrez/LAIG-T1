@@ -393,6 +393,7 @@ XMLscene.prototype.display = function () {
 	{
 		if(index === 0)
 		{
+			this.pushMatrix();
 			componentStack.push(currentComponent);
 
 			let appearance = new CGFappearance(this);
@@ -423,7 +424,6 @@ XMLscene.prototype.display = function () {
 			this.multMatrix(matrix);
 			materialStack.push(material);
 			textureStack.push(texture);
-			this.pushMatrix();
 
 			let primitiveChildren = currentComponent.getChildren().primitives;
 			let sLength = null;
