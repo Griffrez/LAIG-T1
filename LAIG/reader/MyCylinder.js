@@ -129,7 +129,49 @@
  			this.indices.push(start, start + 1, start + lvlJump + 1);
  	 	}
  	}
- 	
+	
+	// Base
+	var baseStart = (this.vertices.length / 3);
+	angHorizontal = 0;
+	this.vertices.push(0, 0, 0);
+	this.normals.push(0, -1, 0);
+	this.texCoords.push(0.5, 0.5);
+
+	for(let k = 0; k < this.stacks; k++)
+	{
+		this.vertices.push(this.base * Math.cos(angHorizontal), this.base * Math.sin(angHorizontal), 0);
+		this.normals.push(0,-1,0);
+		this.texCoords.push(0.5 + Math.cos(angHorizontal), 0.5 +  Math.sin(angHorizontal));
+		
+		angHorizontal = angHorizontal + angHorizontalIncrement;
+		
+		if(k != 0)
+			this.indices.push(baseStart, baseStart + k + 1, baseStart + k);
+		else
+			this.indices.push(baseStart, baseStart + 1, baseStart + this.slices);
+	}
+	
+	// Top
+	baseStart = (this.vertices.length / 3);
+	angHorizontal = 0;
+	this.vertices.push(0, 0, this.height);
+	this.normals.push(0, 1, 0);
+	this.texCoords.push(0.5, 0.5);
+
+	for(let k = 0; k < this.stacks; k++)
+	{
+		this.vertices.push(this.top * Math.cos(angHorizontal), this.top * Math.sin(angHorizontal), this.height);
+		this.normals.push(0,1,0);
+		this.texCoords.push(0.5 + -Math.cos(angHorizontal), 0.5 + Math.sin(angHorizontal));
+		
+		angHorizontal = angHorizontal + angHorizontalIncrement;
+		
+		if(k != 0)
+			this.indices.push(baseStart, baseStart + k, baseStart + k + 1);
+		else
+			this.indices.push(baseStart, baseStart + this.slices, baseStart + 1);
+	}
+	
  	this.primitiveType = this.scene.gl.TRIANGLES;
  	this.initGLBuffers();
  };
