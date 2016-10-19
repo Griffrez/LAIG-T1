@@ -1,3 +1,8 @@
+function deg2rad(degree)
+{
+	return Math.PI/180*degree;
+}
+
 function MySceneGraph(filename, scene)
 {
 	this.loadedOk = null;
@@ -58,14 +63,10 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 
 	if(rootElement.children.length !== 9)
 	{
+		if ("parsererror" === rootElement.children[0].nodeName) {
+			return "There is an error in the dsx/xml format. Please review your file.";
+		}
 		return "dsx doesn't have exactly 9 children.";
-	}
-
-	// Parse Scene TO TEST
-	result = this.parseScene(rootElement);
-	if (result != null)
-	{
-		return result;
 	}
 
 	// Parse View TO TEST
@@ -124,7 +125,7 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 		return result;
 	}
 
-	result = this.postProcess();
+	result = this.parseScene(rootElement);
 	if (result != null)
 	{
 		return result;
@@ -164,6 +165,23 @@ MySceneGraph.prototype.parseScene = function (rootElement)
 	if(0 !== elems.children.length)
 	{
 		console.error("Warning: Scene shouldn't have any children, doesn't affect final result.");
+	}
+
+	let rootComponent = this.elements.getComponent(root);
+
+	if(null === rootComponent)
+	{
+		return "Root id refers a non-existing component.";
+	}
+
+	if(rootComponent.getMaterials().includes("inherit"))
+	{
+		return "Root cannot inherit a material.";
+	}
+
+	if(rootComponent.getTexture() === "inherit")
+	{
+		return "Root cannot inherit a texture.";
 	}
 
 	this.elements.setScene(new Scene(root, axisLength));
@@ -273,7 +291,7 @@ MySceneGraph.prototype.parseView = function (rootElement)
 
 		// Add perspective
 
-		var perspective = new Perspective(id, near, far, angle, from, to);
+		var perspective = new Perspective(id, near, far, deg2rad(angle), from, to);
 		var error = this.elements.addPerspective(perspective);
 		if (error != null)
 		{
@@ -697,7 +715,11 @@ MySceneGraph.prototype.parseTransformations = function (rootElement)
 			{
 				var axis = this.reader.getString(inner_currentTransformation, 'axis');
 				var angle = this.reader.getFloat(inner_currentTransformation, 'angle');
-				transformation.addRotation(axis, angle*Math.PI/180);
+				let error;
+				if(null !== (error = transformation.addRotation(axis, deg2rad(angle))))
+				{
+					return error;
+				}
 			}
 			else
 			{
@@ -887,11 +909,6 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 		{
 			var transformationRef = transformationElement.children[0];
 
-			if(transformationRef.nodeName !== 'transformationref')
-			{
-				return "Error Parsing Transformation in ComponentData, only one child, not a transformationref";
-			}
-
 			var transformationID = this.reader.getString(transformationRef, 'id');
 
 			transformation = this.elements.getTransformation(transformationID);
@@ -932,7 +949,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 				{
 					var axis = this.reader.getString(currentTransformation, 'axis');
 					var angle = this.reader.getFloat(currentTransformation, 'angle');
-					transformation.addRotation(axis, angle*Math.PI/180);
+					transformation.addRotation(axis, deg2rad(angle));
 				}
 				else
 				{
@@ -1038,23 +1055,6 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
 		{
 			return error;
 		}
-	}
-};
-
-MySceneGraph.prototype.postProcess = function ()
-{
-	let rootID = this.elements.getScene().getRoot();
-
-	let rootComponent = this.elements.getComponent(rootID);
-
-	if(rootComponent.getMaterials().includes("inherit"))
-	{
-		return "Root cannot inherit a material.";
-	}
-
-	if(rootComponent.getTexture() === "inherit")
-	{
-		return "Root cannot inherit a texture.";
 	}
 };
 

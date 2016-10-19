@@ -44,7 +44,7 @@ MySphere.prototype.initBuffers = function () {
 			var sinTh = Math.sin(theta);
 
 			var x = cosTh*cosPh*this.radius;
-			var y = sinPh*this.radius
+			var y = sinPh*this.radius;
 			var z = -sinTh*cosPh*this.radius;
 
 			this.vertices.push	(x, y, z);
