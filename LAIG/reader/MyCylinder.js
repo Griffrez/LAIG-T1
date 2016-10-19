@@ -102,85 +102,6 @@ MyCylinder.prototype.initBuffers = function()
 
 		// Increments the radius
 		currRadius = currRadius + currentRadiusIncrement;
- 		
- 		// Resets the t coordinate
- 		t = 0;
- 		
- 		// Increments the s texture
- 		s = s + sIncrement;
- 		
- 		// Resets the angle
- 		angHorizontal = 0;
- 	}
- 	
- 	// Value where the triangle starts
- 	var start;
- 	
- 	// Value it takes to go up a level
- 	var lvlJump = this.slices + 1;
- 	
- 	// Iterates through all the levels
- 	for(var i = 0; i < this.stacks; i++)
- 	{	
- 		// Iterates through all the slices of that level
- 		for(var j = 0; j < this.slices; j++)
- 	 	{
- 			// Calculates where the the triangles should start
- 			start = j + i * lvlJump;
- 			
- 			// Upper Triangle
- 			this.indices.push(start + lvlJump, start, start + lvlJump + 1);
- 				
- 			// Lower Triangle
- 			this.indices.push(start, start + 1, start + lvlJump + 1);
- 	 	}
- 	}
-	
-	// Base
-	var baseStart = (this.vertices.length / 3);
-	angHorizontal = 0;
-	this.vertices.push(0, 0, 0);
-	this.normals.push(0, -1, 0);
-	this.texCoords.push(0.5, 0.5);
-
-	for(let k = 0; k < this.stacks; k++)
-	{
-		this.vertices.push(this.base * Math.cos(angHorizontal), this.base * Math.sin(angHorizontal), 0);
-		this.normals.push(0,-1,0);
-		this.texCoords.push(0.5 + Math.cos(angHorizontal), 0.5 +  Math.sin(angHorizontal));
-		
-		angHorizontal = angHorizontal + angHorizontalIncrement;
-		
-		if(k != 0)
-			this.indices.push(baseStart, baseStart + k + 1, baseStart + k);
-		else
-			this.indices.push(baseStart, baseStart + 1, baseStart + this.slices);
-	}
-	
-	// Top
-	baseStart = (this.vertices.length / 3);
-	angHorizontal = 0;
-	this.vertices.push(0, 0, this.height);
-	this.normals.push(0, 1, 0);
-	this.texCoords.push(0.5, 0.5);
-
-	for(let k = 0; k < this.stacks; k++)
-	{
-		this.vertices.push(this.top * Math.cos(angHorizontal), this.top * Math.sin(angHorizontal), this.height);
-		this.normals.push(0,1,0);
-		this.texCoords.push(0.5 + -Math.cos(angHorizontal), 0.5 + Math.sin(angHorizontal));
-		
-		angHorizontal = angHorizontal + angHorizontalIncrement;
-		
-		if(k != 0)
-			this.indices.push(baseStart, baseStart + k, baseStart + k + 1);
-		else
-			this.indices.push(baseStart, baseStart + this.slices, baseStart + 1);
-	}
-	
- 	this.primitiveType = this.scene.gl.TRIANGLES;
- 	this.initGLBuffers();
- };
 
 		// Resets the t coordinate
 		t = 0;
@@ -222,4 +143,3 @@ MyCylinder.prototype.initBuffers = function()
 	this.primitiveType = this.scene.gl.TRIANGLES;
 	this.initGLBuffers();
 };
-

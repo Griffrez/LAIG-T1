@@ -2,7 +2,7 @@
 	<scene root="root" axis_length="5.0"/>
 	
 	<views default="cam0">
-		<perspective id="cam0" near="0.1" far="500" angle="1.6">
+		<perspective id="cam0" near="0.1" far="500" angle="90">
             <from x="4" y="3" z="4" />
             <to x="0" y="0" z="0" />
         </perspective>
