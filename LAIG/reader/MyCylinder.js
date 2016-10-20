@@ -134,13 +134,13 @@
 	var baseStart = (this.vertices.length / 3);
 	angHorizontal = 0;
 	this.vertices.push(0, 0, 0);
-	this.normals.push(0, -1, 0);
+	this.normals.push(0, 0, -1);
 	this.texCoords.push(0.5, 0.5);
 
 	for(let k = 0; k < this.slices; k++)
 	{
 		this.vertices.push(this.base * Math.cos(angHorizontal), this.base * Math.sin(angHorizontal), 0);
-		this.normals.push(0,-1,0);
+		this.normals.push(0,0,-1);
 		this.texCoords.push(0.5 + Math.cos(angHorizontal), 0.5 +  Math.sin(angHorizontal));
 		
 		angHorizontal = angHorizontal + angHorizontalIncrement;
@@ -155,13 +155,13 @@
 	baseStart = (this.vertices.length / 3);
 	angHorizontal = 0;
 	this.vertices.push(0, 0, this.height);
-	this.normals.push(0, 1, 0);
+	this.normals.push(0, 0, 1);
 	this.texCoords.push(0.5, 0.5);
 
 	for(let k = 0; k < this.slices; k++)
 	{
 		this.vertices.push(this.top * Math.cos(angHorizontal), this.top * Math.sin(angHorizontal), this.height);
-		this.normals.push(0,1,0);
+		this.normals.push(0,0,1);
 		this.texCoords.push(0.5 + -Math.cos(angHorizontal), 0.5 + Math.sin(angHorizontal));
 		
 		angHorizontal = angHorizontal + angHorizontalIncrement;

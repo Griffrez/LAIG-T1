@@ -462,7 +462,7 @@ MySceneGraph.prototype.parseLights = function (rootElement)
 				, (this.reader.getFloat(specularElems[0], 'b'))
 				, (this.reader.getFloat(specularElems[0], 'a')));
 
-			var spotLight = new SpotLight(id, enabled, location, ambient, diffuse, specular, angle, exponent, target);
+			var spotLight = new SpotLight(id, enabled, location, ambient, diffuse, specular, deg2rad(angle), exponent, target);
 
 			var error = this.elements.addLight(spotLight);
 			if (error != null)
