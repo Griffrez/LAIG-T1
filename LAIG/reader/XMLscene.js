@@ -1,10 +1,3 @@
-
-function XMLscene() {
-	CGFscene.call(this);
-	this.graph = null;
-	this.interface = null;
-}
-
 function setMaterial(appearance, data)
 {
 	let emission = data.getEmission();
@@ -42,6 +35,12 @@ function setMaterial(appearance, data)
 	);
 
 	appearance.setShininess(shininess);
+}
+
+function XMLscene() {
+	CGFscene.call(this);
+	this.graph = null;
+	this.interface = null;
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -106,6 +105,8 @@ XMLscene.prototype.perspectivesInit = function ()
 
 	this.cameras = [];
 
+	this.cameraIndex = 0;
+
 	for(let perspective of perspectives)
 	{
 		let near = perspective.getNear();
@@ -146,12 +147,15 @@ XMLscene.prototype.lightsInit = function ()
 	let lightsData = this.graph.elements.getLights();
 
 	this.lights = [];
+	this.lightNames = [];
 
 	let index = 0;
 
 	for(let lightData of lightsData)
 	{
 		let i = index++;
+
+		let id = lightData.getID();
 
 		let light = new CGFlight(this, i);
 
@@ -223,11 +227,16 @@ XMLscene.prototype.lightsInit = function ()
 		if(lightData.isEnabled())
 		{
 			light.enable();
+			this[id] = true;
 		}
 		else
 		{
 			light.disable();
+			this[id] = false;
 		}
+
+		this.interface.addLight(id);
+		this.lightNames.push(id);
 
 		light.setVisible(true);
 
@@ -397,7 +406,8 @@ XMLscene.prototype.display = function () {
 			componentStack.push(currentComponent);
 
 			let appearance = new CGFappearance(this);
-			let material = currentComponent.getMaterials()[this.materialsIndex];
+			let materials = currentComponent.getMaterials();
+			let material = materials[(this.materialsIndex)%(materials.length)];
 			if((material === "inherit"))
 			{
 				material = materialStack.pop();
@@ -485,17 +495,34 @@ XMLscene.prototype.display = function () {
 		}
 	}
 
-	// ---- END Background, camera and axis setup
-
-	// it is important that things depending on the proper loading of the graph
-	// only get executed after the graph has loaded correctly.
-	// This is one possible way to do it
-	if (this.graph.loadedOk)
+	for(let i = 0; i < this.lights.length; i++)
 	{
-		for(let light of this.lights)
+		let lightBool = this[this.lightNames[i]];
+
+		if(lightBool === true)
 		{
-			light.update();
+			this.lights[i].enable();
 		}
+		else
+		{
+			this.lights[i].disable();
+		}
+		this.lights[i].update();
 	}
+};
+
+XMLscene.prototype.changeCamera = function()
+{
+	this.cameraIndex = (this.cameraIndex+1)%(this.cameras.length);
+
+	let camera = this.cameras[this.cameraIndex];
+
+	this.camera = camera;
+	this.interface.setActiveCamera(camera);
+};
+
+XMLscene.prototype.changeMaterial = function()
+{
+	this.materialsIndex++;
 };
 
