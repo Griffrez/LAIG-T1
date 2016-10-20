@@ -35,7 +35,7 @@ MySphere.prototype.initBuffers = function () {
 		var sinPh = Math.sin(phi);
 
 		var s = 0;
-		var t = 1 - sinPh;
+		var t = 0.5-sinPh/2;
 		theta = 0;
 
 		for(slice = 0; slice <= this.slices; slice++) // Less or equal to overlap at the starting point for texturing
@@ -44,8 +44,8 @@ MySphere.prototype.initBuffers = function () {
 			var sinTh = Math.sin(theta);
 
 			var x = cosTh*cosPh*this.radius;
-			var y = sinPh*this.radius;
-			var z = -sinTh*cosPh*this.radius;
+			var y = sinTh*cosPh*this.radius;
+			var z = sinPh*this.radius;
 
 			this.vertices.push	(x, y, z);
 			this.normals.push	(x, y, z);
