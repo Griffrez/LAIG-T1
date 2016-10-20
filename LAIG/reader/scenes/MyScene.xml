@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-16" standalone="yes"?>
 <dsx>
-	<scene root="root" axis_length="5.0"/>
+	<scene root="raiz" axis_length="5.0"/>
 	
 	<views default="cam0">
-<<<<<<< HEAD
 		<perspective id="cam0" near="0.1" far="500" angle="20">
-=======
-		<perspective id="cam0" near="0.1" far="500" angle="30">
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
             <from x="15" y="15" z="15" />
              <to x="0" y="0" z="0" />
         </perspective>
-<<<<<<< HEAD
         <perspective id="cam1" near="0.1" far="500" angle="20">
             <from x="15" y="15" z="15" />
             <to x="6" y="2" z="-2" />
@@ -28,21 +23,14 @@
        		<to x="0" y="0" z="0" />
        		<from x="14" y="5" z="-25" />
         </perspective>
-=======
-		<perspective id="cam1" near="0.1" far="500" angle="30">
-			<from x="1" y="15" z="1" />
-			<to x="0" y="0" z="0" />
-		</perspective>
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 	</views>
 	
-	<illumination doublesided="0" local="0">
+	<illumination doublesided="1" local="1">
 		<ambient r="0.6" g="0.6" b="0.6" a="1.0"/> 
 		<background r="0" g="0" b="0" a="1.0"/>
 	</illumination>
 	
 	<lights>
-<<<<<<< HEAD
 		<omni id="king_crab_bulb" enabled="0" >
 			<location x="6" y="2.8" z="-2.8" w="1" />
 			<ambient r="0" g="0" b="0" a="1.0" />
@@ -79,10 +67,6 @@
 		</spot>
 		<omni id="omni1" enabled="0" >
 			<location x="10" y="2.8" z="-10" w="1" />
-=======
-		<omni id="omni0" enabled="1" >
-			<location x="2" y="2" z="0.5" w="1" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			<ambient r="0" g="0" b="0" a="1.0" />
 			<diffuse r="0.6" g="0.6" b="0.6" a="1" />
 			<specular r="0.4" g="0.4" b="0.4" a="1" />
@@ -90,7 +74,6 @@
 	</lights>
 	
 	<textures>
-<<<<<<< HEAD
 		<texture id="stripes" file="../resources/stripes.png" length_s="3" length_t="1" />
 		<texture id="sand" file="../resources/sand.png" length_s="1" length_t="1" />
 		<texture id="trunc" file="../resources/trunc.png" length_s="1" length_t="3" />
@@ -142,46 +125,24 @@
         </material>
         <material id="bulb" >
             <emission r="0.4" g="0.4" b="0.4" a="1.0" />
-=======
-		<texture id="tex0" file="../resources/bulb.png" length_s="0.5" length_t="0.5" />
-        <texture id="tex1" file="../resources/stripes.png" length_s="0.5" length_t="0.5" />
-	</textures>
-
-	<materials>
-        <material id="mat0" >
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <diffuse r="0.2" g="0.2" b="0.2" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <shininess value="50" />
         </material>
-		<material id="mat1" >
-			<emission r="0.0" g="0.0" b="0.0" a="1.0" />
-			<ambient r="0.1" g="0.1" b="0.1" a="1.0" />
-			<diffuse r="1.0" g="0.0" b="1.0" a="1.0" />
-			<specular r="0.2" g="0.2" b="0.2" a="1.0" />
-			<shininess value="50" />
-		</material>
 	</materials>
 
 	<transformations>
-<<<<<<< HEAD
         <transformation id="x_inv">
           <rotate axis="x" angle="180" />
         </transformation>
 
         <transformation id="z_inv">
           <rotate axis="z" angle="180" />
-=======
-        <transformation id="rotate_y_90">
-          <rotate axis="y" angle="90" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
         </transformation>
 	</transformations>
 	
 	<primitives>
-<<<<<<< HEAD
 		<primitive id = "rect">
 			<rectangle x1="0" y1="0" x2="1" y2="1" />
 		</primitive>
@@ -196,15 +157,15 @@
 		</primitive>
 		<primitive id = "torus">
 			<torus inner="1" outer="2" slices="20" loops="20" />
-=======
-		<primitive id="prim00">
-			<triangle x1="0" y1="1" z1="0" x2="1" y2="0" z2="0" x3="0" y3="0" z3="0" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 		</primitive>
-		<primitive id="prim01">
-			<triangle x1="0" y1="1" z1="0" x2="0" y2="0" z2="0" x3="0" y3="0" z3="1" />
+
+		<primitive id = "island">
+			<cylinder base="8" top="7.071" height="2" slices="50" stacks="50" />
 		</primitive>
-<<<<<<< HEAD
+
+		<primitive id = "trunc">
+			<cylinder base="0.4" top="0.5" height="10" slices="50" stacks="50" />
+		</primitive>
 
 		<primitive id = "cone">
 			<cylinder base="1" top="0" height="1" slices="10" stacks="50" />
@@ -786,28 +747,10 @@
          </component>
 
          <component id = "garra">
-=======
-		<primitive id="prim02">
-			<triangle x1="0" y1="1" z1="0" x2="0" y2="0" z2="1" x3="1" y3="0" z3="0" />
-		</primitive>
-		<primitive id="prim03">
-			<triangle x1="0" y1="0" z1="0" x2="1" y2="0" z2="0" x3="0" y3="0" z3="1" />
-		</primitive>
-		<primitive id="prim1">
-			<rectangle x1="0" y1="0" x2="1" y2="1" />
-		</primitive>
-		<primitive id="prim2">
-			<cylinder top="1" base="1" height="1" slices="8" stacks="4" />
-		</primitive>
-	</primitives>
-	
-	<components>
-		<component id="root">
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			<transformation>
+				<translate x="0" y="0" z="0.15"/>
 			</transformation>
 			<materials>
-<<<<<<< HEAD
                 <material id="inherit" />
             </materials>
             <texture id="none" />
@@ -928,16 +871,16 @@
 			</transformation>
 			<materials>
 				<material id="inherit" />
-=======
-				<material id="mat0" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</materials>
 			<texture id="none" />
 			<children>
-				<componentref id="ultracomp" />
+				<componentref id="paredes" />
+				<componentref id="telhado" />
+				<componentref id="porta" />
+				<componentref id="janelas" />
 			</children>
+		</component>
 
-<<<<<<< HEAD
 		<component id = "paredes">
 			<transformation>
 			</transformation>
@@ -953,29 +896,22 @@
 				<componentref id="parede_E_top" />
 				<componentref id="parede_W_top" />
 			</children>
-=======
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 		</component>
 
-		<component id="ultracomp">
+		<component id = "parede_S">
 			<transformation>
+				<scale x="2" y="1.4" z="1" />
+				<translate x="-0.5" y="0" z="0.5" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="tex0" />
+			<texture id="inherit" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="supercomp0" />
-				<componentref id="supercomp1" />
-				<componentref id="supercomp2" />
-				<componentref id="supercomp3" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
+		</component>
 
-<<<<<<< HEAD
 		<component id = "parede_N">
 			<transformation>
 				<rotate axis="y" angle="180" />
@@ -989,27 +925,23 @@
 			<children>
 				<primitiveref id="rect"/>
 			</children>
-=======
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 		</component>
 
-		<component id="supercomp3">
+		<component id = "parede_E">
 			<transformation>
-				<transformationref id="rotate_y_90" />
+				<rotate axis="y" angle="90" />
+				<scale x="1" y="1.4" z="1" />
+				<translate x="-0.5" y="0" z="1" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="tex0" />
+			<texture id="inherit" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="supercomp2" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
+		</component>
 
-<<<<<<< HEAD
 		<component id = "parede_W">
 			<transformation>
 				<rotate axis="y" angle="-90" />
@@ -1053,26 +985,23 @@
 			<children>
 				<primitiveref id="triangle"/>
 			</children>
-=======
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 		</component>
 
-		<component id="supercomp2">
+		<component id = "telhado">
 			<transformation>
-<<<<<<< HEAD
-=======
-				<transformationref id="rotate_y_90" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="tex0" />
+			<texture id="wood_roof" />
 			<children>
-				<componentref id="supercomp1" />
+				<componentref id="telhado_N" />
+				<componentref id="telhado_S" />
+				<componentref id="telhado_S_baixo"/>
+				<componentref id="telhado_N_baixo"/>
 			</children>
+		</component>
 
-<<<<<<< HEAD
 		<component id = "telhado_S">
 			<transformation>
 				<translate x="0" y="1.33" z="0.57" />
@@ -1087,152 +1016,114 @@
 			<children>
 				<primitiveref id="rect"/>
 			</children>
-=======
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 		</component>
-
-		<component id="supercomp1">
+		
+		<component id = "telhado_S_baixo">
 			<transformation>
-				<transformationref id="rotate_y_90" />
+				<translate x="0" y="1.33" z="-0.57" />
+				<rotate axis="x" angle="45" />
+				<scale x="2.2" y="0.807" z="1" />
+				<translate x="-0.5" y="0" z="0" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="tex0" />
+			<texture id="inherit" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="supercomp0" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
-
 		</component>
-
-		<component id="supercomp0">
+		
+		<component id = "telhado_N_baixo">
 			<transformation>
-				<transformationref id="rotate_y_90" />
+				<translate x="0" y="1.33" z="0.57" />
+				<rotate axis="y" angle="180" />
+				<rotate axis="x" angle="45" />
+				<scale x="2.2" y="0.807" z="1" />
+				<translate x="-0.5" y="0" z="0" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="tex0" />
+			<texture id="inherit" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="supercomp" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
-
 		</component>
 
-		<component id="supercomp">
+		<component id = "telhado_N">
 			<transformation>
-				<translate x="1" y="0" z="0" />
+				<translate x="0" y="1.33" z="-0.57" />
+				<rotate axis="y" angle="180" />
+				<rotate axis="x" angle="-45" />
+				<scale x="2.2" y="0.807" z="1" />
+				<translate x="-0.5" y="0" z="0" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="tex0" />
+			<texture id="inherit" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="comp0" />
-				<componentref id="comp1" />
-				<componentref id="comp2" />
-				<componentref id="comp3" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
-
 		</component>
-
-		<component id="comp3">
+		
+		<component id = "porta">
 			<transformation>
-				<transformationref id="rotate_y_90" />
+				<scale x="0.7" y="1.2" z="1" />
+				<translate x="-0.5" y="0" z="0.501" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="wood_door" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="comp2" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
-
 		</component>
-
-		<component id="comp2">
+		
+		<component id = "janelas">
 			<transformation>
-<<<<<<< HEAD
-=======
-				<transformationref id="rotate_y_90" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" /> 
 			<children>
-				<componentref id="comp1" />
+				<componentref id="janela_1" />
+				<componentref id="janela_2" />
 			</children>
-
 		</component>
-
-		<component id="comp1">
+		
+		<component id = "janela_1">
 			<transformation>
-				<transformationref id="rotate_y_90" />
+				<scale x="0.5" y="0.8" z="1" />
+				<translate x="1.5" y="0.5" z="-0.501" />
+				<rotate axis="y" angle="180" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="wood_window_2" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="comp0" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
-
 		</component>
-
-		<component id="comp0">
+		
+		<component id = "janela_2">
 			<transformation>
+				<scale x="0.5" y="0.8" z="1" />
+				<translate x="-0.5" y="0.5" z="-0.501" />
+				<rotate axis="y" angle="180" />
 			</transformation>
 			<materials>
-				<material id="mat0" />
+				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="wood_window_1" />
 			<children>
-<<<<<<< HEAD
 				<primitiveref id="rect"/>
-=======
-				<componentref id="comp" />
->>>>>>> e5cc962acfd5525a9b495f82383a3deae0ca48d5
 			</children>
-
 		</component>
 
-        <component id="comp">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="mat0" />
-				<material id="mat1" />
-            </materials>
-            <texture id="tex0" />
-            <children>
-                <primitiveref id="prim00" />
-				<primitiveref id="prim01" />
-				<primitiveref id="prim02" />
-				<primitiveref id="prim03" />
-            </children>
-
-        </component>
 	</components>
 </dsx>
