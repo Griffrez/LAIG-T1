@@ -97,7 +97,7 @@
 	var c = vec3.length(vecC);
 	
 	var cosBeta = (a*a - b*b + c*c) / (2 * a * c);
-	var sinBeta = Math.sqrt(1 - cosBeta^2);
+	var sinBeta = Math.sqrt(1 - cosBeta*cosBeta);
 	
 	this.texCoords =
 	[
