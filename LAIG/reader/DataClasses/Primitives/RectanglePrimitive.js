@@ -1,6 +1,10 @@
-/*
-	Point1: CartesianValues2
-	Point2: CartesianValues2
+/**
+ * RectanglePrimitive
+ * Data structure to store basic information about a rectangle
+ *
+ * @param {string} id String that uniquely identifies this primitive
+ * @param {vec2} p1 Point number one of the rectangle
+ * @param {vec2} p2 Point number two of the rectangle
  */
 function RectanglePrimitive(id, p1, p2)
 {

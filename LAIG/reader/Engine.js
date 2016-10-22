@@ -37,16 +37,16 @@ function setMaterial(appearance, data)
 	appearance.setShininess(shininess);
 }
 
-function XMLscene() {
+function Engine() {
 	CGFscene.call(this);
 	this.graph = null;
 	this.interface = null;
 }
 
-XMLscene.prototype = Object.create(CGFscene.prototype);
-XMLscene.prototype.constructor = XMLscene;
+Engine.prototype             = Object.create(CGFscene.prototype);
+Engine.prototype.constructor = Engine;
 
-XMLscene.prototype.init = function (application) {
+Engine.prototype.init = function (application) {
 	CGFscene.prototype.init.call(this, application);
 
 	this.initLights();
@@ -61,7 +61,7 @@ XMLscene.prototype.init = function (application) {
 	this.axis=new CGFaxis(this);
 };
 
-XMLscene.prototype.initLights = function () {
+Engine.prototype.initLights = function () {
 
 	//this.lights[0].setPosition(2, 3, 3, 1);
 	//this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
@@ -70,7 +70,7 @@ XMLscene.prototype.initLights = function () {
 	//this.lights[0].update();
 };
 
-XMLscene.prototype.setDefaultAppearance = function () {
+Engine.prototype.setDefaultAppearance = function () {
 	this.setAmbient(0.2, 0.4, 0.8, 1.0);
 	this.setDiffuse(0.2, 0.4, 0.8, 1.0);
 	this.setSpecular(0.2, 0.4, 0.8, 1.0);
@@ -78,7 +78,7 @@ XMLscene.prototype.setDefaultAppearance = function () {
 	this.activeTexture = null;
 };
 
-XMLscene.prototype.illuminationInit = function ()
+Engine.prototype.illuminationInit = function ()
 {
 	var illumination = this.graph.elements.getIllumination();
 
@@ -99,7 +99,7 @@ XMLscene.prototype.illuminationInit = function ()
 	);
 };
 
-XMLscene.prototype.perspectivesInit = function ()
+Engine.prototype.perspectivesInit = function ()
 {
 	var perspectives = this.graph.elements.getPerspectives();
 
@@ -128,7 +128,7 @@ XMLscene.prototype.perspectivesInit = function ()
 	this.interface.setActiveCamera(this.cameras[0]);
 };
 
-XMLscene.prototype.texturesInit = function ()
+Engine.prototype.texturesInit = function ()
 {
 	let texturesData = this.graph.elements.getTextures();
 
@@ -142,7 +142,7 @@ XMLscene.prototype.texturesInit = function ()
 	}
 };
 
-XMLscene.prototype.lightsInit = function ()
+Engine.prototype.lightsInit = function ()
 {
 	let lightsData = this.graph.elements.getLights();
 
@@ -245,7 +245,7 @@ XMLscene.prototype.lightsInit = function ()
 	}
 };
 
-XMLscene.prototype.processComponent = function(id)
+Engine.prototype.processComponent = function(id)
 {
 	let compData = this.graph.elements.getComponent(id);
 	let transformation = compData.getTransformation();
@@ -267,13 +267,13 @@ XMLscene.prototype.processComponent = function(id)
 	return new Component(id, transformation, materials, texture, childComponents, childPrimitives);
 };
 
-XMLscene.prototype.componentsInit = function ()
+Engine.prototype.componentsInit = function ()
 {
 	let rootID = this.graph.elements.getScene().getRoot();
 	this.root = this.processComponent(rootID);
 };
 
-XMLscene.prototype.primitivesInit = function()
+Engine.prototype.primitivesInit = function()
 {
 	let texturesData = this.graph.elements.getTextures();
 
@@ -355,7 +355,7 @@ XMLscene.prototype.primitivesInit = function()
 
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
-XMLscene.prototype.onGraphLoaded = function ()
+Engine.prototype.onGraphLoaded = function ()
 {
 	this.illuminationInit();
 	this.perspectivesInit();
@@ -369,7 +369,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.dataLoaded = true;
 };
 
-XMLscene.prototype.display = function () {
+Engine.prototype.display = function () {
 	if(!this.dataLoaded)
 	{
 		return;
@@ -511,7 +511,7 @@ XMLscene.prototype.display = function () {
 	}
 };
 
-XMLscene.prototype.changeCamera = function()
+Engine.prototype.changeCamera = function()
 {
 	this.cameraIndex = (this.cameraIndex+1)%(this.cameras.length);
 
@@ -521,7 +521,7 @@ XMLscene.prototype.changeCamera = function()
 	this.interface.setActiveCamera(camera);
 };
 
-XMLscene.prototype.changeMaterial = function()
+Engine.prototype.changeMaterial = function()
 {
 	this.materialsIndex++;
 };

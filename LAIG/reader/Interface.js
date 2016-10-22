@@ -11,8 +11,7 @@ Interface.prototype.init = function(application)
 {
 	CGFinterface.prototype.init.call(this, application);
 
-	this.GUI = new dat.GUI();
-
+	this.GUI    = new dat.GUI();
 	this.lights = this.GUI.addFolder("Lights");
 	this.lights.open();
 

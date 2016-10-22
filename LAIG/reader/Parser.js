@@ -3,7 +3,7 @@ function deg2rad(degree)
 	return Math.PI/180*degree;
 }
 
-function MySceneGraph(filename, scene)
+function Parser(filename, scene)
 {
 	this.loadedOk = null;
 
@@ -26,7 +26,7 @@ function MySceneGraph(filename, scene)
 /*
  * Callback to be executed after successful reading
  */
-MySceneGraph.prototype.onXMLReady = function ()
+Parser.prototype.onXMLReady = function ()
 {
 	console.log("XML Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
@@ -52,7 +52,7 @@ MySceneGraph.prototype.onXMLReady = function ()
 
 /* -------------------- PARSE DSX -------------------- */
 
-MySceneGraph.prototype.parseDSX = function (rootElement)
+Parser.prototype.parseDSX = function (rootElement)
 {
 	var result;
 
@@ -138,7 +138,7 @@ MySceneGraph.prototype.parseDSX = function (rootElement)
 /* -------------------- PARSE FUNCTIONS -------------------- */
 
 /* -------------------- SCENE -------------------- */
-MySceneGraph.prototype.parseScene = function (rootElement)
+Parser.prototype.parseScene = function (rootElement)
 {
 	var elems = rootElement.children[0];
 	if (elems.nodeName !== "scene")
@@ -190,7 +190,7 @@ MySceneGraph.prototype.parseScene = function (rootElement)
 };
 
 /* -------------------- VIEW -------------------- */
-MySceneGraph.prototype.parseView = function (rootElement)
+Parser.prototype.parseView = function (rootElement)
 {
 	var elems = rootElement.children[1];
 	if (elems.nodeName !== "views")
@@ -314,7 +314,7 @@ MySceneGraph.prototype.parseView = function (rootElement)
 };
 
 /* -------------------- ILLUMINATION -------------------- */
-MySceneGraph.prototype.parseIllumination = function (rootElement)
+Parser.prototype.parseIllumination = function (rootElement)
 {
 	var elems = rootElement.children[2];
 
@@ -362,7 +362,7 @@ MySceneGraph.prototype.parseIllumination = function (rootElement)
 };
 
 /* -------------------- LIGHTS -------------------- */
-MySceneGraph.prototype.parseLights = function (rootElement)
+Parser.prototype.parseLights = function (rootElement)
 {
 	var elems = rootElement.children[3];
 
@@ -532,7 +532,7 @@ MySceneGraph.prototype.parseLights = function (rootElement)
 };
 
 /* -------------------- TEXTURES -------------------- */
-MySceneGraph.prototype.parseTextures = function (rootElement)
+Parser.prototype.parseTextures = function (rootElement)
 {
 	var elems = rootElement.children[4];
 
@@ -567,7 +567,7 @@ MySceneGraph.prototype.parseTextures = function (rootElement)
 };
 
 /* -------------------- MATERIALS -------------------- */
-MySceneGraph.prototype.parseMaterials = function (rootElement)
+Parser.prototype.parseMaterials = function (rootElement)
 {
 	var elems = rootElement.children[5];
 
@@ -660,7 +660,7 @@ MySceneGraph.prototype.parseMaterials = function (rootElement)
 	return null;
 };
 
-MySceneGraph.prototype.parseTransformations = function (rootElement)
+Parser.prototype.parseTransformations = function (rootElement)
 {
 	var elems = rootElement.children[6];
 
@@ -735,7 +735,7 @@ MySceneGraph.prototype.parseTransformations = function (rootElement)
 	}
 };
 
-MySceneGraph.prototype.parsePrimitives = function (rootElement)
+Parser.prototype.parsePrimitives = function (rootElement)
 {
 	var elems = rootElement.children[7];
 
@@ -844,7 +844,7 @@ MySceneGraph.prototype.parsePrimitives = function (rootElement)
 	}
 };
 
-MySceneGraph.prototype.parseComponents = function (rootElement)
+Parser.prototype.parseComponents = function (rootElement)
 {
 	var elems = rootElement.children[8];
 
@@ -1062,7 +1062,7 @@ MySceneGraph.prototype.parseComponents = function (rootElement)
  * Callback to be executed on any read error
  */
 
-MySceneGraph.prototype.onXMLError = function (message)
+Parser.prototype.onXMLError = function (message)
 {
 	console.error("XML Loading Error: " + message);
 	this.loadedOk = false;

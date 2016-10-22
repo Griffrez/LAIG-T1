@@ -1,3 +1,7 @@
+/*
+	Class to store data about a component.
+ */
+
 function ComponentData(id)
 {
 	this.id             = id;
