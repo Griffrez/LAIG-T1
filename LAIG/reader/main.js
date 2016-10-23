@@ -11,8 +11,36 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'Engine.js', 'Interface.js', 'Parser.js', 'DataClasses/Color.js', 'DataClasses/Scene.js', 'DataClasses/Perspective.js', 'DataClasses/Illumination.js', 'DataClasses/Light.js', 'DataClasses/SpotLight.js', 'DataClasses/OmniLight.js', 'DataClasses/TextureData.js', 'DataClasses/Material.js', 'DataClasses/Transformation.js', 'DataClasses/Primitives/Primitive.js', 'DataClasses/Primitives/RectanglePrimitive.js', 'DataClasses/Primitives/TrianglePrimitive.js', 'DataClasses/Primitives/CylinderPrimitive.js', 'DataClasses/Primitives/SpherePrimitive.js', 'DataClasses/Primitives/TorusPrimitive.js', 'DataClasses/ComponentData.js', 'DataClasses/Elements.js', 'EngineDataClasses/Texture.js', 'EngineDataClasses/Component.js', 'GraphicPrimitives/MyRectangle.js', 'GraphicPrimitives/MyTriangle.js', 'GraphicPrimitives/MyCylinder.js', 'GraphicPrimitives/MySphere.js', 'GraphicPrimitives/MyTorus.js',
-
+serialInclude([
+	'../lib/CGF.js',
+	'Engine.js',
+	'Interface.js',
+	'Parser.js',
+	'DataClasses/Color.js',
+	'DataClasses/Scene.js',
+	'DataClasses/Perspective.js',
+	'DataClasses/Illumination.js',
+	'DataClasses/Light.js',
+	'DataClasses/SpotLight.js',
+	'DataClasses/OmniLight.js',
+	'DataClasses/TextureData.js',
+	'DataClasses/Material.js',
+	'DataClasses/Transformation.js',
+	'DataClasses/Primitives/Primitive.js',
+	'DataClasses/Primitives/RectanglePrimitive.js',
+	'DataClasses/Primitives/TrianglePrimitive.js',
+	'DataClasses/Primitives/CylinderPrimitive.js',
+	'DataClasses/Primitives/SpherePrimitive.js',
+	'DataClasses/Primitives/TorusPrimitive.js',
+	'DataClasses/ComponentData.js',
+	'DataClasses/Elements.js',
+	'EngineDataClasses/Texture.js',
+	'EngineDataClasses/Component.js',
+	'GraphicPrimitives/MyRectangle.js',
+	'GraphicPrimitives/MyTriangle.js',
+	'GraphicPrimitives/MyCylinder.js',
+	'GraphicPrimitives/MySphere.js',
+	'GraphicPrimitives/MyTorus.js',
                main = function()
                {
 	               // Standard application, scene and interface setup
