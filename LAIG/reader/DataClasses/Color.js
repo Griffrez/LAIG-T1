@@ -1,5 +1,12 @@
-/* Color structure to store 4 float values 0.0-1.0*/
-
+/**
+ * Color
+ * Data structure to store basic information about a color
+ *
+ * @param {number} r Red component
+ * @param {number} g Green component
+ * @param {number} b Blue component
+ * @param {number} a Alpha component
+ */
 function Color(r, g, b, a)
 {
 	this.r = r;

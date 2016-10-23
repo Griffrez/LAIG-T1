@@ -1,15 +1,18 @@
-/*
-	Class to store data about a component.
+/**
+ * ComponentData
+ * Data structure to store information about a component
+ *
+ * @param {float} id String that uniquely identifies this component
  */
-
 function ComponentData(id)
 {
 	this.id             = id;
-	this.loadedOK       = false;
-	this.transformation = null;
-	this.materials      = null;
-	this.texture        = null;
-	this.children       = {'components': [], 'primitives': []};
+	this.loadedOK       = false;    // Becomes true when the other fields are filled in
+	this.transformation = null;     // Reference to a Transformation
+	this.materials      = null;     // Array of references to Materials
+	this.texture        = null;     // Reference to TextureData
+	this.children       = {'components': [], 'primitives': []}; // Array of two arrays of references to
+	// ComponentData and Primitives, respectively
 }
 
 ComponentData.prototype.getID = function()

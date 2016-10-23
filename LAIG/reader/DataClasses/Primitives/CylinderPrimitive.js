@@ -21,7 +21,7 @@ function CylinderPrimitive(id, base, top, height, slices, stacks)
 	this.stacks = stacks;
 }
 
-CylinderPrimitive.prototype = new Primitive();
+CylinderPrimitive.prototype = Object.create(Primitive.prototype);
 
 CylinderPrimitive.prototype.getBase = function()
 {

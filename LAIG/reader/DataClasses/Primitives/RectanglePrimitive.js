@@ -14,7 +14,7 @@ function RectanglePrimitive(id, p1, p2)
 	this.point2 = p2;
 }
 
-RectanglePrimitive.prototype = new Primitive();
+RectanglePrimitive.prototype = Object.create(Primitive.prototype);
 
 RectanglePrimitive.prototype.getPoint1 = function()
 {

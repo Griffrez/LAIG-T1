@@ -1,7 +1,11 @@
-/*
-	Point1: CartesianValues3
-	Point2: CartesianValues3
-	Point3: CartesianValues3
+/**
+ * TrianglePrimitive
+ * Data structure to store basic information about a triangle
+ *
+ * @param {string} id String that uniquely identifies this primitive
+ * @param {vec3} p1 Data about the first point
+ * @param {vec3} p2 Data about the second point
+ * @param {vec3} p3 Data about the third point
  */
 function TrianglePrimitive(id, p1, p2, p3)
 {
@@ -12,7 +16,7 @@ function TrianglePrimitive(id, p1, p2, p3)
 	this.point3 = p3;
 }
 
-TrianglePrimitive.prototype = new Primitive();
+TrianglePrimitive.prototype = Object.create(Primitive.prototype);
 
 TrianglePrimitive.prototype.getPoint1 = function()
 {

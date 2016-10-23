@@ -1,95 +1,99 @@
+/**
+ * Elements
+ * Data structure to index all the information required for the Engine
+ */
 function Elements()
 {
-	this.scene = null;
-	this.illumination = null;
-	this.perspectives = new Map();
-	this.defaultPerspective = null;
-	this.lights = new Map();
-	this.textures = new Map();
-	this.materials = new Map();
-	this.transformations = new Map();
-	this.primitives = new Map();
-	this.components = new Map();
+	this.scene              = null;         // Reference to the Scene element of the dsx
+	this.illumination       = null;         // Reference to the Illumination element of the dsx
+	this.perspectives       = new Map();    // Map of ID to Perspectives. [id, Perspective]
+	this.defaultPerspective = null;         // Default perspective used, reference to Perspective element
+	this.lights             = new Map();    // Map of ID to Lights. [id, Light]
+	this.textures           = new Map();    // Map of ID to TextureData. [id, TextureData]
+	this.materials          = new Map();    // Map of ID to Materials. [id, Material]
+	this.transformations    = new Map();    // Map of ID to Transformations. [id, Transformation]
+	this.primitives         = new Map();    // Map of ID to Primitives. [id, Primitive]
+	this.components         = new Map();    // Map of ID to Components. [id, Component]
 }
 
 // Getters
 
-Elements.prototype.getScene = function ()
+Elements.prototype.getScene = function()
 {
 	return this.scene;
 };
 
-Elements.prototype.getIllumination = function ()
+Elements.prototype.getIllumination = function()
 {
 	return this.illumination;
 };
 
-Elements.prototype.getPerspective = function (id)
+Elements.prototype.getPerspective = function(id)
 {
 	return this.perspectives.get(id);
 };
 
-Elements.prototype.getPerspectives = function ()
+Elements.prototype.getPerspectives = function()
 {
 	return this.perspectives.values();
 };
 
-Elements.prototype.getDefaultPerspective = function ()
+Elements.prototype.getDefaultPerspective = function()
 {
 	return this.defaultPerspective;
 };
 
-Elements.prototype.getLight = function (id)
+Elements.prototype.getLight = function(id)
 {
 	return this.lights.get(id);
 };
 
-Elements.prototype.getLights = function ()
+Elements.prototype.getLights = function()
 {
 	return this.lights.values();
 };
 
-Elements.prototype.getTexture = function (id)
+Elements.prototype.getTexture = function(id)
 {
 	return this.textures.get(id);
 };
 
-Elements.prototype.getTextures = function ()
+Elements.prototype.getTextures = function()
 {
 	return this.textures.values();
 };
 
-Elements.prototype.getMaterial = function (id)
+Elements.prototype.getMaterial = function(id)
 {
 	return this.materials.get(id);
 };
 
-Elements.prototype.getMaterials = function ()
+Elements.prototype.getMaterials = function()
 {
 	return this.materials.values();
 };
 
-Elements.prototype.getTransformation = function (id)
+Elements.prototype.getTransformation = function(id)
 {
 	return this.transformations.get(id);
 };
 
-Elements.prototype.getTransformations = function ()
+Elements.prototype.getTransformations = function()
 {
 	return this.transformations.values();
 };
 
-Elements.prototype.getPrimitive = function (id)
+Elements.prototype.getPrimitive = function(id)
 {
 	return this.primitives.get(id);
 };
 
-Elements.prototype.getPrimitives = function ()
+Elements.prototype.getPrimitives = function()
 {
 	return this.primitives.values();
 };
 
-Elements.prototype.getComponent = function (id)
+Elements.prototype.getComponent = function(id)
 {
 	var element = this.components.get(id);
 
@@ -101,14 +105,14 @@ Elements.prototype.getComponent = function (id)
 	return this.components.get(id);
 };
 
-Elements.prototype.getComponents = function ()
+Elements.prototype.getComponents = function()
 {
 	return this.components.values();
 };
 
 // Setters
 
-Elements.prototype.setScene = function (item)
+Elements.prototype.setScene = function(item)
 {
 	if (!(item instanceof Scene))
 	{
@@ -119,7 +123,7 @@ Elements.prototype.setScene = function (item)
 	return null;
 };
 
-Elements.prototype.setIllumination = function (item)
+Elements.prototype.setIllumination = function(item)
 {
 	if (!(item instanceof Illumination))
 	{
@@ -130,7 +134,7 @@ Elements.prototype.setIllumination = function (item)
 	return null;
 };
 
-Elements.prototype.checkValid = function (item, map, constructor, nameType)
+Elements.prototype.checkValid = function(item, map, constructor, nameType)
 {
 	if (!(item instanceof constructor))
 	{
@@ -151,7 +155,7 @@ Elements.prototype.checkValid = function (item, map, constructor, nameType)
 	}
 };
 
-Elements.prototype.addPerspective = function (item)
+Elements.prototype.addPerspective = function(item)
 {
 	var error = this.checkValid(item, this.perspectives, Perspective, "perspective");
 
@@ -164,7 +168,7 @@ Elements.prototype.addPerspective = function (item)
 	return null;
 };
 
-Elements.prototype.setDefaultPerspective = function (item)
+Elements.prototype.setDefaultPerspective = function(item)
 {
 	if (!(item instanceof Perspective))
 	{
@@ -175,7 +179,7 @@ Elements.prototype.setDefaultPerspective = function (item)
 	return null;
 };
 
-Elements.prototype.addLight = function (item)
+Elements.prototype.addLight = function(item)
 {
 	var error = this.checkValid(item, this.lights, Light, "light");
 
@@ -188,7 +192,7 @@ Elements.prototype.addLight = function (item)
 	return null;
 };
 
-Elements.prototype.addTexture = function (item)
+Elements.prototype.addTexture = function(item)
 {
 	var error = this.checkValid(item, this.textures, TextureData, "texture");
 
@@ -201,7 +205,7 @@ Elements.prototype.addTexture = function (item)
 	return null;
 };
 
-Elements.prototype.addMaterial = function (item)
+Elements.prototype.addMaterial = function(item)
 {
 	var error = this.checkValid(item, this.materials, Material, "material");
 
@@ -214,7 +218,7 @@ Elements.prototype.addMaterial = function (item)
 	return null;
 };
 
-Elements.prototype.addTransformation = function (item)
+Elements.prototype.addTransformation = function(item)
 {
 	var error = this.checkValid(item, this.transformations, Transformation, "transformation");
 
@@ -227,7 +231,7 @@ Elements.prototype.addTransformation = function (item)
 	return null;
 };
 
-Elements.prototype.addPrimitive = function (item)
+Elements.prototype.addPrimitive = function(item)
 {
 	var error = this.checkValid(item, this.primitives, Primitive, "primitive");
 
@@ -240,7 +244,7 @@ Elements.prototype.addPrimitive = function (item)
 	return null;
 };
 
-Elements.prototype.addComponent = function (id)
+Elements.prototype.addComponent = function(id)
 {
 	var check = this.components[id];
 
@@ -253,7 +257,7 @@ Elements.prototype.addComponent = function (id)
 	return null;
 };
 
-Elements.prototype.setComponentData = function (id, transformation, materials, texture, childComponents, childPrimitives)
+Elements.prototype.setComponentData = function(id, transformation, materials, texture, childComponents, childPrimitives)
 {
 	var check = this.getComponent(id);
 

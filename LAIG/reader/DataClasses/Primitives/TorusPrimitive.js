@@ -12,13 +12,13 @@ function TorusPrimitive(id, inner, outer, slices, loops)
 {
 	Primitive.call(this, id);
 
-	this.inner = inner;
-	this.outer = outer;
+	this.inner  = inner;
+	this.outer  = outer;
 	this.slices = slices;
-	this.loops = loops;
+	this.loops  = loops;
 }
 
-TorusPrimitive.prototype = new Primitive();
+TorusPrimitive.prototype = Object.create(Primitive.prototype);
 
 TorusPrimitive.prototype.getInner = function()
 {

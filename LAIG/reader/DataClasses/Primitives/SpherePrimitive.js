@@ -16,7 +16,7 @@ function SpherePrimitive(id, radius, slices, stacks)
 	this.stacks = stacks;
 }
 
-SpherePrimitive.prototype = new Primitive();
+SpherePrimitive.prototype = Object.create(Primitive.prototype);
 
 SpherePrimitive.prototype.getRadius = function()
 {
