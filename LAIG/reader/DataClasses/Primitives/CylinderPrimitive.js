@@ -3,10 +3,9 @@
  * Data structure to store basic information about a cylinder
  *
  * @param {string} id String that uniquely identifies this primitive
- * @param {number} base Float that indicates the radius of the base of the cylinder (non-negative value)
- * @param {number} top Float that indicates the radius of the top of the cylinder (non-negative value)
- * @param {number} height Float that indicates the distance between the base and the top of the cylinder
- * (non-negative value)
+ * @param {number} base Float that indicates the radius of the base of the cylinder (positive value)
+ * @param {number} top Float that indicates the radius of the top of the cylinder (positive value)
+ * @param {number} height Float that indicates the distance between the base and the top of the cylinder (positive value)
  * @param {number} slices Integer that indicates the number of divisions around the axis of the cylinder (positive
  * value)
  * @param {number} stacks Integer that indicates the number of divisions along the axis of the cylinder (positive value)
