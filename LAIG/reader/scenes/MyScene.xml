@@ -53,8 +53,8 @@
 	<textures>
 		<texture id="board" file="../resources/Yavalath.png" length_s="4" length_t="4" />
 		<texture id="peca" file="../resources/peca.png" length_s="1" length_t="1" />
-		<texture id="ceu" file="../resources/ceu.jpg" length_s="4" length_t="4" />
-		<texture id="areia" file="../resources/piramide.png" length_s="1" length_t="1" />
+		<texture id="ceu" file="../resources/ceu.jpg" length_s="4" length_t="4/>		
+		<texture id="areia" file="../resources/piramide.png" length_s="1" length_t="1/>
 	</textures>
 	
 	<materials>
@@ -306,10 +306,10 @@
             </transformation>
 			
             <materials>
-                <material id="inherit" />
+                <material id="blue" />
             </materials>
 			
-            <texture id="areia" />
+            <texture id="none" />
             <children>
 				<primitiveref id="da1tri1" />
 				<primitiveref id="da1tri2" />

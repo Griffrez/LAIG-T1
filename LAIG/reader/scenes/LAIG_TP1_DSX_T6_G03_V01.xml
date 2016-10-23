@@ -2,21 +2,9 @@
 	<scene root="root" axis_length="5.0"/>
 	
 	<views default="cam0">
-		<perspective id="cam0" near="0.1" far="500" angle="2">
-            <from x="120" y="60" z="120" />
+		<perspective id="cam0" near="0.1" far="500" angle="1.6">
+            <from x="4" y="3" z="4" />
             <to x="0" y="0" z="0" />
-        </perspective>
-		<perspective id="cam1" near="0.1" far="500" angle="2">
-            <from x="2" y="60" z="120" />
-            <to x="2" y="0" z="0" />
-        </perspective>
-		<perspective id="cam2" near="0.1" far="500" angle="2">
-            <from x="120" y="60" z="2" />
-            <to x="0" y="0" z="2" />
-        </perspective>
-		<perspective id="cam3" near="0.1" far="500" angle="3">
-            <from x="8" y="100" z="8" />
-            <to x="2" y="1" z="2" />
         </perspective>
 	</views>
 	
@@ -27,34 +15,19 @@
 	
 	<lights>
         <omni id="omni1" enabled="1" >
-            <location x="4" y="4" z="4" w="1.0" />
+            <location x="2" y="2" z="2" w="1.0" />
             <ambient r="0.45" g="0.45" b="0.45" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </omni>
 		
-		<omni id="omni2" enabled="1" >
-            <location x="1" y="4" z="1" w="1.0" />
-            <ambient r="1" g="1" b="1" a="1" />
-            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
-            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-        </omni>
-		
-		<spot id="spot1" enabled="0" angle="45" exponent="3">
-			<target x="4" y="4" z="4" />
-			<location x="4" y="0" z="4" />
-			<ambient r="0" g="0" b="0" a="1.0" />
-			<diffuse r="1" g="0" b="0" a="1" />
-			<specular r="0" g="0" b="0" a="1" />
-		</spot>
 		
 	</lights>
 	
 	<textures>
 		<texture id="board" file="../resources/Yavalath.png" length_s="4" length_t="4" />
 		<texture id="peca" file="../resources/peca.png" length_s="1" length_t="1" />
-		<texture id="ceu" file="../resources/ceu.jpg" length_s="4" length_t="4" />
-		<texture id="areia" file="../resources/piramide.png" length_s="1" length_t="1" />
+		<texture id="ceu" length_t="4" length_s="4" file="../resources/ceu.jpg"/>		
 	</textures>
 	
 	<materials>
@@ -191,12 +164,10 @@
             <texture id="none" />
             <children>
 				<componentref id="decoration1" />
-				<componentref id="decoration2" />
-				<componentref id="decoration3" />
-				<componentref id="decoration4" />
             </children>
 			
         </component>
+		
 		
 		<component id="walls">
             <transformation>
@@ -214,62 +185,9 @@
 			
         </component>
 		
-		<!-- Decoration -->
-		
 		<component id="decoration1">
             <transformation>
 				<translate x="0.4" y="0" z="3.60" />
-				<rotate axis="y" angle="45" />
-            </transformation>
-			
-            <materials>
-                <material id="inherit" />
-            </materials>
-			
-            <texture id="none" />
-            <children>
-				<componentref id="decorationasset1" />
-            </children>
-			
-        </component>
-		
-		<component id="decoration2">
-            <transformation>
-				<translate x="0.4" y="0" z="0.4" />
-				<rotate axis="y" angle="45" />
-            </transformation>
-			
-            <materials>
-                <material id="inherit" />
-            </materials>
-			
-            <texture id="none" />
-            <children>
-				<componentref id="decorationasset1" />
-            </children>
-			
-        </component>
-		
-		<component id="decoration3">
-            <transformation>
-				<translate x="3.60" y="0" z="0.4" />
-				<rotate axis="y" angle="45" />
-            </transformation>
-			
-            <materials>
-                <material id="inherit" />
-            </materials>
-			
-            <texture id="none" />
-            <children>
-				<componentref id="decorationasset1" />
-            </children>
-			
-        </component>
-		
-		<component id="decoration4">
-            <transformation>
-				<translate x="3.60" y="0" z="3.60" />
 				<rotate axis="y" angle="45" />
             </transformation>
 			
@@ -306,10 +224,10 @@
             </transformation>
 			
             <materials>
-                <material id="inherit" />
+                <material id="blue" />
             </materials>
 			
-            <texture id="areia" />
+            <texture id="none" />
             <children>
 				<primitiveref id="da1tri1" />
 				<primitiveref id="da1tri2" />
@@ -335,8 +253,6 @@
             </children>
 			
         </component>
-		
-		<!-- Pieces -->
 		
 		<component id="Piece6">
             <transformation>
@@ -479,8 +395,6 @@
             </children>
 			
         </component>
-		
-		<!-- Walls -->
 		
 		<component id="rightWall">
             <transformation>
