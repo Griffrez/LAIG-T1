@@ -11,35 +11,57 @@ function getUrlVars() {
     return vars;
 }
 
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'Color.js', 'Scene.js', 'Perspective.js', 'Illumination.js', 'Light.js', 'SpotLight.js', 'OmniLight.js', 'TextureData.js', 'Material.js', 'Transformation.js', 'Primitive.js', 'RectanglePrimitive.js', 'TrianglePrimitive.js', 'CylinderPrimitive.js', 'SpherePrimitive.js', 'TorusPrimitive.js', 'ComponentData.js', 'Elements.js', 'Texture.js', 'Component.js', 'MyRectangle.js', 'MyTriangle.js', 'MyCylinder.js', 'MySphere.js', 'MyTorus.js', 'Interface.js',
+serialInclude([
+	'../lib/CGF.js',
+	'Engine.js',
+	'Interface.js',
+	'Parser.js',
+	'DataClasses/Color.js',
+	'DataClasses/Scene.js',
+	'DataClasses/Perspective.js',
+	'DataClasses/Illumination.js',
+	'DataClasses/Light.js',
+	'DataClasses/SpotLight.js',
+	'DataClasses/OmniLight.js',
+	'DataClasses/TextureData.js',
+	'DataClasses/Material.js',
+	'DataClasses/Transformation.js',
+	'DataClasses/Primitives/Primitive.js',
+	'DataClasses/Primitives/RectanglePrimitive.js',
+	'DataClasses/Primitives/TrianglePrimitive.js',
+	'DataClasses/Primitives/CylinderPrimitive.js',
+	'DataClasses/Primitives/SpherePrimitive.js',
+	'DataClasses/Primitives/TorusPrimitive.js',
+	'DataClasses/ComponentData.js',
+	'DataClasses/Elements.js',
+	'EngineDataClasses/Texture.js',
+	'EngineDataClasses/Component.js',
+	'GraphicPrimitives/MyRectangle.js',
+	'GraphicPrimitives/MyTriangle.js',
+	'GraphicPrimitives/MyCylinder.js',
+	'GraphicPrimitives/MySphere.js',
+	'GraphicPrimitives/MyTorus.js',
+               main = function()
+               {
+	               // Standard application, scene and interface setup
+	               let app           = new CGFapplication(document.body);
+	               let engine        = new Engine();
+	               let userInterface = new Interface();
 
-    main=function()
-    {
-        // Standard application, scene and interface setup
-        var app = new CGFapplication(document.body);
-        var myScene = new XMLscene();
-        var myInterface = new Interface();
+	               engine.interface = userInterface;
 
-        myScene.interface = myInterface;
+	               app.init();
 
-        app.init();
+	               app.setScene(engine);
+	               app.setInterface(userInterface);
 
-        app.setScene(myScene);
-        app.setInterface(myInterface);
+	               userInterface.setActiveCamera(engine.camera);
 
-        myInterface.setActiveCamera(myScene.camera);
+	               let filename = getUrlVars()['file'] || "scene.dsx";
 
-        // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml
-        // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor)
+	               let myGraph = new Parser(filename, engine);
 
-        var filename=getUrlVars()['file'] || "MyScene.xml";
-
-        // create and load graph, and associate it to scene.
-        // Check console for loading errors
-        var myGraph = new MySceneGraph(filename, myScene);
-
-        // start
-        app.run();
-    }
+	               app.run();
+               }
 
 ]);
