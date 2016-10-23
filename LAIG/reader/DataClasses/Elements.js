@@ -170,11 +170,6 @@ Elements.prototype.addPerspective = function(item)
 
 Elements.prototype.setDefaultPerspective = function(item)
 {
-	if (!(item instanceof Perspective))
-	{
-		return "item is not a Perspective";
-	}
-
 	this.defaultPerspective = item;
 	return null;
 };

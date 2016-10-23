@@ -1,7 +1,7 @@
 <dsx>
 	<scene root="raiz" axis_length="5.0"/>
 	
-	<views default="cam0">
+	<views default="cam4">
 		<perspective id="cam0" near="0.1" far="500" angle="20">
             <from x="15" y="15" z="15" />
              <to x="0" y="0" z="0" />

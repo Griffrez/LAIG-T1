@@ -16,6 +16,7 @@ serialInclude([
 	'Engine.js',
 	'Interface.js',
 	'Parser.js',
+	'AuxiliarClasses/Stack.js',
 	'DataClasses/Color.js',
 	'DataClasses/Scene.js',
 	'DataClasses/Perspective.js',

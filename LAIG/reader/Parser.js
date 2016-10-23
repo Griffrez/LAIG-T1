@@ -266,6 +266,11 @@ Parser.prototype.parseView = function(rootElement)
 			return "Error Parsing Views, to not Unique";
 		}
 
+		if(id === defaultViewID)
+		{
+			this.elements.setDefaultPerspective(i);
+		}
+
 		let from = vec3.fromValues((this.reader.getFloat(fromElems[0], 'x'))
 			, (this.reader.getFloat(fromElems[0], 'y'))
 			, (this.reader.getFloat(fromElems[0], 'z')));
@@ -284,16 +289,10 @@ Parser.prototype.parseView = function(rootElement)
 		}
 	}
 
-	// Test for default perspective goes here
-
-	let defaultPerspectiveReference = this.elements.getPerspective(defaultViewID);
-
-	if (defaultPerspectiveReference === undefined)
+	if (this.elements.getDefaultPerspective() === null)
 	{
 		return "Error Parsing Views, no default perspective";
 	}
-
-	this.elements.setDefaultPerspective(defaultPerspectiveReference);
 
 	return null;
 };

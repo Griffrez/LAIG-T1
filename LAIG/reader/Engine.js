@@ -110,8 +110,10 @@ Engine.prototype.perspectivesInit = function()
 		this.cameras.push(camera);
 	}
 
-	this.camera = this.cameras[0];
-	this.interface.setActiveCamera(this.cameras[0]);
+	let defaultCamera = this.cameras[this.graph.elements.getDefaultPerspective()];
+
+	this.camera = defaultCamera;
+	this.interface.setActiveCamera(defaultCamera);
 };
 
 Engine.prototype.texturesInit = function()
