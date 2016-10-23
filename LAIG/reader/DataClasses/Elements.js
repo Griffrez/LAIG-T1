@@ -95,7 +95,7 @@ Elements.prototype.getPrimitives = function()
 
 Elements.prototype.getComponent = function(id)
 {
-	var element = this.components.get(id);
+	let element = this.components.get(id);
 
 	if (element === undefined)
 	{
@@ -141,9 +141,9 @@ Elements.prototype.checkValid = function(item, map, constructor, nameType)
 		return "item is not a " + nameType;
 	}
 
-	var id = item.getID();
+	let id = item.getID();
 
-	var check = map.get(id);
+	let check = map.get(id);
 
 	if (check !== undefined)
 	{
@@ -157,7 +157,7 @@ Elements.prototype.checkValid = function(item, map, constructor, nameType)
 
 Elements.prototype.addPerspective = function(item)
 {
-	var error = this.checkValid(item, this.perspectives, Perspective, "perspective");
+	let error = this.checkValid(item, this.perspectives, Perspective, "perspective");
 
 	if (error)
 	{
@@ -181,7 +181,7 @@ Elements.prototype.setDefaultPerspective = function(item)
 
 Elements.prototype.addLight = function(item)
 {
-	var error = this.checkValid(item, this.lights, Light, "light");
+	let error = this.checkValid(item, this.lights, Light, "light");
 
 	if (error)
 	{
@@ -194,7 +194,7 @@ Elements.prototype.addLight = function(item)
 
 Elements.prototype.addTexture = function(item)
 {
-	var error = this.checkValid(item, this.textures, TextureData, "texture");
+	let error = this.checkValid(item, this.textures, TextureData, "texture");
 
 	if (error)
 	{
@@ -207,7 +207,7 @@ Elements.prototype.addTexture = function(item)
 
 Elements.prototype.addMaterial = function(item)
 {
-	var error = this.checkValid(item, this.materials, Material, "material");
+	let error = this.checkValid(item, this.materials, Material, "material");
 
 	if (error)
 	{
@@ -220,7 +220,7 @@ Elements.prototype.addMaterial = function(item)
 
 Elements.prototype.addTransformation = function(item)
 {
-	var error = this.checkValid(item, this.transformations, Transformation, "transformation");
+	let error = this.checkValid(item, this.transformations, Transformation, "transformation");
 
 	if (error)
 	{
@@ -233,7 +233,7 @@ Elements.prototype.addTransformation = function(item)
 
 Elements.prototype.addPrimitive = function(item)
 {
-	var error = this.checkValid(item, this.primitives, Primitive, "primitive");
+	let error = this.checkValid(item, this.primitives, Primitive, "primitive");
 
 	if (error)
 	{
@@ -246,7 +246,7 @@ Elements.prototype.addPrimitive = function(item)
 
 Elements.prototype.addComponent = function(id)
 {
-	var check = this.components[id];
+	let check = this.components[id];
 
 	if (check !== undefined)
 	{
@@ -259,7 +259,7 @@ Elements.prototype.addComponent = function(id)
 
 Elements.prototype.setComponentData = function(id, transformation, materials, texture, childComponents, childPrimitives)
 {
-	var check = this.getComponent(id);
+	let check = this.getComponent(id);
 
 	if (check.isLoadedOK())
 	{

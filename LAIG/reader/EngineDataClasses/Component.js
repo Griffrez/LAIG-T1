@@ -1,10 +1,21 @@
-function Component(id, transformation, materials, texture, childComponents, childPrimitives) {
-	this.id = id;
-
+/**
+ * Component
+ * Data structure to store information about a component. Used directly by the Engine.
+ *
+ * @param {string} id Uniquely identifies this component
+ * @param {Transformation} transformation Reference to the Transformation used
+ * @param {Array} materials Array of references to Materials used
+ * @param {Texture} texture Reference to the Texture used
+ * @param {Array} childComponents Array of references to child components
+ * @param {Array} childPrimitives Array of references to child primitives
+ */
+function Component(id, transformation, materials, texture, childComponents, childPrimitives)
+{
+	this.id             = id;
 	this.transformation = transformation;
-	this.materials = materials;
-	this.texture = texture;
-	this.children = {'components': childComponents, 'primitives': childPrimitives};
+	this.materials      = materials;
+	this.texture        = texture;
+	this.children       = {'components': childComponents, 'primitives': childPrimitives};
 }
 
 Component.prototype.getID = function()

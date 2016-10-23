@@ -1,6 +1,16 @@
-/*
-	Location: CartesianValues3
- 	Target: CartesianValues3
+/**
+ * SpotLight
+ * Data structure to store information about a spotlight (directional light)
+ *
+ * @param {string} id Uniquely identifies this light
+ * @param {boolean} enabled Turned on/off by default
+ * @param {vec3} location Location of the light
+ * @param {Color} ambient Ambient light component
+ * @param {Color} diffuse Diffuse light component
+ * @param {Color} specular Specular light component
+ * @param {float} angle Angle of the cone of light
+ * @param {float} exponent Changes the loss of light outside of the cone (0 -> instant dark)
+ * @param {vec3} target Target of the spotlight
  */
 function SpotLight(id, enabled, location, ambient, diffuse, specular, angle, exponent, target)
 {
@@ -12,7 +22,7 @@ function SpotLight(id, enabled, location, ambient, diffuse, specular, angle, exp
 	this.target = target;
 }
 
-SpotLight.prototype = new Light();
+SpotLight.prototype = Object.create(Light.prototype);
 
 SpotLight.prototype.getLocation = function()
 {

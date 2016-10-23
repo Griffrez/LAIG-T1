@@ -1,3 +1,12 @@
+/**
+ * TextureData
+ * Data structure to store information about a texture
+ *
+ * @param {string} id Uniquely identifies this texture
+ * @param {string} file Location of the texture image file
+ * @param {float} length_s How much physical space before tiling s-axis
+ * @param {float} length_t How much physical space before tiling t-axis
+ */
 function TextureData(id, file, length_s, length_t)
 {
 	this.id = id;

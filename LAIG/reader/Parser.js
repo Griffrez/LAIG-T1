@@ -1,24 +1,14 @@
 function deg2rad(degree)
 {
-	return Math.PI/180*degree;
+	return Math.PI / 180 * degree;
 }
 
 function Parser(filename, scene)
 {
-	this.loadedOk = null;
-
-	// Establish bidirectional references between scene and graph
-	this.scene = scene;
+	this.scene  = scene;
 	scene.graph = this;
 
-	// File reading 
 	this.reader = new CGFXMLreader();
-
-	/*
-	 * Read the contents of the xml file, and refer to this class for loading and error handlers.
-	 * After the file is read, the reader calls onXMLReady on this object.
-	 * If any error occurs, the reader calls onXMLError on this object, with an error message
-	 */
 
 	this.reader.open('scenes/' + filename, this);
 }
@@ -26,16 +16,14 @@ function Parser(filename, scene)
 /*
  * Callback to be executed after successful reading
  */
-Parser.prototype.onXMLReady = function ()
+Parser.prototype.onXMLReady = function()
 {
 	console.log("XML Loading finished.");
-	var rootElement = this.reader.xmlDoc.documentElement;
+	let rootElement = this.reader.xmlDoc.documentElement;
 
 	this.elements = new Elements();
 
-	// Here should go the calls for different functions to parse the various blocks
-	// var error = this.parseScene(rootElement);
-	var error = this.parseDSX(rootElement);
+	let error = this.parseDSX(rootElement);
 
 	if (error != null)
 	{
@@ -43,27 +31,24 @@ Parser.prototype.onXMLReady = function ()
 		return;
 	}
 
-	this.loadedOk = true;
-
-	// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take
-	// place
 	this.scene.onGraphLoaded();
 };
 
 /* -------------------- PARSE DSX -------------------- */
 
-Parser.prototype.parseDSX = function (rootElement)
+Parser.prototype.parseDSX = function(rootElement)
 {
-	var result;
+	let result;
 
-	if(rootElement.nodeName !== "dsx")
+	if (rootElement.nodeName !== "dsx")
 	{
 		return "Main element isn't named dsx.";
 	}
 
-	if(rootElement.children.length !== 9)
+	if (rootElement.children.length !== 9)
 	{
-		if ("parsererror" === rootElement.children[0].nodeName) {
+		if ("parsererror" === rootElement.children[0].nodeName)
+		{
 			return "There is an error in the dsx/xml format. Please review your file.";
 		}
 		return "dsx doesn't have exactly 9 children.";
@@ -138,48 +123,48 @@ Parser.prototype.parseDSX = function (rootElement)
 /* -------------------- PARSE FUNCTIONS -------------------- */
 
 /* -------------------- SCENE -------------------- */
-Parser.prototype.parseScene = function (rootElement)
+Parser.prototype.parseScene = function(rootElement)
 {
-	var elems = rootElement.children[0];
+	let elems = rootElement.children[0];
 	if (elems.nodeName !== "scene")
 	{
 		return "Error Parsing First Child, Doesn't Exist or Not Scene";
 	}
 
-	var root = this.reader.getString(elems, 'root');
-	if(null === root)
+	let root = this.reader.getString(elems, 'root');
+	if (null === root)
 	{
 		return "Error Parsing Scene, root doesn't exist.";
 	}
 
-	var axisLength = this.reader.getFloat(elems, 'axis_length');
-	if(null === axisLength)
+	let axisLength = this.reader.getFloat(elems, 'axis_length');
+	if (null === axisLength)
 	{
 		return "Error Parsing Scene, axis length doesn't exist or not a float.";
 	}
-	if(axisLength < 0)
+	if (axisLength < 0)
 	{
 		return "Error Parsing Scene, axis length must be non-negative.";
 	}
 
-	if(0 !== elems.children.length)
+	if (0 !== elems.children.length)
 	{
 		console.error("Warning: Scene shouldn't have any children, doesn't affect final result.");
 	}
 
 	let rootComponent = this.elements.getComponent(root);
 
-	if(null === rootComponent)
+	if (null === rootComponent)
 	{
 		return "Root id refers a non-existing component.";
 	}
 
-	if(rootComponent.getMaterials().includes("inherit"))
+	if (rootComponent.getMaterials().includes("inherit"))
 	{
 		return "Root cannot inherit a material.";
 	}
 
-	if(rootComponent.getTexture() === "inherit")
+	if (rootComponent.getTexture() === "inherit")
 	{
 		return "Root cannot inherit a texture.";
 	}
@@ -190,43 +175,43 @@ Parser.prototype.parseScene = function (rootElement)
 };
 
 /* -------------------- VIEW -------------------- */
-Parser.prototype.parseView = function (rootElement)
+Parser.prototype.parseView = function(rootElement)
 {
-	var elems = rootElement.children[1];
+	let elems = rootElement.children[1];
 	if (elems.nodeName !== "views")
 	{
 		return "Error Parsing Second Child, Not Views";
 	}
 
-	var defaultViewID = this.reader.getString(elems, 'default');
+	let defaultViewID = this.reader.getString(elems, 'default');
 	if (defaultViewID === null)
 	{
 		return "Error Parsing Views, default view doesn't exist.";
 	}
 
-	var perspectiveCount = elems.children.length;
+	let perspectiveCount = elems.children.length;
 	if (perspectiveCount < 1)
 	{
 		return "Error Parsing Views, no Perspectives";
 	}
 
 	// Parse Perspectives
-	for (var i = 0; i < perspectiveCount; i++)
+	for (let i = 0; i < perspectiveCount; i++)
 	{
-		var currentPerspective = elems.children[i];
+		let currentPerspective = elems.children[i];
 
 		if (currentPerspective.nodeName != 'perspective')
 		{
 			return "Error Parsing Views Child, not a Perspective";
 		}
 
-		var id = this.reader.getString(currentPerspective, 'id');
+		let id = this.reader.getString(currentPerspective, 'id');
 		if (id === null)
 		{
 			return "Error Parsing perspective, id doesn't exist.";
 		}
 
-		var near = this.reader.getFloat(currentPerspective, 'near');
+		let near = this.reader.getFloat(currentPerspective, 'near');
 		if (near === null)
 		{
 			return "Error Parsing perspective, near doesn't exist or not a float."
@@ -236,7 +221,7 @@ Parser.prototype.parseView = function (rootElement)
 			return "Error Parsing perspective, near must be non-negative.";
 		}
 
-		var far = this.reader.getFloat(currentPerspective, 'far');
+		let far = this.reader.getFloat(currentPerspective, 'far');
 		if (far === null)
 		{
 			return "Error Parsing perspective, far doesn't exist or not a float."
@@ -250,7 +235,7 @@ Parser.prototype.parseView = function (rootElement)
 			return "Error Parsing perspective, far must be greater than near.";
 		}
 
-		var angle = this.reader.getFloat(currentPerspective, 'angle');
+		let angle = this.reader.getFloat(currentPerspective, 'angle');
 		if (angle === null)
 		{
 			return "Error Parsing perspective, far doesn't exist or not a float."
@@ -267,8 +252,8 @@ Parser.prototype.parseView = function (rootElement)
 			return "Error Parsing Views, Perspective Child not size 2 (to, from)";
 		}
 
-		var fromElems = currentPerspective.getElementsByTagName('from');
-		var toElems = currentPerspective.getElementsByTagName('to');
+		let fromElems = currentPerspective.getElementsByTagName('from');
+		let toElems   = currentPerspective.getElementsByTagName('to');
 
 		// Uniqueness Test
 		if (fromElems.length != 1)
@@ -281,18 +266,18 @@ Parser.prototype.parseView = function (rootElement)
 			return "Error Parsing Views, to not Unique";
 		}
 
-		var from = vec3.fromValues((this.reader.getFloat(fromElems[0], 'x'))
+		let from = vec3.fromValues((this.reader.getFloat(fromElems[0], 'x'))
 			, (this.reader.getFloat(fromElems[0], 'y'))
 			, (this.reader.getFloat(fromElems[0], 'z')));
 
-		var to = vec3.fromValues((this.reader.getFloat(toElems[0], 'x'))
+		let to = vec3.fromValues((this.reader.getFloat(toElems[0], 'x'))
 			, (this.reader.getFloat(toElems[0], 'y'))
 			, (this.reader.getFloat(toElems[0], 'z')));
 
 		// Add perspective
 
-		var perspective = new Perspective(id, near, far, deg2rad(angle), from, to);
-		var error = this.elements.addPerspective(perspective);
+		let perspective = new Perspective(id, near, far, deg2rad(angle), from, to);
+		let error       = this.elements.addPerspective(perspective);
 		if (error != null)
 		{
 			return error;
@@ -301,7 +286,7 @@ Parser.prototype.parseView = function (rootElement)
 
 	// Test for default perspective goes here
 
-	var defaultPerspectiveReference = this.elements.getPerspective(defaultViewID);
+	let defaultPerspectiveReference = this.elements.getPerspective(defaultViewID);
 
 	if (defaultPerspectiveReference === undefined)
 	{
@@ -314,26 +299,26 @@ Parser.prototype.parseView = function (rootElement)
 };
 
 /* -------------------- ILLUMINATION -------------------- */
-Parser.prototype.parseIllumination = function (rootElement)
+Parser.prototype.parseIllumination = function(rootElement)
 {
-	var elems = rootElement.children[2];
+	let elems = rootElement.children[2];
 
 	if (elems.nodeName !== "illumination")
 	{
 		return "Error Parsing Third Child, not Illumination";
 	}
 
-	var illuminationCount = elems.children.length;
+	let illuminationCount = elems.children.length;
 	if (illuminationCount != 2)
 	{
 		return "Error Parsing Illumination, Illumination child not size 2 (ambient,background)";
 	}
 
-	var doublesided = this.reader.getBoolean(elems, 'doublesided');
-	var local = this.reader.getBoolean(elems, 'local');
+	let doublesided = this.reader.getBoolean(elems, 'doublesided');
+	let local       = this.reader.getBoolean(elems, 'local');
 
-	var ambientElems = elems.getElementsByTagName('ambient');
-	var backgroundElems = elems.getElementsByTagName('background');
+	let ambientElems    = elems.getElementsByTagName('ambient');
+	let backgroundElems = elems.getElementsByTagName('background');
 
 	// Uniqueness Test
 	if (ambientElems.length != 1)
@@ -346,12 +331,12 @@ Parser.prototype.parseIllumination = function (rootElement)
 		return "Error Parsing Illumination, background not Unique";
 	}
 
-	var ambientColor = new Color((this.reader.getFloat(ambientElems[0], 'r'))
+	let ambientColor = new Color((this.reader.getFloat(ambientElems[0], 'r'))
 		, (this.reader.getFloat(ambientElems[0], 'g'))
 		, (this.reader.getFloat(ambientElems[0], 'b'))
 		, (this.reader.getFloat(ambientElems[0], 'a')));
 
-	var backgroundColor = new Color((this.reader.getFloat(backgroundElems[0], 'r'))
+	let backgroundColor = new Color((this.reader.getFloat(backgroundElems[0], 'r'))
 		, (this.reader.getFloat(backgroundElems[0], 'g'))
 		, (this.reader.getFloat(backgroundElems[0], 'b'))
 		, (this.reader.getFloat(backgroundElems[0], 'a')));
@@ -362,47 +347,47 @@ Parser.prototype.parseIllumination = function (rootElement)
 };
 
 /* -------------------- LIGHTS -------------------- */
-Parser.prototype.parseLights = function (rootElement)
+Parser.prototype.parseLights = function(rootElement)
 {
-	var elems = rootElement.children[3];
+	let elems = rootElement.children[3];
 
 	if (elems.nodeName !== "lights")
 	{
 		return "Error Parsing Fourth Child, not Lights";
 	}
 
-	var lightCount = elems.children.length;
+	let lightCount = elems.children.length;
 	if (lightCount < 1)
 	{
 		return "Error Parsing Lights, no Lights";
 	}
 
-	for (var i = 0; i < lightCount; i++)
+	for (let i = 0; i < lightCount; i++)
 	{
-		var currentLight = elems.children[i];
+		let currentLight = elems.children[i];
 
-		var isSpot = (currentLight.nodeName == 'spot');
+		let isSpot = (currentLight.nodeName == 'spot');
 
 		// Control
-		var id = this.reader.getString(currentLight, 'id');
-		var enabled = this.reader.getBoolean(currentLight, 'enabled');
+		let id      = this.reader.getString(currentLight, 'id');
+		let enabled = this.reader.getBoolean(currentLight, 'enabled');
 
 		// Variables
-		var locationElems = currentLight.getElementsByTagName('location');
-		var ambientElems = currentLight.getElementsByTagName('ambient');
-		var diffuseElems = currentLight.getElementsByTagName('diffuse');
-		var specularElems = currentLight.getElementsByTagName('specular');
+		let locationElems = currentLight.getElementsByTagName('location');
+		let ambientElems  = currentLight.getElementsByTagName('ambient');
+		let diffuseElems  = currentLight.getElementsByTagName('diffuse');
+		let specularElems = currentLight.getElementsByTagName('specular');
 
-		var location = null;
-		var ambient = null;
-		var diffuse = null;
-		var specular = null;
+		let location = null;
+		let ambient  = null;
+		let diffuse  = null;
+		let specular = null;
 
 		if (isSpot)
 		{
 			// Control
-			var angle = this.reader.getFloat(currentLight, 'angle');
-			var exponent = this.reader.getFloat(currentLight, 'exponent');
+			let angle    = this.reader.getFloat(currentLight, 'angle');
+			let exponent = this.reader.getFloat(currentLight, 'exponent');
 
 			if (currentLight.children.length != 5)
 			{
@@ -410,7 +395,7 @@ Parser.prototype.parseLights = function (rootElement)
 			}
 
 			// Elems
-			var targetElems = currentLight.getElementsByTagName('target');
+			let targetElems = currentLight.getElementsByTagName('target');
 
 			// Uniqueness Test
 			if (locationElems.length != 1)
@@ -442,7 +427,7 @@ Parser.prototype.parseLights = function (rootElement)
 				, (this.reader.getFloat(locationElems[0], 'y'))
 				, (this.reader.getFloat(locationElems[0], 'z')));
 
-			var target = vec3.fromValues((this.reader.getFloat(targetElems[0], 'x'))
+			let target = vec3.fromValues((this.reader.getFloat(targetElems[0], 'x'))
 				, (this.reader.getFloat(targetElems[0], 'y'))
 				, (this.reader.getFloat(targetElems[0], 'z')));
 
@@ -462,9 +447,10 @@ Parser.prototype.parseLights = function (rootElement)
 				, (this.reader.getFloat(specularElems[0], 'b'))
 				, (this.reader.getFloat(specularElems[0], 'a')));
 
-			var spotLight = new SpotLight(id, enabled, location, ambient, diffuse, specular, deg2rad(angle), exponent, target);
+			let spotLight = new SpotLight(id, enabled, location, ambient, diffuse, specular, deg2rad(
+				angle), exponent, target);
 
-			var error = this.elements.addLight(spotLight);
+			let error = this.elements.addLight(spotLight);
 			if (error != null)
 			{
 				return error;
@@ -519,9 +505,9 @@ Parser.prototype.parseLights = function (rootElement)
 				, (this.reader.getFloat(specularElems[0], 'b'))
 				, (this.reader.getFloat(specularElems[0], 'a')));
 
-			var omniLight = new OmniLight(id, enabled, location, ambient, diffuse, specular);
+			let omniLight = new OmniLight(id, enabled, location, ambient, diffuse, specular);
 
-			error = this.elements.addLight(omniLight);
+			let error = this.elements.addLight(omniLight);
 			if (error != null)
 			{
 				return error;
@@ -532,32 +518,32 @@ Parser.prototype.parseLights = function (rootElement)
 };
 
 /* -------------------- TEXTURES -------------------- */
-Parser.prototype.parseTextures = function (rootElement)
+Parser.prototype.parseTextures = function(rootElement)
 {
-	var elems = rootElement.children[4];
+	let elems = rootElement.children[4];
 
 	if (elems.nodeName !== "textures")
 	{
 		return "Error Parsing Fifth Child, not Textures";
 	}
 
-	var textureCount = elems.children.length;
+	let textureCount = elems.children.length;
 	if (textureCount < 1)
 	{
 		return "Error Parsing Textures, no Textures";
 	}
 
-	for (var i = 0; i < textureCount; i++)
+	for (let i = 0; i < textureCount; i++)
 	{
-		var currentTexture = elems.children[i];
+		let currentTexture = elems.children[i];
 
-		var id = this.reader.getString(currentTexture, 'id');
-		var file = this.reader.getString(currentTexture, 'file');
-		var length_s = this.reader.getFloat(currentTexture, 'length_s');
-		var length_t = this.reader.getFloat(currentTexture, 'length_t');
+		let id       = this.reader.getString(currentTexture, 'id');
+		let file     = this.reader.getString(currentTexture, 'file');
+		let length_s = this.reader.getFloat(currentTexture, 'length_s');
+		let length_t = this.reader.getFloat(currentTexture, 'length_t');
 
-		var texture = new TextureData(id, file, length_s, length_t);
-		var error = this.elements.addTexture(texture);
+		let texture = new TextureData(id, file, length_s, length_t);
+		let error   = this.elements.addTexture(texture);
 		if (error != null)
 		{
 			return error;
@@ -567,26 +553,26 @@ Parser.prototype.parseTextures = function (rootElement)
 };
 
 /* -------------------- MATERIALS -------------------- */
-Parser.prototype.parseMaterials = function (rootElement)
+Parser.prototype.parseMaterials = function(rootElement)
 {
-	var elems = rootElement.children[5];
+	let elems = rootElement.children[5];
 
 	if (elems.nodeName !== "materials")
 	{
 		return "Error Parsing Sixth Child, not Materials";
 	}
 
-	var materialCount = elems.children.length;
+	let materialCount = elems.children.length;
 	if (materialCount < 1)
 	{
 		return "Error Parsing Materials, no Materials";
 	}
 
-	for (var i = 0; i < materialCount; i++)
+	for (let i = 0; i < materialCount; i++)
 	{
-		var currentMaterial = elems.children[i];
+		let currentMaterial = elems.children[i];
 
-		var id = this.reader.getString(currentMaterial, 'id');
+		let id = this.reader.getString(currentMaterial, 'id');
 
 		if (currentMaterial.children.length != 5)
 		{
@@ -594,11 +580,11 @@ Parser.prototype.parseMaterials = function (rootElement)
 		}
 
 		// Elems
-		var emissionElems = currentMaterial.getElementsByTagName('emission');
-		var ambientElems = currentMaterial.getElementsByTagName('ambient');
-		var diffuseElems = currentMaterial.getElementsByTagName('diffuse');
-		var specularElems = currentMaterial.getElementsByTagName('specular');
-		var shininessElems = currentMaterial.getElementsByTagName('shininess');
+		let emissionElems  = currentMaterial.getElementsByTagName('emission');
+		let ambientElems   = currentMaterial.getElementsByTagName('ambient');
+		let diffuseElems   = currentMaterial.getElementsByTagName('diffuse');
+		let specularElems  = currentMaterial.getElementsByTagName('specular');
+		let shininessElems = currentMaterial.getElementsByTagName('shininess');
 
 		// Uniqueness Test
 		if (emissionElems.length != 1)
@@ -627,31 +613,31 @@ Parser.prototype.parseMaterials = function (rootElement)
 		}
 
 		// Colors
-		var emission = new Color((this.reader.getFloat(emissionElems[0], 'r'))
+		let emission = new Color((this.reader.getFloat(emissionElems[0], 'r'))
 			, (this.reader.getFloat(emissionElems[0], 'g'))
 			, (this.reader.getFloat(emissionElems[0], 'b'))
 			, (this.reader.getFloat(emissionElems[0], 'a')));
 
-		var ambient = new Color((this.reader.getFloat(ambientElems[0], 'r'))
+		let ambient = new Color((this.reader.getFloat(ambientElems[0], 'r'))
 			, (this.reader.getFloat(ambientElems[0], 'g'))
 			, (this.reader.getFloat(ambientElems[0], 'b'))
 			, (this.reader.getFloat(ambientElems[0], 'a')));
 
-		var diffuse = new Color((this.reader.getFloat(diffuseElems[0], 'r'))
+		let diffuse = new Color((this.reader.getFloat(diffuseElems[0], 'r'))
 			, (this.reader.getFloat(diffuseElems[0], 'g'))
 			, (this.reader.getFloat(diffuseElems[0], 'b'))
 			, (this.reader.getFloat(diffuseElems[0], 'a')));
 
-		var specular = new Color((this.reader.getFloat(specularElems[0], 'r'))
+		let specular = new Color((this.reader.getFloat(specularElems[0], 'r'))
 			, (this.reader.getFloat(specularElems[0], 'g'))
 			, (this.reader.getFloat(specularElems[0], 'b'))
 			, (this.reader.getFloat(specularElems[0], 'a')));
 
-		var shininess = this.reader.getFloat(shininessElems[0], 'value');
+		let shininess = this.reader.getFloat(shininessElems[0], 'value');
 
-		var material = new Material(id, emission, ambient, diffuse, specular, shininess);
+		let material = new Material(id, emission, ambient, diffuse, specular, shininess);
 
-		var error = this.elements.addMaterial(material);
+		let error = this.elements.addMaterial(material);
 		if (error != null)
 		{
 			return error;
@@ -660,47 +646,47 @@ Parser.prototype.parseMaterials = function (rootElement)
 	return null;
 };
 
-Parser.prototype.parseTransformations = function (rootElement)
+Parser.prototype.parseTransformations = function(rootElement)
 {
-	var elems = rootElement.children[6];
+	let elems = rootElement.children[6];
 
 	if (elems.nodeName !== "transformations")
 	{
 		return "Error Parsing Seventh Child, not Transformations";
 	}
 
-	var transformationCount = elems.children.length;
+	let transformationCount = elems.children.length;
 	if (transformationCount < 1)
 	{
 		return "Error Parsing Transformations, no Transformations";
 	}
 
-	for (var i = 0; i < transformationCount; i++)
+	for (let i = 0; i < transformationCount; i++)
 	{
-		var currentTransformation = elems.children[i];
+		let currentTransformation = elems.children[i];
 
-		var id = this.reader.getString(currentTransformation, 'id');
+		let id = this.reader.getString(currentTransformation, 'id');
 
 		if (currentTransformation.children.length < 1)
 		{
 			return "Error Parsing Transformations, Child not size greater than 0.";
 		}
 
-		var transformation = new Transformation(id);
+		let transformation = new Transformation(id);
 
-		var inner_transformationCount = currentTransformation.children.length;
+		let inner_transformationCount = currentTransformation.children.length;
 
-		for (var j = 0; j < inner_transformationCount; j++)
+		for (let j = 0; j < inner_transformationCount; j++)
 		{
-			var inner_currentTransformation = currentTransformation.children[j];
+			let inner_currentTransformation = currentTransformation.children[j];
 
-			var nodeName = inner_currentTransformation.nodeName;
+			let nodeName = inner_currentTransformation.nodeName;
 
 			if ((nodeName === "translate") || (nodeName === "scale"))
 			{
-				var x = this.reader.getFloat(inner_currentTransformation, 'x');
-				var y = this.reader.getFloat(inner_currentTransformation, 'y');
-				var z = this.reader.getFloat(inner_currentTransformation, 'z');
+				let x = this.reader.getFloat(inner_currentTransformation, 'x');
+				let y = this.reader.getFloat(inner_currentTransformation, 'y');
+				let z = this.reader.getFloat(inner_currentTransformation, 'z');
 
 				if (nodeName === "translate")
 				{
@@ -711,12 +697,12 @@ Parser.prototype.parseTransformations = function (rootElement)
 					transformation.addScaling(x, y, z);
 				}
 			}
-			else if(nodeName === "rotate")
+			else if (nodeName === "rotate")
 			{
-				var axis = this.reader.getString(inner_currentTransformation, 'axis');
-				var angle = this.reader.getFloat(inner_currentTransformation, 'angle');
+				let axis  = this.reader.getString(inner_currentTransformation, 'axis');
+				let angle = this.reader.getFloat(inner_currentTransformation, 'angle');
 				let error;
-				if(null !== (error = transformation.addRotation(axis, deg2rad(angle))))
+				if (null !== (error = transformation.addRotation(axis, deg2rad(angle))))
 				{
 					return error;
 				}
@@ -727,7 +713,7 @@ Parser.prototype.parseTransformations = function (rootElement)
 			}
 		}
 
-		var error = this.elements.addTransformation(transformation);
+		let error = this.elements.addTransformation(transformation);
 		if (error != null)
 		{
 			return error;
@@ -735,37 +721,37 @@ Parser.prototype.parseTransformations = function (rootElement)
 	}
 };
 
-Parser.prototype.parsePrimitives = function (rootElement)
+Parser.prototype.parsePrimitives = function(rootElement)
 {
-	var elems = rootElement.children[7];
+	let elems = rootElement.children[7];
 
 	if (elems.nodeName !== "primitives")
 	{
 		return "Error Parsing Eighth Child, not Primitives";
 	}
 
-	var primitiveCount = elems.children.length;
+	let primitiveCount = elems.children.length;
 	if (primitiveCount < 1)
 	{
 		return "Error Parsing Primitives, no Primitives";
 	}
 
-	for (var i = 0; i < primitiveCount; i++)
+	for (let i = 0; i < primitiveCount; i++)
 	{
-		var currentPrimitive = elems.children[i];
+		let currentPrimitive = elems.children[i];
 
-		var id = this.reader.getString(currentPrimitive, 'id');
+		let id = this.reader.getString(currentPrimitive, 'id');
 
 		if (currentPrimitive.children.length !== 1)
 		{
 			return "Error Parsing Primitive, amount of tags found is different from 1";
 		}
 
-		var primitive = currentPrimitive.children[0];
+		let primitive = currentPrimitive.children[0];
 
-		var result;
+		let result;
 
-		if(primitive.nodeName === "rectangle")
+		if (primitive.nodeName === "rectangle")
 		{
 			let x1 = this.reader.getFloat(primitive, 'x1');
 			let y1 = this.reader.getFloat(primitive, 'y1');
@@ -773,13 +759,13 @@ Parser.prototype.parsePrimitives = function (rootElement)
 			let x2 = this.reader.getFloat(primitive, 'x2');
 			let y2 = this.reader.getFloat(primitive, 'y2');
 
-			let p1 = new vec2.fromValues(x1, y1);
+			let p1 = vec2.fromValues(x1, y1);
 
-			let p2 = new vec2.fromValues(x2, y2);
+			let p2 = vec2.fromValues(x2, y2);
 
 			result = new RectanglePrimitive(id, p1, p2);
 		}
-		else if(primitive.nodeName === "triangle")
+		else if (primitive.nodeName === "triangle")
 		{
 			let x1 = this.reader.getFloat(primitive, 'x1');
 			let y1 = this.reader.getFloat(primitive, 'y1');
@@ -801,10 +787,10 @@ Parser.prototype.parsePrimitives = function (rootElement)
 
 			result = new TrianglePrimitive(id, p1, p2, p3);
 		}
-		else if(primitive.nodeName === "cylinder")
+		else if (primitive.nodeName === "cylinder")
 		{
-			let base = this.reader.getFloat(primitive, 'base');
-			let top = this.reader.getFloat(primitive, 'top');
+			let base   = this.reader.getFloat(primitive, 'base');
+			let top    = this.reader.getFloat(primitive, 'top');
 			let height = this.reader.getFloat(primitive, 'height');
 
 			let slices = this.reader.getInteger(primitive, 'slices');
@@ -812,7 +798,7 @@ Parser.prototype.parsePrimitives = function (rootElement)
 
 			result = new CylinderPrimitive(id, base, top, height, slices, stacks);
 		}
-		else if(primitive.nodeName === "sphere")
+		else if (primitive.nodeName === "sphere")
 		{
 			let radius = this.reader.getFloat(primitive, 'radius');
 
@@ -821,13 +807,13 @@ Parser.prototype.parsePrimitives = function (rootElement)
 
 			result = new SpherePrimitive(id, radius, slices, stacks);
 		}
-		else if(primitive.nodeName === "torus")
+		else if (primitive.nodeName === "torus")
 		{
 			let inner = this.reader.getFloat(primitive, 'inner');
 			let outer = this.reader.getFloat(primitive, 'outer');
 
 			let slices = this.reader.getInteger(primitive, 'slices');
-			let loops = this.reader.getInteger(primitive, 'loops');
+			let loops  = this.reader.getInteger(primitive, 'loops');
 
 			result = new TorusPrimitive(id, inner, outer, slices, loops);
 		}
@@ -836,7 +822,7 @@ Parser.prototype.parsePrimitives = function (rootElement)
 			return "Error Parsing Primitive, unknown primitive found."
 		}
 
-		var error = this.elements.addPrimitive(result);
+		let error = this.elements.addPrimitive(result);
 		if (error != null)
 		{
 			return error;
@@ -844,76 +830,76 @@ Parser.prototype.parsePrimitives = function (rootElement)
 	}
 };
 
-Parser.prototype.parseComponents = function (rootElement)
+Parser.prototype.parseComponents = function(rootElement)
 {
-	var elems = rootElement.children[8];
+	let elems = rootElement.children[8];
 
 	if (elems.nodeName !== "components")
 	{
 		return "Error Parsing Ninth Child, not Components";
 	}
 
-	var componentCount = elems.children.length;
+	let componentCount = elems.children.length;
 	if (componentCount < 1)
 	{
 		return "Error Parsing Components, no ComponentData";
 	}
 
-	for (var i = 0; i < componentCount; i++)
+	for (let i = 0; i < componentCount; i++)
 	{
-		var currentComponent = elems.children[i];
+		let currentComponent = elems.children[i];
 
-		var id = this.reader.getString(currentComponent, 'id');
+		let id = this.reader.getString(currentComponent, 'id');
 
 		if (currentComponent.children.length !== 4)
 		{
 			return "Error Parsing ComponentData, tag amount different than 4 (transformation, materials, texture, children)";
 		}
 
-		var transformationElements = currentComponent.getElementsByTagName('transformation');
+		let transformationElements = currentComponent.getElementsByTagName('transformation');
 
-		if(transformationElements.length !== 1)
+		if (transformationElements.length !== 1)
 		{
 			return "Error Parsing ComponentData, should have one and just one transformation element";
 		}
 
-		var materialsElements = currentComponent.getElementsByTagName('materials');
+		let materialsElements = currentComponent.getElementsByTagName('materials');
 
-		if(materialsElements.length !== 1)
+		if (materialsElements.length !== 1)
 		{
 			return "Error Parsing ComponentData, should have one and just one materials element";
 		}
 
-		var textureElements = currentComponent.getElementsByTagName('texture');
+		let textureElements = currentComponent.getElementsByTagName('texture');
 
-		if(textureElements.length !== 1)
+		if (textureElements.length !== 1)
 		{
 			return "Error Parsing ComponentData, should have one and just one texture element";
 		}
 
-		var childrenElements = currentComponent.getElementsByTagName('children');
+		let childrenElements = currentComponent.getElementsByTagName('children');
 
-		if(childrenElements.length !== 1)
+		if (childrenElements.length !== 1)
 		{
 			return "Error Parsing ComponentData, should have one and just one children element";
 		}
 
-		var transformationElement = transformationElements[0];
-		var materialsElement = materialsElements[0];
-		var textureElement = textureElements[0];
-		var childrenElement = childrenElements[0];
+		let transformationElement = transformationElements[0];
+		let materialsElement      = materialsElements[0];
+		let textureElement        = textureElements[0];
+		let childrenElement       = childrenElements[0];
 
-		var transformation;
+		let transformation;
 
-		if((transformationElement.children.length === 1) && (transformationElement.children[0].nodeName === "transformationref"))
+		if ((transformationElement.children.length === 1) && (transformationElement.children[0].nodeName === "transformationref"))
 		{
-			var transformationRef = transformationElement.children[0];
+			let transformationRef = transformationElement.children[0];
 
-			var transformationID = this.reader.getString(transformationRef, 'id');
+			let transformationID = this.reader.getString(transformationRef, 'id');
 
 			transformation = this.elements.getTransformation(transformationID);
 
-			if(transformation === undefined)
+			if (transformation === undefined)
 			{
 				return "Error Parsing Transformation in ComponentData, transformation referred doesn't exist";
 			}
@@ -922,19 +908,19 @@ Parser.prototype.parseComponents = function (rootElement)
 		{
 			transformation = new Transformation(id);
 
-			var transformationCount = transformationElement.children.length;
+			let transformationCount = transformationElement.children.length;
 
-			for (var j = 0; j < transformationCount; j++)
+			for (let j = 0; j < transformationCount; j++)
 			{
-				var currentTransformation = transformationElement.children[j];
+				let currentTransformation = transformationElement.children[j];
 
-				var nodeName = currentTransformation.nodeName;
+				let nodeName = currentTransformation.nodeName;
 
 				if ((nodeName === "translate") || (nodeName === "scale"))
 				{
-					var x = this.reader.getFloat(currentTransformation, 'x');
-					var y = this.reader.getFloat(currentTransformation, 'y');
-					var z = this.reader.getFloat(currentTransformation, 'z');
+					let x = this.reader.getFloat(currentTransformation, 'x');
+					let y = this.reader.getFloat(currentTransformation, 'y');
+					let z = this.reader.getFloat(currentTransformation, 'z');
 
 					if (nodeName === "translate")
 					{
@@ -945,10 +931,10 @@ Parser.prototype.parseComponents = function (rootElement)
 						transformation.addScaling(x, y, z);
 					}
 				}
-				else if(nodeName === "rotate")
+				else if (nodeName === "rotate")
 				{
-					var axis = this.reader.getString(currentTransformation, 'axis');
-					var angle = this.reader.getFloat(currentTransformation, 'angle');
+					let axis  = this.reader.getString(currentTransformation, 'axis');
+					let angle = this.reader.getFloat(currentTransformation, 'angle');
 					transformation.addRotation(axis, deg2rad(angle));
 				}
 				else
@@ -958,24 +944,24 @@ Parser.prototype.parseComponents = function (rootElement)
 			}
 		}
 
-		var materials = [];
+		let materials = [];
 
-		if(materialsElement.children.length < 1)
+		if (materialsElement.children.length < 1)
 		{
 			return "Error Parsing Materials in ComponentData, there must be at least one";
 		}
 
-		var materialElements = materialsElement.children;
+		let materialElements = materialsElement.children;
 
-		var materialCount = materialElements.length;
+		let materialCount = materialElements.length;
 
-		for(let i = 0; i < materialCount; i++)
+		for (let i = 0; i < materialCount; i++)
 		{
 			let materialElement = materialElements[i];
 
 			let materialID = this.reader.getString(materialElement, 'id');
 
-			if(materialID === "inherit")
+			if (materialID === "inherit")
 			{
 				materials.push(materialID);
 			}
@@ -993,19 +979,19 @@ Parser.prototype.parseComponents = function (rootElement)
 			}
 		}
 
-		var texture;
+		let texture;
 
-		var textureID = this.reader.getString(textureElement, 'id');
+		let textureID = this.reader.getString(textureElement, 'id');
 
-		if((textureID === "inherit") || (textureID === "none"))
+		if ((textureID === "inherit") || (textureID === "none"))
 		{
 			texture = textureID;
 		}
 		else
 		{
-			var textureItem = this.elements.getTexture(textureID);
+			let textureItem = this.elements.getTexture(textureID);
 
-			if(textureItem === undefined)
+			if (textureItem === undefined)
 			{
 				return "Error Parsing TextureData in ComponentData, id referred doesn't match any texture";
 			}
@@ -1013,31 +999,31 @@ Parser.prototype.parseComponents = function (rootElement)
 			texture = textureItem;
 		}
 
-		var childrenPrimitives = [];
-		var childrenComponents = [];
+		let childrenPrimitives = [];
+		let childrenComponents = [];
 
-		var children = childrenElement.children;
-		var childrenCount = children.length;
+		let children      = childrenElement.children;
+		let childrenCount = children.length;
 
-		for(let i = 0; i < childrenCount; i++)
+		for (let i = 0; i < childrenCount; i++)
 		{
-			var child = children[i];
+			let child = children[i];
 
-			if(child.nodeName === "componentref")
+			if (child.nodeName === "componentref")
 			{
-				var componentID = this.reader.getString(child, 'id');
+				let componentID = this.reader.getString(child, 'id');
 
-				var component = this.elements.getComponent(componentID);
+				let component = this.elements.getComponent(componentID);
 
 				childrenComponents.push(component);
 			}
-			else if(child.nodeName === "primitiveref")
+			else if (child.nodeName === "primitiveref")
 			{
-				var primitiveID = this.reader.getString(child, 'id');
+				let primitiveID = this.reader.getString(child, 'id');
 
-				var primitive = this.elements.getPrimitive(primitiveID);
+				let primitive = this.elements.getPrimitive(primitiveID);
 
-				if(primitive === undefined)
+				if (primitive === undefined)
 				{
 					return "Error Parsing Child Primitive in ComponentData, id referred doesn't match any primitive";
 				}
@@ -1050,7 +1036,8 @@ Parser.prototype.parseComponents = function (rootElement)
 			}
 		}
 
-		var error = this.elements.setComponentData(id, transformation, materials, texture, childrenComponents, childrenPrimitives);
+		let error = this.elements.setComponentData(id, transformation, materials, texture, childrenComponents,
+		                                           childrenPrimitives);
 		if (error != null)
 		{
 			return error;
@@ -1062,8 +1049,7 @@ Parser.prototype.parseComponents = function (rootElement)
  * Callback to be executed on any read error
  */
 
-Parser.prototype.onXMLError = function (message)
+Parser.prototype.onXMLError = function(message)
 {
 	console.error("XML Loading Error: " + message);
-	this.loadedOk = false;
 };

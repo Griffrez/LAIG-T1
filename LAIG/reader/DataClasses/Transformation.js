@@ -1,3 +1,9 @@
+/**
+ * Transformation
+ * Data structure to store information about a transformation.
+ *
+ * @param {string} id Uniquely identifies this transformation
+ */
 function Transformation(id)
 {
 	this.id = id;

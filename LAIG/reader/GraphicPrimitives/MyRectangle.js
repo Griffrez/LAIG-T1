@@ -1,22 +1,27 @@
 /**
  * MyRectangle
- * @constructor
+ * Class to represent a graphical representation of a rectangle.
+ *
+ * @param {Engine} scene Reference to the scene/engine used
+ * @param {RectanglePrimitive} prim Reference to the primitive data
+ * @param {float} sLength Physical space before texture tiling s-axis
+ * @param {float} tLength Physical space before texture tiling t-axis
  */
-function MyRectangle(scene, rectPrim, sLenght, tLenght)
+function MyRectangle(scene, prim, sLength, tLength)
 {
-	CGFobject.call(this,scene);
+	CGFobject.call(this, scene);
 
 	// Texture Values
-	this.sLen = sLenght || 1;
-	this.tLen = tLenght || 1;
+	this.sLen = sLength;
+	this.tLen = tLength;
 
 	// Rectangle Primitive Data
-	this.rectPrim = rectPrim;
+	this.rectPrim = prim;
 
 	this.initBuffers();
 }
 
-MyRectangle.prototype = Object.create(CGFobject.prototype);
+MyRectangle.prototype             = Object.create(CGFobject.prototype);
 MyRectangle.prototype.constructor = MyRectangle;
 
 MyRectangle.prototype.initBuffers = function()
@@ -45,18 +50,18 @@ MyRectangle.prototype.initBuffers = function()
 
 	this.normals =
 		[
-			0,0,1,
-			0,0,1,
-			0,0,1,
-			0,0,1
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1
 		];
 
 	var deltaX = x2 - x1;
 	var deltaY = y2 - y1;
-	
-	var xtc = deltaX/this.sLen;
-	var xty = deltaY/this.tLen;
-		
+
+	var xtc = deltaX / this.sLen;
+	var xty = deltaY / this.tLen;
+
 	this.texCoords =
 		[
 			xtc, 0,

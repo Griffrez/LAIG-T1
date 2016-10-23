@@ -2,12 +2,8 @@
  * Scene
  * Data structure to store basic information about the scene
  *
- * @param {string} id Uniquely identifies this perspective
- * @param {float} near Doesn't render closer than this
- * @param {float} far Doesn't render more far than this
- * @param {float} angle Field of View
- * @param {float} from Position
- * @param {float} to Target
+ * @param {string} root String that identifies the starting component
+ * @param {float} axisLength Length of the axis element
  */
 function Scene(root, axisLength)
 {

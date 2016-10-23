@@ -1,9 +1,9 @@
 function setMaterial(appearance, data)
 {
-	let emission = data.getEmission();
-	let ambient = data.getAmbient();
-	let diffuse = data.getDiffuse();
-	let specular = data.getSpecular();
+	let emission  = data.getEmission();
+	let ambient   = data.getAmbient();
+	let diffuse   = data.getDiffuse();
+	let specular  = data.getSpecular();
 	let shininess = data.getShininess();
 
 	appearance.setEmission(
@@ -37,19 +37,19 @@ function setMaterial(appearance, data)
 	appearance.setShininess(shininess);
 }
 
-function Engine() {
+function Engine()
+{
 	CGFscene.call(this);
-	this.graph = null;
+	this.graph     = null;
 	this.interface = null;
 }
 
 Engine.prototype             = Object.create(CGFscene.prototype);
 Engine.prototype.constructor = Engine;
 
-Engine.prototype.init = function (application) {
+Engine.prototype.init = function(application)
+{
 	CGFscene.prototype.init.call(this, application);
-
-	this.initLights();
 
 	this.enableTextures(true);
 
@@ -57,20 +57,10 @@ Engine.prototype.init = function (application) {
 	this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
-
-	this.axis=new CGFaxis(this);
 };
 
-Engine.prototype.initLights = function () {
-
-	//this.lights[0].setPosition(2, 3, 3, 1);
-	//this.lights[0].setDiffuse(1.0,1.0,1.0,1.0);
-	//this.lights[0].setVisible(true);
-	//this.lights[0].enable();
-	//this.lights[0].update();
-};
-
-Engine.prototype.setDefaultAppearance = function () {
+Engine.prototype.setDefaultAppearance = function()
+{
 	this.setAmbient(0.2, 0.4, 0.8, 1.0);
 	this.setDiffuse(0.2, 0.4, 0.8, 1.0);
 	this.setSpecular(0.2, 0.4, 0.8, 1.0);
@@ -78,11 +68,11 @@ Engine.prototype.setDefaultAppearance = function () {
 	this.activeTexture = null;
 };
 
-Engine.prototype.illuminationInit = function ()
+Engine.prototype.illuminationInit = function()
 {
-	var illumination = this.graph.elements.getIllumination();
+	let illumination = this.graph.elements.getIllumination();
 
-	var background = illumination.getBackground();
+	let background = illumination.getBackground();
 	this.gl.clearColor(
 		background.getRed(),
 		background.getGreen(),
@@ -90,7 +80,7 @@ Engine.prototype.illuminationInit = function ()
 		background.getAlpha()
 	);
 
-	var ambient = illumination.getAmbient();
+	let ambient = illumination.getAmbient();
 	this.setGlobalAmbientLight(
 		ambient.getRed(),
 		ambient.getGreen(),
@@ -99,25 +89,21 @@ Engine.prototype.illuminationInit = function ()
 	);
 };
 
-Engine.prototype.perspectivesInit = function ()
+Engine.prototype.perspectivesInit = function()
 {
-	var perspectives = this.graph.elements.getPerspectives();
+	let perspectives = this.graph.elements.getPerspectives();
 
 	this.cameras = [];
 
 	this.cameraIndex = 0;
 
-	for(let perspective of perspectives)
+	for (let perspective of perspectives)
 	{
 		let near = perspective.getNear();
-
-		let far = perspective.getFar();
-
-		let fov = perspective.getAngle();
-
-		var from = perspective.getFrom();
-
-		var to = perspective.getTo();
+		let far  = perspective.getFar();
+		let fov  = perspective.getAngle();
+		let from = perspective.getFrom();
+		let to   = perspective.getTo();
 
 		let camera = new CGFcamera(fov, near, far, from, to);
 
@@ -128,13 +114,13 @@ Engine.prototype.perspectivesInit = function ()
 	this.interface.setActiveCamera(this.cameras[0]);
 };
 
-Engine.prototype.texturesInit = function ()
+Engine.prototype.texturesInit = function()
 {
 	let texturesData = this.graph.elements.getTextures();
 
 	this.textures = new Map();
 
-	for(let textureData of texturesData)
+	for (let textureData of texturesData)
 	{
 		let texture = new Texture(this, textureData);
 
@@ -142,16 +128,16 @@ Engine.prototype.texturesInit = function ()
 	}
 };
 
-Engine.prototype.lightsInit = function ()
+Engine.prototype.lightsInit = function()
 {
 	let lightsData = this.graph.elements.getLights();
 
-	this.lights = [];
+	this.lights     = [];
 	this.lightNames = [];
 
 	let index = 0;
 
-	for(let lightData of lightsData)
+	for (let lightData of lightsData)
 	{
 		let i = index++;
 
@@ -183,7 +169,7 @@ Engine.prototype.lightsInit = function ()
 			specular.getAlpha()
 		);
 
-		if(lightData instanceof OmniLight)
+		if (lightData instanceof OmniLight)
 		{
 			let location = lightData.getLocation();
 			light.setPosition(
@@ -203,7 +189,7 @@ Engine.prototype.lightsInit = function ()
 				0.0
 			);
 
-			let target = lightData.getTarget();
+			let target        = lightData.getTarget();
 			let directionSpot = vec3.create();
 			vec3.subtract(directionSpot, target, location);
 			vec3.normalize(directionSpot, directionSpot);
@@ -224,7 +210,7 @@ Engine.prototype.lightsInit = function ()
 		light.setLinearAttenuation(1);
 		light.setQuadraticAttenuation(0);
 
-		if(lightData.isEnabled())
+		if (lightData.isEnabled())
 		{
 			light.enable();
 			this[id] = true;
@@ -247,30 +233,30 @@ Engine.prototype.lightsInit = function ()
 
 Engine.prototype.processComponent = function(id)
 {
-	let compData = this.graph.elements.getComponent(id);
+	let compData       = this.graph.elements.getComponent(id);
 	let transformation = compData.getTransformation();
-	let materials = compData.getMaterials();
-	let texture = compData.getTexture();
-	if(!((texture === "inherit") || (texture === "none")))
+	let materials      = compData.getMaterials();
+	let texture        = compData.getTexture();
+	if (!((texture === "inherit") || (texture === "none")))
 	{
 		let textureID = texture.getID();
-		texture = this.textures.get(textureID);
+		texture       = this.textures.get(textureID);
 	}
 	let childComponents = [];
-	for(let childData of compData.getChildren().components)
+	for (let childData of compData.getChildren().components)
 	{
 		let childID = childData.getID();
-		let child = this.processComponent(childID);
+		let child   = this.processComponent(childID);
 		childComponents.push(child);
 	}
 	let childPrimitives = compData.getChildren().primitives;
 	return new Component(id, transformation, materials, texture, childComponents, childPrimitives);
 };
 
-Engine.prototype.componentsInit = function ()
+Engine.prototype.componentsInit = function()
 {
 	let rootID = this.graph.elements.getScene().getRoot();
-	this.root = this.processComponent(rootID);
+	this.root  = this.processComponent(rootID);
 };
 
 Engine.prototype.primitivesInit = function()
@@ -279,20 +265,20 @@ Engine.prototype.primitivesInit = function()
 
 	let texturesLengths = [];
 
-	for(let textureData of texturesData)
+	for (let textureData of texturesData)
 	{
 		let sLength = textureData.getLengthS();
 		let tLength = textureData.getLengthT();
 		let i;
-		for(i = 0; i < texturesLengths.length; i++)
+		for (i = 0; i < texturesLengths.length; i++)
 		{
-			if((texturesLengths[i][0] === sLength) &&
-				(texturesLengths[i][1] === tLength))
+			if ((texturesLengths[i][0] === sLength) &&
+			    (texturesLengths[i][1] === tLength))
 			{
 				break;
 			}
 		}
-		if(i === texturesLengths.length)
+		if (i === texturesLengths.length)
 		{
 			texturesLengths.push([sLength, tLength])
 		}
@@ -302,12 +288,12 @@ Engine.prototype.primitivesInit = function()
 
 	this.primitives = new Map();
 
-	for(let primitiveData of primitivesData)
+	for (let primitiveData of primitivesData)
 	{
-		if(primitiveData instanceof RectanglePrimitive)
+		if (primitiveData instanceof RectanglePrimitive)
 		{
 			let lengthsToPrimitive = [];
-			for(let textureLength of texturesLengths)
+			for (let textureLength of texturesLengths)
 			{
 				let sLength = textureLength[0];
 				let tLength = textureLength[1];
@@ -318,10 +304,10 @@ Engine.prototype.primitivesInit = function()
 			}
 			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
 		}
-		else if(primitiveData instanceof TrianglePrimitive)
+		else if (primitiveData instanceof TrianglePrimitive)
 		{
 			let lengthsToPrimitive = [];
-			for(let textureLength of texturesLengths)
+			for (let textureLength of texturesLengths)
 			{
 				let sLength = textureLength[0];
 				let tLength = textureLength[1];
@@ -332,19 +318,19 @@ Engine.prototype.primitivesInit = function()
 			}
 			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
 		}
-		else if(primitiveData instanceof CylinderPrimitive)
+		else if (primitiveData instanceof CylinderPrimitive)
 		{
 			let primitive = new MyCylinder(this, primitiveData);
 
 			this.primitives.set(primitiveData.getID(), primitive);
 		}
-		else if(primitiveData instanceof SpherePrimitive)
+		else if (primitiveData instanceof SpherePrimitive)
 		{
 			let primitive = new MySphere(this, primitiveData);
 
 			this.primitives.set(primitiveData.getID(), primitive);
 		}
-		else if(primitiveData instanceof TorusPrimitive)
+		else if (primitiveData instanceof TorusPrimitive)
 		{
 			let primitive = new MyTorus(this, primitiveData);
 
@@ -355,8 +341,10 @@ Engine.prototype.primitivesInit = function()
 
 // Handler called when the graph is finally loaded.
 // As loading is asynchronous, this may be called already after the application has started the run loop
-Engine.prototype.onGraphLoaded = function ()
+Engine.prototype.onGraphLoaded = function()
 {
+	this.axis = new CGFaxis(this, this.graph.elements.getScene().getAxisLength());
+
 	this.illuminationInit();
 	this.perspectivesInit();
 	this.texturesInit();
@@ -369,8 +357,9 @@ Engine.prototype.onGraphLoaded = function ()
 	this.dataLoaded = true;
 };
 
-Engine.prototype.display = function () {
-	if(!this.dataLoaded)
+Engine.prototype.display = function()
+{
+	if (!this.dataLoaded)
 	{
 		return;
 	}
@@ -391,40 +380,38 @@ Engine.prototype.display = function () {
 	this.axis.display();
 	this.setDefaultAppearance();
 
-	let componentStack = [];
-	let indexStack = [];
-	let materialStack = [];
-	let textureStack = [];
+	let componentStack   = new Stack();
+	let indexStack       = new Stack();
+	let materialStack    = new Stack();
+	let textureStack     = new Stack();
 	let currentComponent = this.root;
-	let index = 0;
-	let running = true;
-	while(running)
+	let index            = 0;
+	let running          = true;
+	while (running)
 	{
-		if(index === 0)
+		if (index === 0)
 		{
 			this.pushMatrix();
 			componentStack.push(currentComponent);
 
 			let appearance = new CGFappearance(this);
-			let materials = currentComponent.getMaterials();
-			let material = materials[(this.materialsIndex)%(materials.length)];
-			if((material === "inherit"))
+			let materials  = currentComponent.getMaterials();
+			let material   = materials[(this.materialsIndex) % (materials.length)];
+			if ((material === "inherit"))
 			{
-				material = materialStack.pop();
-				materialStack.push(material);
+				material = materialStack.top();
 			}
 			setMaterial(appearance, material);
 			let texture = currentComponent.getTexture();
-			if((texture === "none"))
+			if ((texture === "none"))
 			{
 				texture = null;
 			}
-			else if((texture === "inherit"))
+			else if ((texture === "inherit"))
 			{
-				texture = textureStack.pop();
-				textureStack.push(texture);
+				texture = textureStack.top();
 			}
-			if(texture !== null)
+			if (texture !== null)
 			{
 				appearance.setTexture(texture.texture);
 			}
@@ -436,21 +423,21 @@ Engine.prototype.display = function () {
 			textureStack.push(texture);
 
 			let primitiveChildren = currentComponent.getChildren().primitives;
-			let sLength = null;
-			let tLength = null;
-			if(texture !== null)
+			let sLength           = null;
+			let tLength           = null;
+			if (texture !== null)
 			{
 				sLength = texture.getData().getLengthS();
 				tLength = texture.getData().getLengthT();
 			}
-			for(let prim of primitiveChildren)
+			for (let prim of primitiveChildren)
 			{
 				let primitive = null;
-				if((prim instanceof RectanglePrimitive) || (prim instanceof TrianglePrimitive))
+				if ((prim instanceof RectanglePrimitive) || (prim instanceof TrianglePrimitive))
 				{
 					let data = this.primitives.get(prim.getID());
 
-					if(texture === null)
+					if (texture === null)
 					{
 						primitive = data[0][2];
 					}
@@ -473,11 +460,11 @@ Engine.prototype.display = function () {
 			}
 		}
 
-		if(index < currentComponent.getChildren().components.length)
+		if (index < currentComponent.getChildren().components.length)
 		{
 			let childComponent = currentComponent.getChildren().components[index];
 			indexStack.push(++index);
-			index = 0;
+			index            = 0;
 			currentComponent = childComponent;
 		}
 		else
@@ -486,20 +473,20 @@ Engine.prototype.display = function () {
 			materialStack.pop();
 			textureStack.pop();
 			this.popMatrix();
-			index = indexStack.pop();
-			currentComponent = componentStack[componentStack.length - 1];
-			if(currentComponent === undefined)
+			index            = indexStack.pop();
+			currentComponent = componentStack.top();
+			if (currentComponent === undefined)
 			{
 				running = false;
 			}
 		}
 	}
 
-	for(let i = 0; i < this.lights.length; i++)
+	for (let i = 0; i < this.lights.length; i++)
 	{
 		let lightBool = this[this.lightNames[i]];
 
-		if(lightBool === true)
+		if (lightBool === true)
 		{
 			this.lights[i].enable();
 		}
@@ -513,7 +500,7 @@ Engine.prototype.display = function () {
 
 Engine.prototype.changeCamera = function()
 {
-	this.cameraIndex = (this.cameraIndex+1)%(this.cameras.length);
+	this.cameraIndex = (this.cameraIndex + 1) % (this.cameras.length);
 
 	let camera = this.cameras[this.cameraIndex];
 
