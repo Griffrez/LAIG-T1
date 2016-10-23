@@ -1,12 +1,12 @@
 /**
  * TorusPrimitive
- * Data structure to store basic information about a torus
+ * Data structure to store information about a torus
  *
- * @param {string} id String that uniquely identifies this primitive
- * @param {number} inner Float that indicates the radius of the inner ring of the torus (non-negative value)
- * @param {number} outer Float that indicates the radius of the outer ring of the torus (positive value)
- * @param {number} slices Integer that indicates the number of divisions around each radial ring (positive value, >= 3)
- * @param {number} loops Integer that indicates the number radial rings (positive value, >= 3)
+ * @param {string} id Uniquely identifies this primitive
+ * @param {number} inner Radius of the inner ring of the torus (non-negative value)
+ * @param {number} outer Radius of the outer ring of the torus (positive value)
+ * @param {number} slices Number of divisions around each radial ring (positive value, >= 3)
+ * @param {number} loops Number radial rings (positive value, >= 3)
  */
 function TorusPrimitive(id, inner, outer, slices, loops)
 {

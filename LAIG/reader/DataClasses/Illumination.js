@@ -1,12 +1,18 @@
-/*
-	Ambient: Color
-	Background: Color
+/**
+ * Illumination
+ * Data structure to store information about general lighting
+ *
+ * @param {boolean} doublesided NOT USED
+ * @param {boolean} local NOT USED
+ * @param {Color} ambient Ambient light
+ * @param {Color} background Background color
  */
-function Illumination(doublesided, local, ambient, background) {
+function Illumination(doublesided, local, ambient, background)
+{
 	this.doublesided = doublesided;
-	this.local = local;
-	this.ambient = ambient;
-	this.background = background;
+	this.local       = local;
+	this.ambient     = ambient;
+	this.background  = background;
 }
 
 Illumination.prototype.isDoubleSided = function()

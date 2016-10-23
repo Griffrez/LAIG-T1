@@ -1,8 +1,8 @@
 /**
  * TrianglePrimitive
- * Data structure to store basic information about a triangle
+ * Data structure to store information about a triangle
  *
- * @param {string} id String that uniquely identifies this primitive
+ * @param {string} id Uniquely identifies this primitive
  * @param {vec3} p1 Data about the first point
  * @param {vec3} p2 Data about the second point
  * @param {vec3} p3 Data about the third point

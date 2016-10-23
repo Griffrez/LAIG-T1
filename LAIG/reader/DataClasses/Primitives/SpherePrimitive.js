@@ -1,11 +1,11 @@
 /**
  * SpherePrimitive
- * Data structure to store basic information about a sphere
+ * Data structure to store information about a sphere
  *
- * @param {string} id String that uniquely identifies this primitive
- * @param {number} radius Float that indicates the radius of the sphere (positive value)
- * @param {number} slices Integer that indicates the number of divisions around the z axis (positive value)
- * @param {number} stacks Integer that indicates the number of divisions along the z axis (positive value)
+ * @param {string} id Uniquely identifies this primitive
+ * @param {number} radius Radius of the sphere (positive value)
+ * @param {number} slices Number of divisions around the z axis (positive value)
+ * @param {number} stacks Number of divisions along the z axis (positive value)
  */
 function SpherePrimitive(id, radius, slices, stacks)
 {

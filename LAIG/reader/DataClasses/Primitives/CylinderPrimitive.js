@@ -1,14 +1,14 @@
 /**
  * CylinderPrimitive
- * Data structure to store basic information about a cylinder
+ * Data structure to store information about a cylinder
  *
- * @param {string} id String that uniquely identifies this primitive
- * @param {number} base Float that indicates the radius of the base of the cylinder (positive value)
- * @param {number} top Float that indicates the radius of the top of the cylinder (positive value)
- * @param {number} height Float that indicates the distance between the base and the top of the cylinder (positive value)
- * @param {number} slices Integer that indicates the number of divisions around the axis of the cylinder (positive
+ * @param {string} id Uniquely identifies this primitive
+ * @param {number} base Radius of the base of the cylinder (positive value)
+ * @param {number} top Radius of the top of the cylinder (positive value)
+ * @param {number} height Distance between the base and the top of the cylinder (positive value)
+ * @param {number} slices Number of divisions around the axis of the cylinder (positive
  * value)
- * @param {number} stacks Integer that indicates the number of divisions along the axis of the cylinder (positive value)
+ * @param {number} stacks Number of divisions along the axis of the cylinder (positive value)
  */
 function CylinderPrimitive(id, base, top, height, slices, stacks)
 {

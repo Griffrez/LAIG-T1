@@ -1,8 +1,13 @@
-/*
-	Emission: Color
-	Ambient: Color
-	Diffuse: Color
-	Specular: Color
+/**
+ * Material
+ * Data structure to store information about a material
+ *
+ * @param {string} id Uniquely identifies this material
+ * @param {Color} emission Emission material component
+ * @param {Color} ambient Ambient material component
+ * @param {Color} diffuse Diffuse material component
+ * @param {Color} specular Specular material component
+ * @param {float} shininess Shininess coeficient for specular light
  */
 function Material(id, emission, ambient, diffuse, specular, shininess)
 {

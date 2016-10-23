@@ -1,7 +1,12 @@
-/*
-	Ambient: Color
-	Diffuse: Color
-	Specular: Color
+/**
+ * Light
+ * Data structure to store basic information about a light
+ *
+ * @param {string} id Uniquely identifies this light
+ * @param {boolean} enabled Turned on/off by default
+ * @param {Color} ambient Ambient light component
+ * @param {Color} diffuse Diffuse light component
+ * @param {Color} specular Specular light component
  */
 function Light(id, enabled, ambient, diffuse, specular)
 {

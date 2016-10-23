@@ -1,6 +1,6 @@
 /**
  * Color
- * Data structure to store basic information about a color
+ * Data structure to store information about a color
  *
  * @param {number} r Red component
  * @param {number} g Green component
