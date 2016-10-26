@@ -816,6 +816,51 @@ Parser.prototype.parsePrimitives = function(rootElement)
 
 			result = new TorusPrimitive(id, inner, outer, slices, loops);
 		}
+		else if (primitive.nodeName === "plane")
+		{
+			let dimX = this.reader.getFloat(primitive, 'dimX');
+			let dimY = this.reader.getFloat(primitive, 'dimY');
+
+			let partsX = this.reader.getInteger(primitive, 'partsX');
+			let partsY = this.reader.getInteger(primitive, 'partsY');
+
+			result = new PlanePrimitive(id, dimX, dimY, partsX, partsY);
+		}
+		else if (primitive.nodeName === "patch")
+		{
+            let orderU = this.reader.getInteger(primitive, 'orderU');
+            let orderV = this.reader.getInteger(primitive, 'orderV');
+
+            let partsU = this.reader.getInteger(primitive, 'partsU');
+            let partsV = this.reader.getInteger(primitive, 'partsV');
+
+            let controlPoints = [];
+
+            let controlPointsNumber = (orderU + 1) * (orderV + 1);
+            let controlPointsCount = primitive.children.length;
+
+            if(controlPointsNumber !== controlPointsCount)
+                return "Error Parsing Primitives, patch should have (orderU + 1) * (orderV + 1) control points";
+
+            for (let j = 0; j < controlPointsCount; j++)
+            {
+                let currentControlPoint = primitive.children[j];
+
+                let testX = this.reader.getFloat(currentControlPoint, 'x');
+
+                let controlPoint = vec3.fromValues((this.reader.getFloat(currentControlPoint, 'x'))
+                    , (this.reader.getFloat(currentControlPoint, 'y'))
+                    , (this.reader.getFloat(currentControlPoint, 'z')));
+
+                controlPoints.push(controlPoint);
+            }
+
+            result = new PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints);
+		}
+		else if (primitive.nodeName === "vehicle")
+		{
+
+		}
 		else
 		{
 			return "Error Parsing Primitive, unknown primitive found."
