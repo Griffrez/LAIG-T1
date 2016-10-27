@@ -30,3 +30,8 @@ PatchPrimitive.prototype.getPartsV = function()
 {
     return this.partsV;
 };
+
+PatchPrimitive.prototype.getControlPoints = function()
+{
+    return this.controlPoints;
+};
