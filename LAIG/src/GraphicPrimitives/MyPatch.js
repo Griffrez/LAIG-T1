@@ -18,7 +18,7 @@ function MyPatch(scene, prim)
 	this.init(scene, orderU, orderV, partsU, partsV, controlPoints);
 }
 
-MyPatch.prototype             = Object.create(CGFobject.prototype);
+MyPatch.prototype = Object.create(CGFnurbsObject.prototype);
 MyPatch.prototype.constructor = MyPatch;
 
 MyPatch.prototype.init = function(scene, orderU, orderV, partsU, partsV, controlPoints)
@@ -59,5 +59,7 @@ MyPatch.prototype.init = function(scene, orderU, orderV, partsU, partsV, control
 	CGFnurbsObject.call(this, scene, this.nurbsSurface.getPoint, partsU, partsV);
 };
 
-MyPatch.prototype = Object.create(CGFnurbsObject.prototype);
-
+MyPatch.prototype.getPoint = function(u, v)
+{
+    return this.nurbsSurface.getPoint(u, v);
+};
