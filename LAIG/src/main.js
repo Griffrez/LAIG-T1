@@ -33,6 +33,8 @@ serialInclude([
 	'DataClasses/Primitives/CylinderPrimitive.js',
 	'DataClasses/Primitives/SpherePrimitive.js',
 	'DataClasses/Primitives/TorusPrimitive.js',
+	'DataClasses/Primitives/PlanePrimitive.js',
+	'DataClasses/Primitives/PatchPrimitive.js',
 	'DataClasses/ComponentData.js',
 	'DataClasses/Elements.js',
 	'EngineDataClasses/Texture.js',

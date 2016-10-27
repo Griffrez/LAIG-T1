@@ -816,24 +816,6 @@ Parser.prototype.parsePrimitives = function(rootElement)
 
 			result = new TorusPrimitive(id, inner, outer, slices, loops);
 		}
-		else if (primitive.nodeName === "plane")
-		{
-			let dimX = this.reader.getFloat(primitive, 'dimX');
-			let dimY = this.reader.getFloat(primitive, 'dimY');
-
-			let partsX = this.reader.getInteger(primitive, 'partsX');
-			let partsY = this.reader.getInteger(primitive, 'partsY');
-
-			result = new PlanePrimitive(id, dimX, dimY, partsX, partsY);
-		}
-		else if (primitive.nodeName === "patch")
-		{
-
-		}
-		else if (primitive.nodeName === "vehicle")
-		{
-
-		}
 		else
 		{
 			return "Error Parsing Primitive, unknown primitive found."
