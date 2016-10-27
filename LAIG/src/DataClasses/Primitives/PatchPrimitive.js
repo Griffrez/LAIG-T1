@@ -1,37 +1,37 @@
 function PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints)
 {
-    Primitive.call(this, id);
+	Primitive.call(this, id);
 
-    this.orderU = orderU;
-    this.orderV = orderV;
-    this.partsU = partsU;
-    this.partsV = partsV;
-    this.controlPoints = controlPoints;
+	this.orderU        = orderU;
+	this.orderV        = orderV;
+	this.partsU        = partsU;
+	this.partsV        = partsV;
+	this.controlPoints = controlPoints;
 }
 
 PatchPrimitive.prototype = Object.create(Primitive.prototype);
 
 PatchPrimitive.prototype.getOrderU = function()
 {
-    return this.orderU;
+	return this.orderU;
 };
 
 PatchPrimitive.prototype.getOrderV = function()
 {
-    return this.orderV;
+	return this.orderV;
 };
 
 PatchPrimitive.prototype.getPartsU = function()
 {
-    return this.partsU;
+	return this.partsU;
 };
 
 PatchPrimitive.prototype.getPartsV = function()
 {
-    return this.partsV;
+	return this.partsV;
 };
 
 PatchPrimitive.prototype.getControlPoints = function()
 {
-    return this.controlPoints;
+	return this.controlPoints;
 };

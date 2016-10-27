@@ -1,31 +1,31 @@
 function PlanePrimitive(id, dimX, dimY, partsX, partsY)
 {
-    Primitive.call(this, id);
+	Primitive.call(this, id);
 
-    this.dimX = dimX;
-    this.dimY = dimY;
-    this.partsX = partsX;
-    this.partsY = partsY;
+	this.dimX   = dimX;
+	this.dimY   = dimY;
+	this.partsX = partsX;
+	this.partsY = partsY;
 }
 
 PlanePrimitive.prototype = Object.create(Primitive.prototype);
 
 PlanePrimitive.prototype.getDimX = function()
 {
-    return this.dimX;
+	return this.dimX;
 };
 
 PlanePrimitive.prototype.getDimY = function()
 {
-    return this.dimY;
+	return this.dimY;
 };
 
 PlanePrimitive.prototype.getPartsX = function()
 {
-    return this.partsX;
+	return this.partsX;
 };
 
 PlanePrimitive.prototype.getPartsY = function()
 {
-    return this.partsY;
+	return this.partsY;
 };

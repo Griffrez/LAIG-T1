@@ -1,37 +1,37 @@
 function CircularAnimation(id, center, radius, initAng, rotAng, time)
 {
-    Animation.call(this, id);
+	Animation.call(this, id);
 
-    this.center = center;
-    this.radius = radius;
-    this.initAng = initAng;
-    this.rotAng = rotAng;
-    this.time = time;
+	this.center  = center;
+	this.radius  = radius;
+	this.initAng = initAng;
+	this.rotAng  = rotAng;
+	this.time    = time;
 }
 
 CircularAnimation.prototype = Object.create(Animation.prototype);
 
 CircularAnimation.prototype.getCenter = function()
 {
-    return this.center;
+	return this.center;
 };
 
 CircularAnimation.prototype.getRadius = function()
 {
-    return this.radius;
+	return this.radius;
 };
 
 CircularAnimation.prototype.getInitAng = function()
 {
-    return this.initAng;
+	return this.initAng;
 };
 
 CircularAnimation.prototype.getRotAng = function()
 {
-    return this.rotAng;
+	return this.rotAng;
 };
 
 CircularAnimation.prototype.getTime = function()
 {
-    return this.time;
+	return this.time;
 };

@@ -7,55 +7,55 @@
  */
 function MyPlane(scene, prim)
 {
-    CGFobject.call(this, scene);
+	CGFobject.call(this, scene);
 
-    let dimX = prim.getDimX();
-    let dimY = prim.getDimY();
-    let partsX = prim.getPartsX();
-    let partsY = prim.getPartsY();
+	let dimX   = prim.getDimX();
+	let dimY   = prim.getDimY();
+	let partsX = prim.getPartsX();
+	let partsY = prim.getPartsY();
 
-    this.init(scene, dimX, dimY, partsX, partsY);
+	this.init(scene, dimX, dimY, partsX, partsY);
 }
 
-MyPlane.prototype = Object.create(CGFobject.prototype);
+MyPlane.prototype             = Object.create(CGFobject.prototype);
 MyPlane.prototype.constructor = MyPlane;
 
 MyPlane.prototype.init = function(scene, dimX, dimY, partsX, partsY)
 {
-    let degree = 1;
+	let degree = 1;
 
-    let knotsU = [];
-    let knotsV = [];
+	let knotsU = [];
+	let knotsV = [];
 
-    let knotAmount = (degree+1)*2;
+	let knotAmount = (degree + 1) * 2;
 
-    for(let i = 0; i < knotAmount; i++)
-    {
-        if(i < (knotAmount/2))
-        {
-            knotsU.push(0);
-            knotsV.push(0);
-        }
-        else
-        {
-            knotsU.push(1);
-            knotsV.push(1);
-        }
-    }
+	for (let i = 0; i < knotAmount; i++)
+	{
+		if (i < (knotAmount / 2))
+		{
+			knotsU.push(0);
+			knotsV.push(0);
+		}
+		else
+		{
+			knotsU.push(1);
+			knotsV.push(1);
+		}
+	}
 
-    let controlPoints = [];
+	let controlPoints = [];
 
-    let halfDimX = dimX/2;
-    let halfDimY = dimY/2;
+	let halfDimX = dimX / 2;
+	let halfDimY = dimY / 2;
 
-    controlPoints.push([-halfDimX, -halfDimY, 0]);
-    controlPoints.push([halfDimX, -halfDimY, 0]);
-    controlPoints.push([-halfDimX, halfDimY, 0]);
-    controlPoints.push([halfDimX, halfDimY, 0]);
+	controlPoints.push([-halfDimX, -halfDimY, 0]);
+	controlPoints.push([halfDimX, -halfDimY, 0]);
+	controlPoints.push([-halfDimX, halfDimY, 0]);
+	controlPoints.push([halfDimX, halfDimY, 0]);
 
-    this.nurbsSurface = new CGFnurbsSurface(degree, degree, knotsU, knotsV, controlPoints);
+	this.nurbsSurface = new CGFnurbsSurface(degree, degree, knotsU, knotsV, controlPoints);
 
-    CGFnurbsObject.call(this, scene, this.nurbsSurface.getPoint, partsX, partsY);
+	CGFnurbsObject.call(this, scene, this.nurbsSurface.getPoint, partsX, partsY);
 };
 
 MyPlane.prototype = Object.create(CGFnurbsObject.prototype);

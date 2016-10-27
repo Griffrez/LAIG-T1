@@ -1,9 +1,9 @@
 function Animation(id)
 {
-    this.id = id;
+	this.id = id;
 }
 
 Animation.prototype.getID = function()
 {
-    return this.id;
+	return this.id;
 };
