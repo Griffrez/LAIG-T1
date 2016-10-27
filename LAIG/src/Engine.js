@@ -188,7 +188,7 @@ Engine.prototype.lightsInit = function()
 				location[0],
 				location[1],
 				location[2],
-				0.0
+				1.0
 			);
 
 			let target        = lightData.getTarget();
@@ -335,6 +335,18 @@ Engine.prototype.primitivesInit = function()
 		else if (primitiveData instanceof TorusPrimitive)
 		{
 			let primitive = new MyTorus(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof PlanePrimitive)
+		{
+			let primitive = new MyPlane(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof PatchPrimitive)
+		{
+			let primitive = new MyPatch(this, primitiveData);
 
 			this.primitives.set(primitiveData.getID(), primitive);
 		}

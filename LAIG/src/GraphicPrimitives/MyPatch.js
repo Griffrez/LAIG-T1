@@ -55,11 +55,10 @@ MyPatch.prototype.init = function(scene, orderU, orderV, partsU, partsV, control
 	}
 
 	this.nurbsSurface = new CGFnurbsSurface(orderU, orderV, knotsU, knotsV, controlPoints);
+    this.getPoint = function(u, v)
+    {
+        return this.nurbsSurface.getPoint(u, v);
+    };
 
-	CGFnurbsObject.call(this, scene, this.nurbsSurface.getPoint, partsU, partsV);
-};
-
-MyPatch.prototype.getPoint = function(u, v)
-{
-    return this.nurbsSurface.getPoint(u, v);
+	CGFnurbsObject.call(this, scene, this.getPoint, partsU, partsV);
 };

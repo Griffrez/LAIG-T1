@@ -44,6 +44,8 @@ serialInclude([
 	'GraphicPrimitives/MyCylinder.js',
 	'GraphicPrimitives/MySphere.js',
 	'GraphicPrimitives/MyTorus.js',
+	'GraphicPrimitives/MyPlane.js',
+	'GraphicPrimitives/MyPatch.js',
                main = function()
                {
 	               // Standard application, scene and interface setup

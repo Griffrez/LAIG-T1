@@ -61,11 +61,10 @@ MyPlane.prototype.init = function(scene, dimX, dimY, partsX, partsY)
     controlPoints.push(temp1, temp2);
 
 	this.nurbsSurface = new CGFnurbsSurface(degree, degree, knotsU, knotsV, controlPoints);
+    this.getPoint = function(u, v)
+    {
+        return this.nurbsSurface.getPoint(u, v);
+    };
 
 	CGFnurbsObject.call(this, scene, this.getPoint, partsX, partsY);
-};
-
-MyPlane.prototype.getPoint = function(u, v)
-{
-    return this.nurbsSurface.getPoint(u, v);
 };

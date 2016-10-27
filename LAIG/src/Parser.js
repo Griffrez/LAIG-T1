@@ -842,17 +842,20 @@ Parser.prototype.parsePrimitives = function(rootElement)
             if(controlPointsNumber !== controlPointsCount)
                 return "Error Parsing Primitives, patch should have (orderU + 1) * (orderV + 1) control points";
 
-            for (let j = 0; j < controlPointsCount; j++)
+            for (let j = 0; j < (orderU + 1); j++)
             {
-                let currentControlPoint = primitive.children[j];
+				let temp = [];
+				for(let k = 0; k < (orderV + 1); k++)
+				{
+					let currentControlPoint = primitive.children[j*(orderV+1)+k];
 
-                let testX = this.reader.getFloat(currentControlPoint, 'x');
+					let controlPoint = vec4.fromValues((this.reader.getFloat(currentControlPoint, 'x'))
+						, (this.reader.getFloat(currentControlPoint, 'y'))
+						, (this.reader.getFloat(currentControlPoint, 'z')), 1);
 
-                let controlPoint = vec3.fromValues((this.reader.getFloat(currentControlPoint, 'x'))
-                    , (this.reader.getFloat(currentControlPoint, 'y'))
-                    , (this.reader.getFloat(currentControlPoint, 'z')));
-
-                controlPoints.push(controlPoint);
+					temp.push(controlPoint);
+				}
+				controlPoints.push(temp);
             }
 
             result = new PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints);
