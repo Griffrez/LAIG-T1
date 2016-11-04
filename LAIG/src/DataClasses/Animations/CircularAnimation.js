@@ -11,6 +11,8 @@ function CircularAnimation(id, center, radius, initAng, rotAng, time)
 
 CircularAnimation.prototype = Object.create(Animation.prototype);
 
+CircularAnimation.prototype.constructor = CircularAnimation;
+
 CircularAnimation.prototype.getCenter = function()
 {
 	return this.center;
