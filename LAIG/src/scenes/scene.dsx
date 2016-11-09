@@ -72,7 +72,7 @@
                 <material id="white" />
             </materials>
 			
-            <texture id="none" />
+            <texture id="board" />
             <children>
 				<primitiveref id="testPatch" />
             </children>

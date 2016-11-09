@@ -19,6 +19,8 @@ function Perspective(id, near, far, angle, from, to)
 	this.to    = to;
 }
 
+Perspective.prototype.constructor = Perspective;
+
 Perspective.prototype.getID = function()
 {
 	return this.id;

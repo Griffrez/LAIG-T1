@@ -15,6 +15,8 @@ function ComponentData(id)
 	// ComponentData and Primitives, respectively
 }
 
+ComponentData.prototype.constructor = ComponentData;
+
 ComponentData.prototype.getID = function()
 {
 	return this.id;

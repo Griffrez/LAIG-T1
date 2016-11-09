@@ -17,6 +17,13 @@ serialInclude([
 	'Interface.js',
 	'Parser.js',
 	'AuxiliarClasses/Stack.js',
+	'GraphicPrimitives/MyRectangle.js',
+	'GraphicPrimitives/MyTriangle.js',
+	'GraphicPrimitives/MyCylinder.js',
+	'GraphicPrimitives/MySphere.js',
+	'GraphicPrimitives/MyTorus.js',
+	'GraphicPrimitives/MyPlane.js',
+	'GraphicPrimitives/MyPatch.js',
 	'DataClasses/Color.js',
 	'DataClasses/Scene.js',
 	'DataClasses/Perspective.js',
@@ -39,13 +46,6 @@ serialInclude([
 	'DataClasses/Elements.js',
 	'EngineDataClasses/Texture.js',
 	'EngineDataClasses/Component.js',
-	'GraphicPrimitives/MyRectangle.js',
-	'GraphicPrimitives/MyTriangle.js',
-	'GraphicPrimitives/MyCylinder.js',
-	'GraphicPrimitives/MySphere.js',
-	'GraphicPrimitives/MyTorus.js',
-	'GraphicPrimitives/MyPlane.js',
-	'GraphicPrimitives/MyPatch.js',
                main = function()
                {
 	               // Standard application, scene and interface setup

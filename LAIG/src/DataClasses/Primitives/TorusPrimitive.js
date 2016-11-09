@@ -20,6 +20,10 @@ function TorusPrimitive(id, inner, outer, slices, loops)
 
 TorusPrimitive.prototype = Object.create(Primitive.prototype);
 
+TorusPrimitive.prototype.constructor = TorusPrimitive;
+
+TorusPrimitive.prototype.graphicConstructor = MyTorus;
+
 TorusPrimitive.prototype.getInner = function()
 {
 	return this.inner;

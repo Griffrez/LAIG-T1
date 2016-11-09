@@ -16,6 +16,10 @@ function RectanglePrimitive(id, p1, p2)
 
 RectanglePrimitive.prototype = Object.create(Primitive.prototype);
 
+RectanglePrimitive.prototype.constructor = RectanglePrimitive;
+
+RectanglePrimitive.prototype.graphicConstructor = MyRectangle;
+
 RectanglePrimitive.prototype.getPoint1 = function()
 {
 	return this.point1;

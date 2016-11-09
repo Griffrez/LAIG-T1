@@ -8,6 +8,10 @@ function TerrainPrimitive(id, texture, heightmap)
 
 TerrainPrimitive.prototype = Object.create(Primitive.prototype);
 
+TerrainPrimitive.prototype.constructor = TerrainPrimitive;
+
+TerrainPrimitive.prototype.graphicConstructor = MyTerrain;
+
 TerrainPrimitive.prototype.getTexture = function()
 {
     return this.texture;

@@ -15,6 +15,8 @@ function TextureData(id, file, length_s, length_t)
 	this.length_t = length_t;
 }
 
+TextureData.prototype.constructor = TextureData;
+
 TextureData.prototype.getID = function()
 {
 	return this.id;

@@ -11,6 +11,8 @@ function Texture(scene, data)
 	this.texture = new CGFtexture(scene, data.file);
 }
 
+Texture.prototype.constructor = Texture;
+
 Texture.prototype.getData = function()
 {
 	return this.data;

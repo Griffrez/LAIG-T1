@@ -19,6 +19,7 @@ function MyPatch(scene, prim)
 }
 
 MyPatch.prototype = Object.create(CGFnurbsObject.prototype);
+
 MyPatch.prototype.constructor = MyPatch;
 
 MyPatch.prototype.init = function(scene, orderU, orderV, partsU, partsV, controlPoints)

@@ -13,6 +13,8 @@ function Parser(filename, scene)
 	this.reader.open('scenes/' + filename, this);
 }
 
+Parser.prototype.constructor = Parser;
+
 /*
  * Callback to be executed after successful reading
  */

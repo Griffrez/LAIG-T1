@@ -8,6 +8,8 @@ function LinearAnimation(id, controlPoints, time)
 
 LinearAnimation.prototype = Object.create(Animation.prototype);
 
+LinearAnimation.prototype.constructor = LinearAnimation;
+
 LinearAnimation.prototype.getControlPoints = function()
 {
 	return this.controlPoints;

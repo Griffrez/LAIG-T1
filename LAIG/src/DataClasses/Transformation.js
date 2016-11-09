@@ -11,6 +11,8 @@ function Transformation(id)
 	this.matrix = mat4.create();
 }
 
+Transformation.prototype.constructor = Transformation;
+
 Transformation.prototype.getID = function()
 {
 	return this.id;

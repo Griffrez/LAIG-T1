@@ -15,6 +15,8 @@ function Illumination(doublesided, local, ambient, background)
 	this.background  = background;
 }
 
+Illumination.prototype.constructor = Illumination;
+
 Illumination.prototype.isDoubleSided = function()
 {
 	return this.doublesided;

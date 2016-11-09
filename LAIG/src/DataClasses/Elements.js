@@ -16,6 +16,8 @@ function Elements()
 	this.components         = new Map();    // Map of ID to Components. [id, Component]
 }
 
+Elements.prototype.constructor = Elements;
+
 // Getters
 
 Elements.prototype.getScene = function()

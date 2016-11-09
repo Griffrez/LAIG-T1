@@ -18,6 +18,8 @@ function Component(id, transformation, materials, texture, childComponents, chil
 	this.children       = {'components': childComponents, 'primitives': childPrimitives};
 }
 
+Component.prototype.constructor = Component;
+
 Component.prototype.getID = function()
 {
 	return this.id;

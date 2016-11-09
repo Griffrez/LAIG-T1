@@ -11,6 +11,10 @@ function PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints)
 
 PatchPrimitive.prototype = Object.create(Primitive.prototype);
 
+PatchPrimitive.prototype.constructor = PatchPrimitive;
+
+PatchPrimitive.prototype.graphicConstructor = MyPatch;
+
 PatchPrimitive.prototype.getOrderU = function()
 {
 	return this.orderU;
