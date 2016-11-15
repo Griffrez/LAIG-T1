@@ -2,7 +2,7 @@
  * ComponentData
  * Data structure to store information about a component
  *
- * @param {float} id Uniquely identifies this component
+ * @param {string} id Uniquely identifies this component
  */
 function ComponentData(id)
 {

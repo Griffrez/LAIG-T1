@@ -241,19 +241,6 @@ Elements.prototype.addPrimitive = function(item)
 	return null;
 };
 
-Elements.prototype.addComponent = function(id)
-{
-	let check = this.components[id];
-
-	if (check !== undefined)
-	{
-		return "ComponentData id " + id + " already exists.";
-	}
-
-	this.components.set(item.getID(), item);
-	return null;
-};
-
 Elements.prototype.setComponentData = function(id, transformation, materials, texture, childComponents, childPrimitives)
 {
 	let check = this.getComponent(id);
