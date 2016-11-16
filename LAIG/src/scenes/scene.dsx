@@ -48,18 +48,12 @@
 	
 	<primitives>
 		<!-- Tests -->
-		<primitive id="testPlane">
-					<plane dimX="5" dimY="5" partsX="100" partsY="100"/>
-		</primitive>
-		<primitive id="testPatch">
-		            <patch orderU="2" orderV="1" partsU="100" partsV="10" >
-		                <controlpoint x="0" y="0" z="0" />
-		                <controlpoint x="0" y="1" z="0" />
-		                <controlpoint x="0" y="0" z="2" />
-                        <controlpoint x="0" y="1" z="2" />
-		                <controlpoint x="1" y="0" z="0" />
-		                <controlpoint x="1" y="1" z="0" />
-		            </patch>
+		<primitive id="testChessboard">
+			<chessboard du="2" dv="2" textureref="peca" su="1" sv="1">
+				<c1 r="0" g="0" b="0" a="1" />
+				<c2 r="1" g="1" b="1" a="1" />
+				<cs r="1" g="0" b="0" a="1" />
+			</chessboard>
 		</primitive>
 	</primitives>
 	
@@ -74,7 +68,7 @@
 			
             <texture id="board" />
             <children>
-				<primitiveref id="testPatch" />
+				<primitiveref id="testChessboard" />
             </children>
 			
         </component>

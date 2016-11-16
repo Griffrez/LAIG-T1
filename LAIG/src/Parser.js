@@ -268,7 +268,7 @@ Parser.prototype.parseView = function(rootElement)
 			return "Error Parsing Views, to not Unique";
 		}
 
-		if(id === defaultViewID)
+		if (id === defaultViewID)
 		{
 			this.elements.setDefaultPerspective(i);
 		}
@@ -830,26 +830,28 @@ Parser.prototype.parsePrimitives = function(rootElement)
 		}
 		else if (primitive.nodeName === "patch")
 		{
-            let orderU = this.reader.getInteger(primitive, 'orderU');
-            let orderV = this.reader.getInteger(primitive, 'orderV');
+			let orderU = this.reader.getInteger(primitive, 'orderU');
+			let orderV = this.reader.getInteger(primitive, 'orderV');
 
-            let partsU = this.reader.getInteger(primitive, 'partsU');
-            let partsV = this.reader.getInteger(primitive, 'partsV');
+			let partsU = this.reader.getInteger(primitive, 'partsU');
+			let partsV = this.reader.getInteger(primitive, 'partsV');
 
-            let controlPoints = [];
+			let controlPoints = [];
 
-            let controlPointsNumber = (orderU + 1) * (orderV + 1);
-            let controlPointsCount = primitive.children.length;
+			let controlPointsNumber = (orderU + 1) * (orderV + 1);
+			let controlPointsCount  = primitive.children.length;
 
-            if(controlPointsNumber !== controlPointsCount)
-                return "Error Parsing Primitives, patch should have (orderU + 1) * (orderV + 1) control points";
+			if (controlPointsNumber !== controlPointsCount)
+			{
+				return "Error Parsing Primitives, patch should have (orderU + 1) * (orderV + 1) control points";
+			}
 
-            for (let j = 0; j < (orderU + 1); j++)
-            {
+			for (let j = 0; j < (orderU + 1); j++)
+			{
 				let temp = [];
-				for(let k = 0; k < (orderV + 1); k++)
+				for (let k = 0; k < (orderV + 1); k++)
 				{
-					let currentControlPoint = primitive.children[j*(orderV+1)+k];
+					let currentControlPoint = primitive.children[j * (orderV + 1) + k];
 
 					let controlPoint = vec4.fromValues((this.reader.getFloat(currentControlPoint, 'x'))
 						, (this.reader.getFloat(currentControlPoint, 'y'))
@@ -858,9 +860,105 @@ Parser.prototype.parsePrimitives = function(rootElement)
 					temp.push(controlPoint);
 				}
 				controlPoints.push(temp);
-            }
+			}
 
-            result = new PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints);
+			result = new PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints);
+		}
+		else if (primitive.nodeName === "chessboard")
+		{
+			let du     = this.reader.getInteger(primitive, 'du');
+			let dv     = this.reader.getInteger(primitive, 'dv');
+			let texref = this.reader.getString(primitive, 'textureref');
+			texref = this.elements.getTexture(texref);
+			if(texref === null)
+			{
+				return "Error Parsing Primitives, chessboard texture reference doesn't match any existing texture.";
+			}
+			let su = this.reader.getInteger(primitive, 'su');
+			if(su === null)
+			{
+				su = -1;
+			}
+			else if((su < -1) || (su >= du))
+			{
+				return "Error Parsing Primitives, chessboard su has to be in the range -1 .. (du-1).";
+			}
+			let sv = this.reader.getInteger(primitive, 'sv');
+			if(sv === null)
+			{
+				sv = -1;
+			}
+			else if((sv < -1) || (sv >= dv))
+			{
+				return "Error Parsing Primitives, chessboard sv has to be in the range -1 .. (dv-1).";
+			}
+			let children = primitive.children;
+			if(children.length != 3)
+			{
+				return "Error Parsing Primitives, chessboard must have 3 children.";
+			}
+			let c1Found = false;
+			let c2Found = false;
+			let csFound = false;
+			let c1 = null;
+			let c2 = null;
+			let cs = null;
+			for(let i = 0; i < 3; i++)
+			{
+				let child = children[i];
+
+				if(child.nodeName === "c1")
+				{
+					if(c1Found)
+					{
+						return "Error Parsing Primitives, chessboard can only have one c1 child";
+					}
+					c1Found = true;
+
+					let red = this.reader.getFloat(child, 'r');
+					let green = this.reader.getFloat(child, 'g');
+					let blue = this.reader.getFloat(child, 'b');
+					let alpha = this.reader.getFloat(child, 'a');
+
+					c1 = new Color(red, green, blue, alpha);
+				}
+				else if(child.nodeName === "c2")
+				{
+					if(c2Found)
+					{
+						return "Error Parsing Primitives, chessboard can only have one c2 child";
+					}
+					c2Found = true;
+
+					let red = this.reader.getFloat(child, 'r');
+					let green = this.reader.getFloat(child, 'g');
+					let blue = this.reader.getFloat(child, 'b');
+					let alpha = this.reader.getFloat(child, 'a');
+
+					c2 = new Color(red, green, blue, alpha);
+				}
+				else if(child.nodeName === "cs")
+				{
+					if(csFound)
+					{
+						return "Error Parsing Primitives, chessboard can only have one cs child";
+					}
+					csFound = true;
+
+					let red = this.reader.getFloat(child, 'r');
+					let green = this.reader.getFloat(child, 'g');
+					let blue = this.reader.getFloat(child, 'b');
+					let alpha = this.reader.getFloat(child, 'a');
+
+					cs = new Color(red, green, blue, alpha);
+				}
+				else
+				{
+					return "Error Parsing Primitives, chessboard: unknown color type found."
+				}
+			}
+
+			result = new ChessboardPrimitive(id, du, dv, su, sv, texref, c1, c2, cs);
 		}
 		else if (primitive.nodeName === "vehicle")
 		{

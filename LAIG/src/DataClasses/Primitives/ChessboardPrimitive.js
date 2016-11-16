@@ -11,46 +11,48 @@ function ChessboardPrimitive(id, du, dv, su, sv, texref, c1, c2, cs)
 	this.cs     = cs;
 }
 
-CylinderPrimitive.prototype = Object.create(Primitive.prototype);
+ChessboardPrimitive.prototype = Object.create(Primitive.prototype);
 
-CylinderPrimitive.prototype.constructor = ChessboardPrimitive;
+ChessboardPrimitive.prototype.constructor = ChessboardPrimitive;
 
-CylinderPrimitive.prototype.getDU = function()
+ChessboardPrimitive.prototype.graphicConstructor = MyChessboard;
+
+ChessboardPrimitive.prototype.getDU = function()
 {
 	return this.du;
 };
 
-CylinderPrimitive.prototype.getDV = function()
+ChessboardPrimitive.prototype.getDV = function()
 {
 	return this.dv;
 };
 
-CylinderPrimitive.prototype.getSU = function()
+ChessboardPrimitive.prototype.getSU = function()
 {
 	return this.su;
 };
 
-CylinderPrimitive.prototype.getSV = function()
+ChessboardPrimitive.prototype.getSV = function()
 {
 	return this.sv;
 };
 
-CylinderPrimitive.prototype.getTexRef = function()
+ChessboardPrimitive.prototype.getTexRef = function()
 {
 	return this.texref;
 };
 
-CylinderPrimitive.prototype.getC1 = function()
+ChessboardPrimitive.prototype.getC1 = function()
 {
 	return this.c1;
 };
 
-CylinderPrimitive.prototype.getC2 = function()
+ChessboardPrimitive.prototype.getC2 = function()
 {
 	return this.c2;
 };
 
-CylinderPrimitive.prototype.getCS = function()
+ChessboardPrimitive.prototype.getCS = function()
 {
 	return this.cs;
 };
