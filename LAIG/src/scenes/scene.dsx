@@ -2,8 +2,8 @@
 	<scene root="root" axis_length="5.0"/>
 	
 	<views default="cam0">
-		<perspective id="cam0" near="0.1" far="500" angle="2">
-            <from x="120" y="60" z="120" />
+		<perspective id="cam0" near="0.1" far="500" angle="45">
+            <from x="6" y="3" z="6" />
             <to x="0" y="0" z="0" />
         </perspective>
 	</views>
@@ -16,7 +16,7 @@
 	<lights>
         <spot id="spot1" enabled="1" angle="20" exponent="0">
             <target x="0" y="0" z="0" />
-            <location x="0" y="0" z="2" />
+            <location x="1" y="1" z="2" />
             <ambient r="0" g="0" b="0" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
             <specular r="1" g="1" b="1" a="1" />
@@ -49,11 +49,12 @@
 	<primitives>
 		<!-- Tests -->
 		<primitive id="testChessboard">
-			<chessboard du="2" dv="2" textureref="peca" su="1" sv="1">
-				<c1 r="0" g="0" b="0" a="1" />
-				<c2 r="1" g="1" b="1" a="1" />
-				<cs r="1" g="0" b="0" a="1" />
-			</chessboard>
+			<chessboard du="8" dv="8" textureref="peca" su="1" sv="1">
+                  <c1 r="1" g="1" b="1" a="1" />
+                  <c2 r="0" g="0" b="0" a="1" />
+                  <cs r="1" g="0" b="0" a="1" />
+            </chessboard>
+
 		</primitive>
 	</primitives>
 	

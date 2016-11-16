@@ -1,3 +1,7 @@
+#ifdef GL_ES
+precision highp float;
+#endif
+
 uniform vec4 c1;
 uniform vec4 c2;
 uniform vec4 cs;
@@ -49,6 +53,5 @@ void main()
             colorFactor = c2;
         }
     }
-
     gl_FragColor = (colorFactor + colorTexture)*0.5;
 }

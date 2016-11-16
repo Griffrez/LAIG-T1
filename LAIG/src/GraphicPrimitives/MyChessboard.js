@@ -32,17 +32,18 @@ function MyChessboard(scene, prim)
 	}
 
 	this.texref = prim.getTexRef();
+	this.texref = scene.textures.get(this.texref.getID()).texture;
 
-	let planePrim = new PlanePrimitive(1, 1, du, dv);
+	let planePrim = new PlanePrimitive(null, 1, 1, du*4, dv*4);
 	this.plane = new MyPlane(scene, planePrim);
 
-	this.shader = new CGFshader(scene.gl, "Shaders/ChessboardFragment.glsl", "Shaders/ChessboardVertex.glsl");
-	this.shader.setUniformsValues({uSelectedInitialTexCoord: [sInit, tInit]});
-	this.shader.setUniformsValues({uSelectedFinalTexCoord: [sFinal, tFinal]});
-	this.shader.setUniformsValues({uDivisionIncrement: [sDivisionIncrement, tDivisionIncrement]});
-	this.shader.setUniformsValues({c1: [c1.getRed(), c1.getGreen(), c1.getBlue(), c1.getAlpha()]});
-	this.shader.setUniformsValues({c2: [c2.getRed(), c2.getGreen(), c2.getBlue(), c2.getAlpha()]});
-	this.shader.setUniformsValues({cs: [cs.getRed(), cs.getGreen(), cs.getBlue(), cs.getAlpha()]});
+	this.shader = new CGFshader(scene.gl, "Shaders/ChessboardVertex.glsl", "Shaders/ChessboardFragment.glsl");
+	this.shader.setUniformsValues({uSelectedInitialTexCoord: [sInit, tInit],
+		                           uSelectedFinalTexCoord: [sFinal, tFinal],
+								   uDivisionIncrement: [sDivisionIncrement, tDivisionIncrement],
+								   c1: [c1.getRed(), c1.getGreen(), c1.getBlue(), c1.getAlpha()],
+								   c2: [c2.getRed(), c2.getGreen(), c2.getBlue(), c2.getAlpha()],
+		                           cs: [cs.getRed(), cs.getGreen(), cs.getBlue(), cs.getAlpha()]});
 }
 
 MyChessboard.prototype = Object.create(CGFobject.prototype);
@@ -54,5 +55,5 @@ MyChessboard.prototype.display = function()
 	this.scene.setActiveShader(this.shader);
 	this.texref.bind(0);
 	this.plane.display();
-	this.scene.setActiveShader(this.defaultShader);
+	this.scene.setActiveShader(this.scene.defaultShader);
 };

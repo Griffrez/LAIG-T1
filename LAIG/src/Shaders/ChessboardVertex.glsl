@@ -1,3 +1,10 @@
+#ifdef GL_ES
+precision highp float;
+#endif
+
+attribute vec3 aVertexPosition;
+attribute vec2 aTextureCoord;
+
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
 uniform vec2 uSelectedInitialTexCoord;
@@ -9,7 +16,7 @@ void main()
 {
     vec3 offset = vec3(0.0,0.0,0.0);
 
-    if(uSelectedInitialTexCoord.s != float(-1))
+    if(uSelectedInitialTexCoord.s != -1.0)
     {
         if(aTextureCoord.s >= uSelectedInitialTexCoord.s &&
            aTextureCoord.t >= uSelectedInitialTexCoord.t &&
