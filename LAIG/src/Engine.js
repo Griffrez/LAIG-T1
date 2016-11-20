@@ -53,6 +53,9 @@ Engine.prototype.init = function(application)
 	CGFscene.prototype.init.call(this, application);
 
 	this.enableTextures(true);
+	this.setUpdatePeriod(20);
+
+	this.oldCurrTime = null;
 
 	this.gl.clearDepth(100.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
@@ -239,6 +242,9 @@ Engine.prototype.processComponent = function(id)
 	let compData       = this.graph.elements.getComponent(id);
 	let transformation = compData.getTransformation();
 	let materials      = compData.getMaterials();
+	let animations     = compData.getAnimations();
+	let animationCluster = new AnimationCluster(animations);
+	this.aniClusters.push(animationCluster);
 	let texture        = compData.getTexture();
 	if (!((texture === "inherit") || (texture === "none")))
 	{
@@ -253,11 +259,12 @@ Engine.prototype.processComponent = function(id)
 		childComponents.push(child);
 	}
 	let childPrimitives = compData.getChildren().primitives;
-	return new Component(id, transformation, materials, texture, childComponents, childPrimitives);
+	return new Component(id, transformation, materials, animationCluster, texture, childComponents, childPrimitives);
 };
 
 Engine.prototype.componentsInit = function()
 {
+	this.aniClusters = [];
 	let rootID = this.graph.elements.getScene().getRoot();
 	this.root  = this.processComponent(rootID);
 };
@@ -395,7 +402,9 @@ Engine.prototype.display = function()
 				appearance.setTexture(texture.texture);
 			}
 			appearance.apply();
-
+			let animationCluster = currentComponent.getAnimationCluster();
+			let animationMatrix = animationCluster.getMatrix();
+			this.multMatrix(animationMatrix);
 			let matrix = currentComponent.getTransformation().getMatrix();
 			this.multMatrix(matrix);
 			materialStack.push(material);
@@ -476,6 +485,31 @@ Engine.prototype.display = function()
 		}
 		this.lights[i].update();
 	}
+};
+
+Engine.prototype.update = function(currTime)
+{
+	if(this.oldCurrTime === null)
+	{
+		this.oldCurrTime = currTime;
+		return;
+	}
+
+	let deltaTime = currTime - this.oldCurrTime;
+	if(deltaTime < 60)
+	{
+		if (!this.dataLoaded)
+		{
+			return;
+		}
+
+		for (let aniCluster of this.aniClusters)
+		{
+			aniCluster.update(deltaTime);
+		}
+	}
+
+	this.oldCurrTime = currTime;
 };
 
 Engine.prototype.changeCamera = function()

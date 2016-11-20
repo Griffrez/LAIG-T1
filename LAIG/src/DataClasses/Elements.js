@@ -6,6 +6,7 @@ function Elements()
 {
 	this.scene              = null;         // Reference to the Scene element of the dsx
 	this.illumination       = null;         // Reference to the Illumination element of the dsx
+	this.animations         = new Map();
 	this.perspectives       = new Map();    // Map of ID to Perspectives. [id, Perspective]
 	this.defaultPerspective = null;         // Default perspective used, reference to Perspective element
 	this.lights             = new Map();    // Map of ID to Lights. [id, Light]
@@ -28,6 +29,16 @@ Elements.prototype.getScene = function()
 Elements.prototype.getIllumination = function()
 {
 	return this.illumination;
+};
+
+Elements.prototype.getAnimation = function(id)
+{
+	return this.animations.get(id);
+};
+
+Elements.prototype.getAnimations = function()
+{
+	return this.animations.values();
 };
 
 Elements.prototype.getPerspective = function(id)
@@ -157,6 +168,19 @@ Elements.prototype.checkValid = function(item, map, constructor, nameType)
 	}
 };
 
+Elements.prototype.addAnimation = function(item)
+{
+	let error = this.checkValid(item, this.animations, AnimationData, "animation");
+
+	if (error)
+	{
+		return error;
+	}
+
+	this.animations.set(item.getID(), item);
+	return null;
+};
+
 Elements.prototype.addPerspective = function(item)
 {
 	let error = this.checkValid(item, this.perspectives, Perspective, "perspective");
@@ -241,7 +265,7 @@ Elements.prototype.addPrimitive = function(item)
 	return null;
 };
 
-Elements.prototype.setComponentData = function(id, transformation, materials, texture, childComponents, childPrimitives)
+Elements.prototype.setComponentData = function(id, transformation, materials, animations, texture, childComponents, childPrimitives)
 {
 	let check = this.getComponent(id);
 
@@ -250,7 +274,7 @@ Elements.prototype.setComponentData = function(id, transformation, materials, te
 		return "ComponentData id " + id + " is already loaded";
 	}
 
-	check.setData(transformation, materials, texture, childComponents, childPrimitives);
+	check.setData(transformation, materials, animations, texture, childComponents, childPrimitives);
 	return null;
 };
 
