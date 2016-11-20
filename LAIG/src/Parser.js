@@ -994,7 +994,7 @@ Parser.prototype.parsePrimitives = function(rootElement)
 		}
 		else if (primitive.nodeName === "vehicle")
 		{
-
+			result = new VehiclePrimitive(id);
 		}
 		else
 		{

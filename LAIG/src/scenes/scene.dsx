@@ -66,7 +66,7 @@
 			<shininess value="10.0" />
 		</material>
 		<material id="white" >
-			<emission r="0.0" g="0.0" b="0.0" a="0.0" />
+			<emission r="1" g="1" b="1" a="1" />
 			<ambient r="0" g="0" b="0" a="1.0" />
 			<diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
 			<specular r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -88,6 +88,9 @@
 	</transformations>
 
 	<primitives>
+		<primitive id="vehicle">
+			<vehicle/>
+		</primitive>
 		<primitive id="prim1">
 			<rectangle x1="0" y1="0" x2="4" y2="4" />
 		</primitive>
@@ -141,6 +144,7 @@
 				<componentref id="pieces" />
 				<componentref id="decoration" />
 				<componentref id="walls" />
+				<componentref id="vehicle" />
 			</children>
 
 		</component>
@@ -213,6 +217,21 @@
 			<children>
 				<componentref id="rightWall"/>
 				<componentref id="leftWall"/>
+			</children>
+
+		</component>
+
+		<component id="vehicle">
+			<transformation>
+			</transformation>
+
+			<materials>
+				<material id="white" />
+			</materials>
+
+			<texture id="none" />
+			<children>
+				<primitiveref id="vehicle"/>
 			</children>
 
 		</component>

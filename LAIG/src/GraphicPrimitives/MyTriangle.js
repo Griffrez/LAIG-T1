@@ -4,8 +4,8 @@
  *
  * @param {Engine} scene Reference to the scene/engine used
  * @param {TrianglePrimitive} prim Reference to the primitive data
- * @param {float} sLength Physical space before texture tiling s-axis
- * @param {float} tLength Physical space before texture tiling t-axis
+ * @param {number} sLength Physical space before texture tiling s-axis
+ * @param {number} tLength Physical space before texture tiling t-axis
  */
 function MyTriangle(scene, prim, sLength, tLength)
 {

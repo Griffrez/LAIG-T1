@@ -40,6 +40,8 @@ serialInclude([
 	'DataClasses/Primitives/TorusPrimitive.js',
 	'GraphicPrimitives/MyTriangle.js',
 	'DataClasses/Primitives/TrianglePrimitive.js',
+	'GraphicPrimitives/MyVehicle.js',
+	'DataClasses/Primitives/VehiclePrimitive.js',
 	'DataClasses/Color.js',
 	'DataClasses/ComponentData.js',
 	'DataClasses/Elements.js',
