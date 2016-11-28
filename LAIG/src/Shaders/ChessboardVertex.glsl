@@ -23,7 +23,7 @@ void main()
            aTextureCoord.s <= uSelectedFinalTexCoord.s &&
            aTextureCoord.t <= uSelectedFinalTexCoord.t)
         {
-            offset.z = 1.0;
+            offset.z = 0.05;
         }
     }
 

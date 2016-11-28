@@ -36,7 +36,6 @@ LinearAnimation.prototype.update = function(deltaTime)
 	}
 
 	this.time += deltaTime;
-	console.log(this.time);
 	this.matrix = mat4.create();
 	let i = 0;
 	for(i = 0; i < this.controlPoints.length - 1; i++)

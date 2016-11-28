@@ -36,7 +36,7 @@ CircularAnimation.prototype.update = function(deltaTime)
 	}
 	mat4.rotateY(this.matrix, this.matrix, this.initAng);
 	mat4.translate(this.matrix, this.matrix, [this.radius, 0, 0]);
-	if(this.varAng >= 0)
+	if(this.varAng > 0)
 	{
 		mat4.rotateY(this.matrix, this.matrix, Math.PI);
 	}

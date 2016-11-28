@@ -298,11 +298,9 @@ Engine.prototype.primitivesInit = function()
 
 	this.primitives = new Map();
 
-	let primitivesWithVariableLength = [RectanglePrimitive, TrianglePrimitive];
-
 	for (let primitiveData of primitivesData)
 	{
-		if (primitivesWithVariableLength.find(primitiveData.constructor))
+		if (primitiveData instanceof RectanglePrimitive)
 		{
 			let lengthsToPrimitive = [];
 			for (let textureLength of texturesLengths)
@@ -310,15 +308,65 @@ Engine.prototype.primitivesInit = function()
 				let sLength = textureLength[0];
 				let tLength = textureLength[1];
 
-				let primitive = new primitiveData.graphicConstructor(this, primitiveData, sLength, tLength);
+				let primitive = new MyRectangle(this, primitiveData, sLength, tLength);
 
 				lengthsToPrimitive.push([sLength, tLength, primitive]);
 			}
 			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
 		}
-		else
+		else if (primitiveData instanceof TrianglePrimitive)
 		{
-			let primitive = new primitiveData.graphicConstructor(this, primitiveData);
+			let lengthsToPrimitive = [];
+			for (let textureLength of texturesLengths)
+			{
+				let sLength = textureLength[0];
+				let tLength = textureLength[1];
+
+				let primitive = new MyTriangle(this, primitiveData, sLength, tLength);
+
+				lengthsToPrimitive.push([sLength, tLength, primitive]);
+			}
+			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
+		}
+		else if (primitiveData instanceof CylinderPrimitive)
+		{
+			let primitive = new MyCylinder(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof SpherePrimitive)
+		{
+			let primitive = new MySphere(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof TorusPrimitive)
+		{
+			let primitive = new MyTorus(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof PlanePrimitive)
+		{
+			let primitive = new MyPlane(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof PatchPrimitive)
+		{
+			let primitive = new MyPatch(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof VehiclePrimitive)
+		{
+			let primitive = new MyVehicle(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof ChessboardPrimitive)
+		{
+			let primitive = new MyChessboard(this, primitiveData);
 
 			this.primitives.set(primitiveData.getID(), primitive);
 		}
@@ -404,9 +452,9 @@ Engine.prototype.display = function()
 			appearance.apply();
 			let animationCluster = currentComponent.getAnimationCluster();
 			let animationMatrix = animationCluster.getMatrix();
-			this.multMatrix(animationMatrix);
 			let matrix = currentComponent.getTransformation().getMatrix();
 			this.multMatrix(matrix);
+			this.multMatrix(animationMatrix);
 			materialStack.push(material);
 			textureStack.push(texture);
 
@@ -422,7 +470,7 @@ Engine.prototype.display = function()
 			for (let prim of primitiveChildren)
 			{
 				let primitive = null;
-				if (primitivesWithVariableLength.find(prim.constructor))
+				if ((prim instanceof RectanglePrimitive) || (prim instanceof TrianglePrimitive))
 				{
 					let data = this.primitives.get(prim.getID());
 
