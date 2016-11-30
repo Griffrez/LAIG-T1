@@ -8,11 +8,6 @@ function Animation(data)
 
 Animation.prototype.constructor = Animation;
 
-Animation.prototype.getCluster = function()
-{
-	return this.cluster;
-};
-
 Animation.prototype.getSpan = function()
 {
 	return this.span;
