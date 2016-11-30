@@ -212,8 +212,8 @@ Engine.prototype.lightsInit = function()
 			light.setSpotCutOff(angle);
 		}
 
-		light.setConstantAttenuation(0);
-		light.setLinearAttenuation(1);
+		light.setConstantAttenuation(1);
+		light.setLinearAttenuation(0);
 		light.setQuadraticAttenuation(0);
 
 		if (lightData.isEnabled())
@@ -243,8 +243,12 @@ Engine.prototype.processComponent = function(id)
 	let transformation = compData.getTransformation();
 	let materials      = compData.getMaterials();
 	let animations     = compData.getAnimations();
-	let animationCluster = new AnimationCluster(animations);
-	this.aniClusters.push(animationCluster);
+	let animationCluster = null;
+	if(animations !== null)
+	{
+		animationCluster = new AnimationCluster(animations);
+		this.aniClusters.push(animationCluster);
+	}
 	let texture        = compData.getTexture();
 	if (!((texture === "inherit") || (texture === "none")))
 	{

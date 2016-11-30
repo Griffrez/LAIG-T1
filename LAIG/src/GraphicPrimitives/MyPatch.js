@@ -12,7 +12,7 @@ function MyPatch(scene, prim)
 	let orderU        = prim.getOrderU();
 	let orderV        = prim.getOrderV();
 	let partsU        = prim.getPartsU();
-	let partsV        = prim.getOrderV();
+	let partsV        = prim.getPartsV();
 	let controlPoints = prim.getControlPoints();
 
 	this.init(scene, orderU, orderV, partsU, partsV, controlPoints);
