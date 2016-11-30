@@ -450,6 +450,7 @@ Engine.prototype.display = function()
 				appearance.setTexture(texture.texture);
 			}
 			appearance.apply();
+			
 			let animationCluster = currentComponent.getAnimationCluster();
 			let animationMatrix = animationCluster.getMatrix();
 			let matrix = currentComponent.getTransformation().getMatrix();
