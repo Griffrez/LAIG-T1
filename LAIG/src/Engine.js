@@ -548,7 +548,7 @@ Engine.prototype.update = function(currTime)
 	}
 
 	let deltaTime = currTime - this.oldCurrTime;
-	if(deltaTime < 60)
+	if(deltaTime < 1000)
 	{
 		if (!this.dataLoaded)
 		{
