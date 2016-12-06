@@ -18,6 +18,10 @@ function SpherePrimitive(id, radius, slices, stacks)
 
 SpherePrimitive.prototype = Object.create(Primitive.prototype);
 
+SpherePrimitive.prototype.constructor = SpherePrimitive;
+
+SpherePrimitive.prototype.graphicConstructor = MySphere;
+
 SpherePrimitive.prototype.getRadius = function()
 {
 	return this.radius;

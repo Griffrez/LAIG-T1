@@ -10,6 +10,10 @@ function PlanePrimitive(id, dimX, dimY, partsX, partsY)
 
 PlanePrimitive.prototype = Object.create(Primitive.prototype);
 
+PlanePrimitive.prototype.constructor = PlanePrimitive;
+
+PlanePrimitive.prototype.graphicConstructor = MyPlane;
+
 PlanePrimitive.prototype.getDimX = function()
 {
 	return this.dimX;

@@ -18,6 +18,8 @@ function OmniLight(id, enabled, location, ambient, diffuse, specular)
 
 OmniLight.prototype = Object.create(Light.prototype);
 
+OmniLight.prototype.constructor = OmniLight;
+
 OmniLight.prototype.getLocation = function()
 {
 	return this.location;

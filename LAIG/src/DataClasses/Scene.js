@@ -11,6 +11,8 @@ function Scene(root, axisLength)
 	this.axisLength = axisLength;
 }
 
+Scene.prototype.constructor = Scene;
+
 // Gets
 Scene.prototype.getRoot = function()
 {

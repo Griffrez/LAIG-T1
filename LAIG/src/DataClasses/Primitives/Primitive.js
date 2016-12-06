@@ -9,6 +9,8 @@ function Primitive(id)
 	this.id = id;
 }
 
+Primitive.prototype.constructor = Primitive;
+
 Primitive.prototype.getID = function()
 {
 	return this.id;

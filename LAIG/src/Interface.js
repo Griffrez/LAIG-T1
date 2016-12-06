@@ -4,7 +4,8 @@ function Interface(scene)
 	this.scene = scene;
 }
 
-Interface.prototype             = Object.create(CGFinterface.prototype);
+Interface.prototype = Object.create(CGFinterface.prototype);
+
 Interface.prototype.constructor = Interface;
 
 Interface.prototype.init = function(application)

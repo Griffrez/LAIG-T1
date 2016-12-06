@@ -3,6 +3,21 @@ function deg2rad(degree)
 	return Math.PI / 180 * degree;
 }
 
+function DSXisParent(array)
+{
+	let out = [];
+
+	for(let element of array)
+	{
+		if(element.parentNode.nodeName === "dsx")
+		{
+			out.push(element);
+		}
+	}
+
+	return out;
+}
+
 function Parser(filename, scene)
 {
 	this.scene  = scene;
@@ -12,6 +27,8 @@ function Parser(filename, scene)
 
 	this.reader.open('scenes/' + filename, this);
 }
+
+Parser.prototype.constructor = Parser;
 
 /*
  * Callback to be executed after successful reading
@@ -45,7 +62,7 @@ Parser.prototype.parseDSX = function(rootElement)
 		return "Main element isn't named dsx.";
 	}
 
-	if (rootElement.children.length !== 9)
+	if (rootElement.children.length !== 10)
 	{
 		if ("parsererror" === rootElement.children[0].nodeName)
 		{
@@ -103,6 +120,13 @@ Parser.prototype.parseDSX = function(rootElement)
 		return result;
 	}
 
+	// Parse Animations
+	result = this.parseAnimations(rootElement);
+	if (result != null)
+	{
+		return result;
+	}
+
 	// Parse Components
 	result = this.parseComponents(rootElement);
 	if (result != null)
@@ -125,11 +149,13 @@ Parser.prototype.parseDSX = function(rootElement)
 /* -------------------- SCENE -------------------- */
 Parser.prototype.parseScene = function(rootElement)
 {
-	let elems = rootElement.children[0];
-	if (elems.nodeName !== "scene")
+	let elems = rootElement.getElementsByTagName("scene");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing First Child, Doesn't Exist or Not Scene";
+		return "Error Parsing Scene, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let root = this.reader.getString(elems, 'root');
 	if (null === root)
@@ -177,11 +203,13 @@ Parser.prototype.parseScene = function(rootElement)
 /* -------------------- VIEW -------------------- */
 Parser.prototype.parseView = function(rootElement)
 {
-	let elems = rootElement.children[1];
-	if (elems.nodeName !== "views")
+	let elems = rootElement.getElementsByTagName("views");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Second Child, Not Views";
+		return "Error Parsing Views, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let defaultViewID = this.reader.getString(elems, 'default');
 	if (defaultViewID === null)
@@ -266,7 +294,7 @@ Parser.prototype.parseView = function(rootElement)
 			return "Error Parsing Views, to not Unique";
 		}
 
-		if(id === defaultViewID)
+		if (id === defaultViewID)
 		{
 			this.elements.setDefaultPerspective(i);
 		}
@@ -300,12 +328,13 @@ Parser.prototype.parseView = function(rootElement)
 /* -------------------- ILLUMINATION -------------------- */
 Parser.prototype.parseIllumination = function(rootElement)
 {
-	let elems = rootElement.children[2];
-
-	if (elems.nodeName !== "illumination")
+	let elems = rootElement.getElementsByTagName("illumination");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Third Child, not Illumination";
+		return "Error Parsing Illumination, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let illuminationCount = elems.children.length;
 	if (illuminationCount != 2)
@@ -348,12 +377,13 @@ Parser.prototype.parseIllumination = function(rootElement)
 /* -------------------- LIGHTS -------------------- */
 Parser.prototype.parseLights = function(rootElement)
 {
-	let elems = rootElement.children[3];
-
-	if (elems.nodeName !== "lights")
+	let elems = rootElement.getElementsByTagName("lights");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Fourth Child, not Lights";
+		return "Error Parsing Lights, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let lightCount = elems.children.length;
 	if (lightCount < 1)
@@ -519,12 +549,13 @@ Parser.prototype.parseLights = function(rootElement)
 /* -------------------- TEXTURES -------------------- */
 Parser.prototype.parseTextures = function(rootElement)
 {
-	let elems = rootElement.children[4];
-
-	if (elems.nodeName !== "textures")
+	let elems = rootElement.getElementsByTagName("textures");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Fifth Child, not Textures";
+		return "Error Parsing Textures, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let textureCount = elems.children.length;
 	if (textureCount < 1)
@@ -554,12 +585,13 @@ Parser.prototype.parseTextures = function(rootElement)
 /* -------------------- MATERIALS -------------------- */
 Parser.prototype.parseMaterials = function(rootElement)
 {
-	let elems = rootElement.children[5];
-
-	if (elems.nodeName !== "materials")
+	let elems = rootElement.getElementsByTagName("materials");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Sixth Child, not Materials";
+		return "Error Parsing Materials, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let materialCount = elems.children.length;
 	if (materialCount < 1)
@@ -647,12 +679,13 @@ Parser.prototype.parseMaterials = function(rootElement)
 
 Parser.prototype.parseTransformations = function(rootElement)
 {
-	let elems = rootElement.children[6];
-
-	if (elems.nodeName !== "transformations")
+	let elems = rootElement.getElementsByTagName("transformations");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Seventh Child, not Transformations";
+		return "Error Parsing Transformations, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let transformationCount = elems.children.length;
 	if (transformationCount < 1)
@@ -722,12 +755,13 @@ Parser.prototype.parseTransformations = function(rootElement)
 
 Parser.prototype.parsePrimitives = function(rootElement)
 {
-	let elems = rootElement.children[7];
-
-	if (elems.nodeName !== "primitives")
+	let elems = rootElement.getElementsByTagName("primitives");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Eighth Child, not Primitives";
+		return "Error Parsing Primitives, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let primitiveCount = elems.children.length;
 	if (primitiveCount < 1)
@@ -828,26 +862,28 @@ Parser.prototype.parsePrimitives = function(rootElement)
 		}
 		else if (primitive.nodeName === "patch")
 		{
-            let orderU = this.reader.getInteger(primitive, 'orderU');
-            let orderV = this.reader.getInteger(primitive, 'orderV');
+			let orderU = this.reader.getInteger(primitive, 'orderU');
+			let orderV = this.reader.getInteger(primitive, 'orderV');
 
-            let partsU = this.reader.getInteger(primitive, 'partsU');
-            let partsV = this.reader.getInteger(primitive, 'partsV');
+			let partsU = this.reader.getInteger(primitive, 'partsU');
+			let partsV = this.reader.getInteger(primitive, 'partsV');
 
-            let controlPoints = [];
+			let controlPoints = [];
 
-            let controlPointsNumber = (orderU + 1) * (orderV + 1);
-            let controlPointsCount = primitive.children.length;
+			let controlPointsNumber = (orderU + 1) * (orderV + 1);
+			let controlPointsCount  = primitive.children.length;
 
-            if(controlPointsNumber !== controlPointsCount)
-                return "Error Parsing Primitives, patch should have (orderU + 1) * (orderV + 1) control points";
+			if (controlPointsNumber !== controlPointsCount)
+			{
+				return "Error Parsing Primitives, patch should have (orderU + 1) * (orderV + 1) control points";
+			}
 
-            for (let j = 0; j < (orderU + 1); j++)
-            {
+			for (let j = 0; j < (orderU + 1); j++)
+			{
 				let temp = [];
-				for(let k = 0; k < (orderV + 1); k++)
+				for (let k = 0; k < (orderV + 1); k++)
 				{
-					let currentControlPoint = primitive.children[j*(orderV+1)+k];
+					let currentControlPoint = primitive.children[j * (orderV + 1) + k];
 
 					let controlPoint = vec4.fromValues((this.reader.getFloat(currentControlPoint, 'x'))
 						, (this.reader.getFloat(currentControlPoint, 'y'))
@@ -856,13 +892,109 @@ Parser.prototype.parsePrimitives = function(rootElement)
 					temp.push(controlPoint);
 				}
 				controlPoints.push(temp);
-            }
+			}
 
-            result = new PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints);
+			result = new PatchPrimitive(id, orderU, orderV, partsU, partsV, controlPoints);
+		}
+		else if (primitive.nodeName === "chessboard")
+		{
+			let du     = this.reader.getInteger(primitive, 'du');
+			let dv     = this.reader.getInteger(primitive, 'dv');
+			let texref = this.reader.getString(primitive, 'textureref');
+			texref = this.elements.getTexture(texref);
+			if(texref === null)
+			{
+				return "Error Parsing Primitives, chessboard texture reference doesn't match any existing texture.";
+			}
+			let su = this.reader.getInteger(primitive, 'su');
+			if(su === null)
+			{
+				su = -1;
+			}
+			else if((su < -1) || (su >= du))
+			{
+				return "Error Parsing Primitives, chessboard su has to be in the range -1 .. (du-1).";
+			}
+			let sv = this.reader.getInteger(primitive, 'sv');
+			if(sv === null)
+			{
+				sv = -1;
+			}
+			else if((sv < -1) || (sv >= dv))
+			{
+				return "Error Parsing Primitives, chessboard sv has to be in the range -1 .. (dv-1).";
+			}
+			let children = primitive.children;
+			if(children.length != 3)
+			{
+				return "Error Parsing Primitives, chessboard must have 3 children.";
+			}
+			let c1Found = false;
+			let c2Found = false;
+			let csFound = false;
+			let c1 = null;
+			let c2 = null;
+			let cs = null;
+			for(let i = 0; i < 3; i++)
+			{
+				let child = children[i];
+
+				if(child.nodeName === "c1")
+				{
+					if(c1Found)
+					{
+						return "Error Parsing Primitives, chessboard can only have one c1 child";
+					}
+					c1Found = true;
+
+					let red = this.reader.getFloat(child, 'r');
+					let green = this.reader.getFloat(child, 'g');
+					let blue = this.reader.getFloat(child, 'b');
+					let alpha = this.reader.getFloat(child, 'a');
+
+					c1 = new Color(red, green, blue, alpha);
+				}
+				else if(child.nodeName === "c2")
+				{
+					if(c2Found)
+					{
+						return "Error Parsing Primitives, chessboard can only have one c2 child";
+					}
+					c2Found = true;
+
+					let red = this.reader.getFloat(child, 'r');
+					let green = this.reader.getFloat(child, 'g');
+					let blue = this.reader.getFloat(child, 'b');
+					let alpha = this.reader.getFloat(child, 'a');
+
+					c2 = new Color(red, green, blue, alpha);
+				}
+				else if(child.nodeName === "cs")
+				{
+					if(csFound)
+					{
+						return "Error Parsing Primitives, chessboard can only have one cs child";
+					}
+					csFound = true;
+
+					let red = this.reader.getFloat(child, 'r');
+					let green = this.reader.getFloat(child, 'g');
+					let blue = this.reader.getFloat(child, 'b');
+					let alpha = this.reader.getFloat(child, 'a');
+
+					cs = new Color(red, green, blue, alpha);
+				}
+				else
+				{
+					return "Error Parsing Primitives, chessboard: unknown color type found."
+				}
+			}
+
+			result = new ChessboardPrimitive(id, du, dv, su, sv, texref, c1, c2, cs);
 		}
 		else if (primitive.nodeName === "vehicle")
 		{
-
+			result = new VehiclePrimitive(id);
 		}
 		else
 		{
@@ -877,14 +1009,85 @@ Parser.prototype.parsePrimitives = function(rootElement)
 	}
 };
 
+Parser.prototype.parseAnimations = function(rootElement)
+{
+	let elems = rootElement.getElementsByTagName("animations");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
+	{
+		return "Error Parsing Animations, there can only be one block.";
+	}
+	elems = elems[0];
+
+	let children = elems.children;
+	let childrenCount = children.length;
+
+	for(let i = 0; i < childrenCount; i++)
+	{
+		let animation = null;
+		let currentAnimation = children[i];
+
+		let id = this.reader.getString(currentAnimation, 'id');
+		let span = this.reader.getFloat(currentAnimation, 'span');
+		let type = this.reader.getString(currentAnimation, 'type');
+
+		if(type === "linear")
+		{
+			let controlPoints = currentAnimation.children;
+
+			let controlPointsCount = controlPoints.length;
+
+			let controlPointsArray = [];
+
+			if(controlPointsCount < 2)
+			{
+				return "Error Parsing Animations, linear animations must have at least 2 control points.";
+			}
+
+			for(let j = 0; j < controlPointsCount; j++)
+			{
+				let controlPoint = controlPoints[j];
+
+				let x = this.reader.getFloat(controlPoint, 'xx');
+				let y = this.reader.getFloat(controlPoint, 'yy');
+				let z = this.reader.getFloat(controlPoint, 'zz');
+
+				let controlPointData = vec3.fromValues(x, y, z);
+
+				controlPointsArray.push(controlPointData);
+			}
+
+			animation = new LinearAnimationData(id, span, controlPointsArray);
+		}
+		else if(type === "circular")
+		{
+			let centerx = this.reader.getFloat(currentAnimation, 'centerx');
+			let centery = this.reader.getFloat(currentAnimation, 'centery');
+			let centerz = this.reader.getFloat(currentAnimation, 'centerz');
+			let center = vec3.fromValues(centerx, centery, centerz);
+
+			let radius = this.reader.getFloat(currentAnimation, 'radius');
+			let startang = this.reader.getFloat(currentAnimation, 'startang');
+			let rotang = this.reader.getFloat(currentAnimation, 'rotang');
+
+			animation = new CircularAnimationData(id, span, center, radius, deg2rad(startang), deg2rad(rotang));
+		}
+
+		this.elements.addAnimation(animation);
+	}
+
+	return null;
+};
+
 Parser.prototype.parseComponents = function(rootElement)
 {
-	let elems = rootElement.children[8];
-
-	if (elems.nodeName !== "components")
+	let elems = rootElement.getElementsByTagName("components");
+	elems = DSXisParent(elems);
+	if (elems.length !== 1)
 	{
-		return "Error Parsing Ninth Child, not Components";
+		return "Error Parsing Components, there can only be one block.";
 	}
+	elems = elems[0];
 
 	let componentCount = elems.children.length;
 	if (componentCount < 1)
@@ -898,9 +1101,16 @@ Parser.prototype.parseComponents = function(rootElement)
 
 		let id = this.reader.getString(currentComponent, 'id');
 
-		if (currentComponent.children.length !== 4)
+		let animationElements = currentComponent.getElementsByTagName('animation');
+		let hasAnimation = animationElements.length > 0;
+
+		if (!hasAnimation && currentComponent.children.length !== 4)
 		{
 			return "Error Parsing ComponentData, tag amount different than 4 (transformation, materials, texture, children)";
+		}
+		else if(hasAnimation === 1 && currentComponent.children.length !== 5)
+		{
+			return "Error Parsing ComponentData, animation block detected but tag amount different than 5 (transformation, materials, texture, children, animation)";
 		}
 
 		let transformationElements = currentComponent.getElementsByTagName('transformation');
@@ -935,6 +1145,11 @@ Parser.prototype.parseComponents = function(rootElement)
 		let materialsElement      = materialsElements[0];
 		let textureElement        = textureElements[0];
 		let childrenElement       = childrenElements[0];
+		let animationElement      = null;
+		if(hasAnimation)
+		{
+			animationElement = animationElements[0];
+		}
 
 		let transformation;
 
@@ -988,6 +1203,31 @@ Parser.prototype.parseComponents = function(rootElement)
 				{
 					return "Error Parsing Transformation in ComponentData, unknown transformation type" + nodeName;
 				}
+			}
+		}
+
+		let animations = [];
+
+		if(hasAnimation)
+		{
+			let animationElements = animationElement.children;
+
+			let animationCount = animationElements.length;
+
+			for (let i = 0; i < animationCount; i++)
+			{
+				let animationElement = animationElements[i];
+
+				let animationID = this.reader.getString(animationElement, 'id');
+
+				let animation = this.elements.getAnimation(animationID);
+
+				if (animation === undefined)
+				{
+					return "Error Parsing Animation in ComponentData, id referred doesn't match any material";
+				}
+
+				animations.push(animation);
 			}
 		}
 
@@ -1083,7 +1323,7 @@ Parser.prototype.parseComponents = function(rootElement)
 			}
 		}
 
-		let error = this.elements.setComponentData(id, transformation, materials, texture, childrenComponents,
+		let error = this.elements.setComponentData(id, transformation, materials, animations, texture, childrenComponents,
 		                                           childrenPrimitives);
 		if (error != null)
 		{

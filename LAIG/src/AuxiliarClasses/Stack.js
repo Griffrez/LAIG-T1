@@ -15,5 +15,5 @@ Stack.prototype.top = function()
 {
 	let length = this.length;
 
-	return this[length-1];
+	return this[length - 1];
 };

@@ -18,6 +18,7 @@ function MyPlane(scene, prim)
 }
 
 MyPlane.prototype = Object.create(CGFnurbsObject.prototype);
+
 MyPlane.prototype.constructor = MyPlane;
 
 MyPlane.prototype.init = function(scene, dimX, dimY, partsX, partsY)

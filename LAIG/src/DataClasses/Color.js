@@ -15,6 +15,8 @@ function Color(r, g, b, a)
 	this.a = a;
 }
 
+Color.prototype.constructor = Color;
+
 Color.prototype.getRed = function()
 {
 	return this.r;

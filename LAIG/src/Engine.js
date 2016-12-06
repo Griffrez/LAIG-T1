@@ -44,7 +44,8 @@ function Engine()
 	this.interface = null;
 }
 
-Engine.prototype             = Object.create(CGFscene.prototype);
+Engine.prototype = Object.create(CGFscene.prototype);
+
 Engine.prototype.constructor = Engine;
 
 Engine.prototype.init = function(application)
@@ -52,6 +53,9 @@ Engine.prototype.init = function(application)
 	CGFscene.prototype.init.call(this, application);
 
 	this.enableTextures(true);
+	this.setUpdatePeriod(20);
+
+	this.oldCurrTime = null;
 
 	this.gl.clearDepth(100.0);
 	this.gl.enable(this.gl.DEPTH_TEST);
@@ -208,8 +212,8 @@ Engine.prototype.lightsInit = function()
 			light.setSpotCutOff(angle);
 		}
 
-		light.setConstantAttenuation(0);
-		light.setLinearAttenuation(1);
+		light.setConstantAttenuation(1);
+		light.setLinearAttenuation(0);
 		light.setQuadraticAttenuation(0);
 
 		if (lightData.isEnabled())
@@ -238,6 +242,13 @@ Engine.prototype.processComponent = function(id)
 	let compData       = this.graph.elements.getComponent(id);
 	let transformation = compData.getTransformation();
 	let materials      = compData.getMaterials();
+	let animations     = compData.getAnimations();
+	let animationCluster = null;
+	if(animations !== null)
+	{
+		animationCluster = new AnimationCluster(animations);
+		this.aniClusters.push(animationCluster);
+	}
 	let texture        = compData.getTexture();
 	if (!((texture === "inherit") || (texture === "none")))
 	{
@@ -252,11 +263,12 @@ Engine.prototype.processComponent = function(id)
 		childComponents.push(child);
 	}
 	let childPrimitives = compData.getChildren().primitives;
-	return new Component(id, transformation, materials, texture, childComponents, childPrimitives);
+	return new Component(id, transformation, materials, animationCluster, texture, childComponents, childPrimitives);
 };
 
 Engine.prototype.componentsInit = function()
 {
+	this.aniClusters = [];
 	let rootID = this.graph.elements.getScene().getRoot();
 	this.root  = this.processComponent(rootID);
 };
@@ -350,6 +362,18 @@ Engine.prototype.primitivesInit = function()
 
 			this.primitives.set(primitiveData.getID(), primitive);
 		}
+		else if (primitiveData instanceof VehiclePrimitive)
+		{
+			let primitive = new MyVehicle(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
+		else if (primitiveData instanceof ChessboardPrimitive)
+		{
+			let primitive = new MyChessboard(this, primitiveData);
+
+			this.primitives.set(primitiveData.getID(), primitive);
+		}
 	}
 };
 
@@ -430,9 +454,11 @@ Engine.prototype.display = function()
 				appearance.setTexture(texture.texture);
 			}
 			appearance.apply();
-
+			let animationCluster = currentComponent.getAnimationCluster();
+			let animationMatrix = animationCluster.getMatrix();
 			let matrix = currentComponent.getTransformation().getMatrix();
 			this.multMatrix(matrix);
+			this.multMatrix(animationMatrix);
 			materialStack.push(material);
 			textureStack.push(texture);
 
@@ -444,6 +470,7 @@ Engine.prototype.display = function()
 				sLength = texture.getData().getLengthS();
 				tLength = texture.getData().getLengthT();
 			}
+			let primitivesWithVariableLength = [RectanglePrimitive, TrianglePrimitive];
 			for (let prim of primitiveChildren)
 			{
 				let primitive = null;
@@ -510,6 +537,31 @@ Engine.prototype.display = function()
 		}
 		this.lights[i].update();
 	}
+};
+
+Engine.prototype.update = function(currTime)
+{
+	if(this.oldCurrTime === null)
+	{
+		this.oldCurrTime = currTime;
+		return;
+	}
+
+	let deltaTime = currTime - this.oldCurrTime;
+	if(deltaTime < 1000)
+	{
+		if (!this.dataLoaded)
+		{
+			return;
+		}
+
+		for (let aniCluster of this.aniClusters)
+		{
+			aniCluster.update(deltaTime);
+		}
+	}
+
+	this.oldCurrTime = currTime;
 };
 
 Engine.prototype.changeCamera = function()

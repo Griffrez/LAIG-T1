@@ -19,6 +19,8 @@ function Material(id, emission, ambient, diffuse, specular, shininess)
 	this.shininess = shininess;
 }
 
+Material.prototype.constructor = Material;
+
 Material.prototype.getID = function()
 {
 	return this.id;

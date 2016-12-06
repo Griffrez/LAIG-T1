@@ -9,14 +9,17 @@
  * @param {Array} childComponents Array of references to child components
  * @param {Array} childPrimitives Array of references to child primitives
  */
-function Component(id, transformation, materials, texture, childComponents, childPrimitives)
+function Component(id, transformation, materials, aniCluster, texture, childComponents, childPrimitives)
 {
-	this.id             = id;
-	this.transformation = transformation;
-	this.materials      = materials;
-	this.texture        = texture;
-	this.children       = {'components': childComponents, 'primitives': childPrimitives};
+	this.id               = id;
+	this.transformation   = transformation;
+	this.materials        = materials;
+	this.animationCluster = aniCluster;
+	this.texture          = texture;
+	this.children         = {'components': childComponents, 'primitives': childPrimitives};
 }
+
+Component.prototype.constructor = Component;
 
 Component.prototype.getID = function()
 {
@@ -31,6 +34,11 @@ Component.prototype.getTransformation = function()
 Component.prototype.getMaterials = function()
 {
 	return this.materials;
+};
+
+Component.prototype.getAnimationCluster = function()
+{
+	return this.animationCluster;
 };
 
 Component.prototype.getTexture = function()

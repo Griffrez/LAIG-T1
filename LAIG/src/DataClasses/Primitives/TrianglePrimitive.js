@@ -18,6 +18,10 @@ function TrianglePrimitive(id, p1, p2, p3)
 
 TrianglePrimitive.prototype = Object.create(Primitive.prototype);
 
+TrianglePrimitive.prototype.constructor = TrianglePrimitive;
+
+TrianglePrimitive.prototype.graphicConstructor = MyTriangle;
+
 TrianglePrimitive.prototype.getPoint1 = function()
 {
 	return this.point1;

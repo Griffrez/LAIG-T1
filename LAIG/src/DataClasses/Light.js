@@ -18,6 +18,8 @@ function Light(id, enabled, ambient, diffuse, specular)
 	this.specular = specular;
 }
 
+Light.prototype.constructor = Light;
+
 Light.prototype.getID = function()
 {
 	return this.id;

@@ -16,7 +16,8 @@ function MyTorus(scene, prim)
 
 	this.initBuffers();
 }
-MyTorus.prototype             = Object.create(CGFobject.prototype);
+MyTorus.prototype = Object.create(CGFobject.prototype);
+
 MyTorus.prototype.constructor = MyTorus;
 
 MyTorus.prototype.initBuffers = function()

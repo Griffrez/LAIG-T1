@@ -23,6 +23,10 @@ function CylinderPrimitive(id, base, top, height, slices, stacks)
 
 CylinderPrimitive.prototype = Object.create(Primitive.prototype);
 
+CylinderPrimitive.prototype.constructor = CylinderPrimitive;
+
+CylinderPrimitive.prototype.graphicConstructor = MyCylinder;
+
 CylinderPrimitive.prototype.getBase = function()
 {
 	return this.base;

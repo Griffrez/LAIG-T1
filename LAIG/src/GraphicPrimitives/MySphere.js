@@ -16,7 +16,8 @@ function MySphere(scene, prim)
 	this.initBuffers();
 }
 
-MySphere.prototype             = Object.create(CGFobject.prototype);
+MySphere.prototype = Object.create(CGFobject.prototype);
+
 MySphere.prototype.constructor = MySphere;
 
 MySphere.prototype.initBuffers = function()

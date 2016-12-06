@@ -24,6 +24,8 @@ function SpotLight(id, enabled, location, ambient, diffuse, specular, angle, exp
 
 SpotLight.prototype = Object.create(Light.prototype);
 
+SpotLight.prototype.constructor = SpotLight;
+
 SpotLight.prototype.getLocation = function()
 {
 	return this.location;
