@@ -332,45 +332,9 @@ Engine.prototype.primitivesInit = function()
 			}
 			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
 		}
-		else if (primitiveData instanceof CylinderPrimitive)
+		else
 		{
-			let primitive = new MyCylinder(this, primitiveData);
-
-			this.primitives.set(primitiveData.getID(), primitive);
-		}
-		else if (primitiveData instanceof SpherePrimitive)
-		{
-			let primitive = new MySphere(this, primitiveData);
-
-			this.primitives.set(primitiveData.getID(), primitive);
-		}
-		else if (primitiveData instanceof TorusPrimitive)
-		{
-			let primitive = new MyTorus(this, primitiveData);
-
-			this.primitives.set(primitiveData.getID(), primitive);
-		}
-		else if (primitiveData instanceof PlanePrimitive)
-		{
-			let primitive = new MyPlane(this, primitiveData);
-
-			this.primitives.set(primitiveData.getID(), primitive);
-		}
-		else if (primitiveData instanceof PatchPrimitive)
-		{
-			let primitive = new MyPatch(this, primitiveData);
-
-			this.primitives.set(primitiveData.getID(), primitive);
-		}
-		else if (primitiveData instanceof VehiclePrimitive)
-		{
-			let primitive = new MyVehicle(this, primitiveData);
-
-			this.primitives.set(primitiveData.getID(), primitive);
-		}
-		else if (primitiveData instanceof ChessboardPrimitive)
-		{
-			let primitive = new MyChessboard(this, primitiveData);
+			let primitive = new primitiveData.graphicConstructor(this, primitiveData);
 
 			this.primitives.set(primitiveData.getID(), primitive);
 		}

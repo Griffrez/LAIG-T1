@@ -28,6 +28,8 @@ serialInclude([
 	'DataClasses/Primitives/ChessboardPrimitive.js',
 	'GraphicPrimitives/MyCylinder.js',
 	'DataClasses/Primitives/CylinderPrimitive.js',
+    'GraphicPrimitives/MyHexagon.js',
+    'DataClasses/Primitives/HexagonPrimitive.js',
 	'GraphicPrimitives/MyPatch.js',
 	'DataClasses/Primitives/PatchPrimitive.js',
 	'GraphicPrimitives/MyPlane.js',

@@ -996,6 +996,12 @@ Parser.prototype.parsePrimitives = function(rootElement)
 		{
 			result = new VehiclePrimitive(id);
 		}
+        else if (primitive.nodeName === "hexagon")
+        {
+            let side = this.reader.getFloat(primitive, 'side');
+
+            result = new HexagonPrimitive(id, side);
+        }
 		else
 		{
 			return "Error Parsing Primitive, unknown primitive found."
