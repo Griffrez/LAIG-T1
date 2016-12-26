@@ -29,10 +29,11 @@
     </lights>
 
     <textures>
-		<texture id="wood" file="../resources/madeira.png" length_s="1" length_t="1" />
-		<texture id="wood_floor" file="../resources/madeira_chao.jpg" length_s="1" length_t="1" />
-		<texture id="marble" file="../resources/marble.jpg" length_s="1" length_t="1" />
-		<texture id="room_wall" file="../resources/room_wall.jpg" length_s="1" length_t="1" />
+		<texture id="wood" file="../resources/madeira.png" length_s="1" length_t="1"/>
+		<texture id="wood_floor" file="../resources/madeira_chao.jpg" length_s="1" length_t="1"/>
+		<texture id="marble" file="../resources/marble.jpg" length_s="1" length_t="1"/>
+		<texture id="room_wall" file="../resources/room_wall.jpg" length_s="1" length_t="1"/>
+		<texture id="plastic" file="../resources/plastic.jpg" length_s="1" length_t="1"/>
     </textures>
 
     <materials>
@@ -100,7 +101,6 @@
             <children>
 				<componentref id="table"/>
 				<componentref id="room"/>
-				<componentref id="scoreboard"/>
             </children>
         </component>
 		
@@ -120,6 +120,8 @@
 				<componentref id="floor"/>
 				<componentref id="right_wall"/>
 				<componentref id="left_wall"/>
+				<componentref id="scoreboard"/>
+				<componentref id="television"/>
             </children>
         </component>
 		
@@ -141,6 +143,60 @@
 				<primitiveref id="plane"/>
             </children>
         </component>
+		
+		<!-- Television -->
+		
+		<component id="television">
+            <transformation>
+				<translate x="0" y="3" z="-6.45"/>
+				<scale x="2" y="2" z="2"/>
+            </transformation>
+			
+			<materials>
+				<material id="white"/>
+            </materials>
+
+            <texture id="plastic"/>
+			
+            <children>
+				<componentref id="cube_no_front"/>
+				<componentref id="television_table"/>
+				<componentref id="television_furniture"/>
+            </children>
+		</component>
+		
+		<component id="television_furniture">
+		    <transformation>
+				<translate x="0" y="-1.01" z="0"/>
+            </transformation>
+			
+			<materials>
+				<material id="white"/>
+            </materials>
+
+            <texture id="wood"/>
+			
+            <children>
+				<componentref id="cube"/>
+            </children>
+		</component>
+		
+		<component id="television_table">
+            <transformation>
+				<translate x="0" y="-0.5" z="0"/>
+				<scale x="0.1" y="0.1" z="0.1"/>
+            </transformation>
+			
+			<materials>
+				<material id="white"/>
+            </materials>
+
+            <texture id="none"/>
+			
+            <children>
+				<componentref id="table"/>
+            </children>
+		</component>
 		
 		<!-- Walls -->
 		
@@ -357,9 +413,32 @@
 		
 		<!-- Cube -->
 		
+		<component id="cube_no_front">
+			<transformation>	
+            </transformation>
+			
+            <materials>
+				<material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+			
+            <children>
+				<componentref id="cube_back"/>
+				<componentref id="cube_left"/>
+				<componentref id="cube_right"/>
+				<componentref id="cube_top"/>
+				<componentref id="cube_bot"/>
+				<componentref id="cube_back_reversed"/>
+				<componentref id="cube_left_reversed"/>
+				<componentref id="cube_right_reversed"/>
+				<componentref id="cube_top_reversed"/>
+				<componentref id="cube_bot_reversed"/>
+            </children>
+		</component>
+		
 		<component id="cube">
-            <transformation>
-				
+            <transformation>	
             </transformation>
 
             <materials>
@@ -411,10 +490,44 @@
             </children>
         </component>
 		
+		<component id="cube_back_reversed">
+            <transformation>
+				<translate x="0" y="0" z="-0.5"/>
+            </transformation>
+
+            <materials>
+				<material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+			
+            <children>
+				<primitiveref id="cube_wall"/>
+            </children>
+        </component>
+		
 		<component id="cube_left">
             <transformation>
 				<translate x="-0.5" y="0" z="0"/>
 				<rotate axis="y" angle="-90"/>
+            </transformation>
+
+            <materials>
+				<material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+			
+            <children>
+				<primitiveref id="cube_wall"/>
+            </children>
+        </component>
+		
+		<component id="cube_left_reversed">
+            <transformation>
+				<translate x="-0.5" y="0" z="0"/>
+				<rotate axis="y" angle="-90"/>
+				<rotate axis="y" angle="180"/>
             </transformation>
 
             <materials>
@@ -445,6 +558,24 @@
             </children>
         </component>
 		
+		<component id="cube_right_reversed">
+            <transformation>
+				<translate x="0.5" y="0" z="0"/>
+				<rotate axis="y" angle="90"/>
+				<rotate axis="y" angle="180"/>
+            </transformation>
+
+            <materials>
+				<material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+			
+            <children>
+				<primitiveref id="cube_wall"/>
+            </children>
+        </component>
+		
 		<component id="cube_top">
             <transformation>
 				<translate x="0" y="0.5" z="0"/>
@@ -462,10 +593,46 @@
             </children>
         </component>
 		
+		<component id="cube_top_reversed">
+            <transformation>
+				<translate x="0" y="0.5" z="0"/>
+				<rotate axis="x" angle="-90"/>
+				<rotate axis="y" angle="180"/>
+            </transformation>
+
+            <materials>
+				<material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+			
+            <children>
+				<primitiveref id="cube_wall"/>
+            </children>
+        </component>
+		
 		<component id="cube_bot">
             <transformation>
 				<translate x="0" y="-0.5" z="0"/>
 				<rotate axis="x" angle="90"/>
+            </transformation>
+
+            <materials>
+				<material id="inherit"/>
+            </materials>
+
+            <texture id="inherit"/>
+			
+            <children>
+				<primitiveref id="cube_wall"/>
+            </children>
+        </component>
+		
+		<component id="cube_bot_reversed">
+            <transformation>
+				<translate x="0" y="-0.5" z="0"/>
+				<rotate axis="x" angle="90"/>
+				<rotate axis="y" angle="180"/>
             </transformation>
 
             <materials>
