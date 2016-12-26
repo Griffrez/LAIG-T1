@@ -81,6 +81,12 @@
         <primitive id="vehicle">
             <vehicle/>
         </primitive>
+        <primitive id="game">
+            <game/>
+        </primitive>
+        <primitive id="scoreboard">
+            <scoreboard/>
+        </primitive>
         <primitive id="square">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5"/>
         </primitive>
@@ -134,7 +140,39 @@
 
             <texture id="none" />
             <children>
-                <primitiveref id="hexagon"/>
+                <componentref id="game1"/>
+                <componentref id="game2"/>
+            </children>
+        </component>
+
+        <component id="game1">
+            <transformation>
+                <translate x="0" y="0" z="3"/>
+                <rotate axis="y" angle="180"/>
+            </transformation>
+
+            <materials>
+                <material id="white" />
+            </materials>
+
+            <texture id="none" />
+            <children>
+                <primitiveref id="game"/>
+            </children>
+        </component>
+
+        <component id="game2">
+            <transformation>
+                <translate x="0" y="0" z="-3"/>
+            </transformation>
+
+            <materials>
+                <material id="white" />
+            </materials>
+
+            <texture id="none" />
+            <children>
+                <primitiveref id="scoreboard"/>
             </children>
         </component>
 

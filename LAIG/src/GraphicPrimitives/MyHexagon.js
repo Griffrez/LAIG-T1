@@ -15,17 +15,17 @@ MyHexagon.prototype.initBuffers = function()
 {
     let side = this.hexPrim.getSide();
 
-    this.vertices =
-        [
-            0, 0, 0,
-            side, 0, 0,
-            side*Math.cos(Math.PI/3), side*Math.sin(Math.PI/3), 0,
-            side*Math.cos(Math.PI*2/3), side*Math.sin(Math.PI*2/3), 0,
-            -side, 0, 0,
-            side*Math.cos(Math.PI*4/3), side*Math.sin(Math.PI*4/3), 0,
-            side*Math.cos(Math.PI*5/3), side*Math.sin(Math.PI*5/3), 0,
-            side, 0, 0,
-        ];
+	this.vertices =
+		[
+			0, 0, 0,
+			0, side, 0,
+			side*Math.cos(Math.PI*5/6), side*Math.sin(Math.PI*5/6), 0,
+			side*Math.cos(Math.PI*7/6), side*Math.sin(Math.PI*7/6), 0,
+			side*Math.cos(Math.PI*3/2), side*Math.sin(Math.PI*3/2), 0,
+			side*Math.cos(Math.PI*11/6), side*Math.sin(Math.PI*11/6), 0,
+			side*Math.cos(Math.PI*13/6), side*Math.sin(Math.PI*13/6), 0,
+			0, side, 0
+		];
 
     this.indices =
         [
@@ -52,13 +52,13 @@ MyHexagon.prototype.initBuffers = function()
     this.texCoords =
         [
             0.5, 0.5,
-            1, 0.5,
-            0.5+0.5*Math.cos(Math.PI/3), 0.5-Math.sin(Math.PI/3),
-            0.5+0.5*Math.cos(Math.PI*2/3), 0.5-Math.sin(Math.PI*2/3),
-            0, 0.5,
-            0.5+0.5*Math.cos(Math.PI*4/3), 0.5-Math.sin(Math.PI*4/3),
-            0.5+0.5*Math.cos(Math.PI*5/3), 0.5-Math.sin(Math.PI*5/3),
-            1, 0.5
+            0.5, 0,
+            0.5+0.5*Math.cos(Math.PI*5/6), 0.5-0.5*Math.sin(Math.PI*5/6),
+            0.5+0.5*Math.cos(Math.PI*7/6), 0.5-0.5*Math.sin(Math.PI*7/6),
+            0.5+0.5*Math.cos(Math.PI*3/2), 0.5-0.5*Math.sin(Math.PI*3/2),
+            0.5+0.5*Math.cos(Math.PI*11/6), 0.5-0.5*Math.sin(Math.PI*11/6),
+            0.5+0.5*Math.cos(Math.PI*13/6), 0.5-0.5*Math.sin(Math.PI*13/6),
+            0.5, 0
         ];
 
     this.primitiveType = this.scene.gl.TRIANGLES;

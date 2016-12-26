@@ -1,7 +1,8 @@
 /**
  * Color
  * Data structure to store information about a color
- *
+ * @constructor
+ * @this {Color}
  * @param {number} r Red component
  * @param {number} g Green component
  * @param {number} b Blue component

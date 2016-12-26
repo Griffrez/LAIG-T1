@@ -1002,6 +1002,14 @@ Parser.prototype.parsePrimitives = function(rootElement)
 
             result = new HexagonPrimitive(id, side);
         }
+		else if (primitive.nodeName === "game")
+		{
+			result = new GamePrimitive(id);
+		}
+		else if (primitive.nodeName === "scoreboard")
+		{
+			result = new ScoreboardPrimitive(id);
+		}
 		else
 		{
 			return "Error Parsing Primitive, unknown primitive found."

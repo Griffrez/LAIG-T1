@@ -42,11 +42,15 @@ function Engine()
 	CGFscene.call(this);
 	this.graph     = null;
 	this.interface = null;
+	this.nextID    = 1;
+	this.sceneIndex = 0;
 }
 
 Engine.prototype = Object.create(CGFscene.prototype);
 
 Engine.prototype.constructor = Engine;
+
+Engine.prototype.sceneFileNames = ["scene.dsx", "scene2.dsx"];
 
 Engine.prototype.init = function(application)
 {
@@ -61,6 +65,12 @@ Engine.prototype.init = function(application)
 	this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
 	this.gl.depthFunc(this.gl.LEQUAL);
+
+	this.setPickEnabled(true);
+
+	this.game = new Game(this);
+
+	new Parser(this.sceneFileNames[this.sceneIndex], this);
 };
 
 Engine.prototype.setDefaultAppearance = function()
@@ -239,17 +249,17 @@ Engine.prototype.lightsInit = function()
 
 Engine.prototype.processComponent = function(id)
 {
-	let compData       = this.graph.elements.getComponent(id);
-	let transformation = compData.getTransformation();
-	let materials      = compData.getMaterials();
-	let animations     = compData.getAnimations();
+	let compData         = this.graph.elements.getComponent(id);
+	let transformation   = compData.getTransformation();
+	let materials        = compData.getMaterials();
+	let animations       = compData.getAnimations();
 	let animationCluster = null;
-	if(animations !== null)
+	if (animations !== null)
 	{
 		animationCluster = new AnimationCluster(animations);
 		this.aniClusters.push(animationCluster);
 	}
-	let texture        = compData.getTexture();
+	let texture = compData.getTexture();
 	if (!((texture === "inherit") || (texture === "none")))
 	{
 		let textureID = texture.getID();
@@ -269,8 +279,8 @@ Engine.prototype.processComponent = function(id)
 Engine.prototype.componentsInit = function()
 {
 	this.aniClusters = [];
-	let rootID = this.graph.elements.getScene().getRoot();
-	this.root  = this.processComponent(rootID);
+	let rootID       = this.graph.elements.getScene().getRoot();
+	this.root        = this.processComponent(rootID);
 };
 
 Engine.prototype.primitivesInit = function()
@@ -332,6 +342,14 @@ Engine.prototype.primitivesInit = function()
 			}
 			this.primitives.set(primitiveData.getID(), lengthsToPrimitive);
 		}
+		else if (primitiveData instanceof GamePrimitive)
+		{
+			this.primitives.set(primitiveData.getID(), this.game);
+		}
+		else if (primitiveData instanceof ScoreboardPrimitive)
+		{
+			this.primitives.set(primitiveData.getID(), this.game.scoreboard);
+		}
 		else
 		{
 			let primitive = new primitiveData.graphicConstructor(this, primitiveData);
@@ -359,8 +377,29 @@ Engine.prototype.onGraphLoaded = function()
 	this.dataLoaded = true;
 };
 
+Engine.prototype.logPicking = function ()
+{
+	if (this.pickMode == false) {
+		if (this.pickResults != null && this.pickResults.length > 0) {
+			for (var i=0; i< this.pickResults.length; i++) {
+				var obj = this.pickResults[i][0];
+				if (obj)
+				{
+					var customId = this.pickResults[i][1];
+					console.log("Picked object: " + obj + ", with pick id " + customId);
+					this.game.clickEvent(obj);
+				}
+			}
+			this.pickResults.splice(0,this.pickResults.length);
+		}
+	}
+};
+
 Engine.prototype.display = function()
 {
+	this.logPicking();
+	this.clearPickRegistration();
+
 	if (!this.dataLoaded)
 	{
 		return;
@@ -417,10 +456,9 @@ Engine.prototype.display = function()
 			{
 				appearance.setTexture(texture.texture);
 			}
-			appearance.apply();
 			let animationCluster = currentComponent.getAnimationCluster();
-			let animationMatrix = animationCluster.getMatrix();
-			let matrix = currentComponent.getTransformation().getMatrix();
+			let animationMatrix  = animationCluster.getMatrix();
+			let matrix           = currentComponent.getTransformation().getMatrix();
 			this.multMatrix(matrix);
 			this.multMatrix(animationMatrix);
 			materialStack.push(material);
@@ -461,6 +499,7 @@ Engine.prototype.display = function()
 				{
 					primitive = this.primitives.get(prim.getID());
 				}
+	            appearance.apply();
 				primitive.display();
 			}
 		}
@@ -505,14 +544,14 @@ Engine.prototype.display = function()
 
 Engine.prototype.update = function(currTime)
 {
-	if(this.oldCurrTime === null)
+	if (this.oldCurrTime === null)
 	{
 		this.oldCurrTime = currTime;
 		return;
 	}
 
-	let deltaTime = currTime - this.oldCurrTime;
-	if(deltaTime < 1000)
+	let deltaTime = (currTime - this.oldCurrTime) / 1000;
+	if (deltaTime < 1)
 	{
 		if (!this.dataLoaded)
 		{
@@ -523,6 +562,8 @@ Engine.prototype.update = function(currTime)
 		{
 			aniCluster.update(deltaTime);
 		}
+
+		this.game.update(deltaTime);
 	}
 
 	this.oldCurrTime = currTime;
@@ -541,5 +582,17 @@ Engine.prototype.changeCamera = function()
 Engine.prototype.changeMaterial = function()
 {
 	this.materialsIndex++;
+};
+
+Engine.prototype.getGame = function()
+{
+	return this.game;
+};
+
+Engine.prototype.changeScene = function()
+{
+	this.sceneIndex = (this.sceneIndex + 1)%this.sceneFileNames.length;
+	this.interface.resetLights();
+	new Parser(this.sceneFileNames[this.sceneIndex], this);
 };
 

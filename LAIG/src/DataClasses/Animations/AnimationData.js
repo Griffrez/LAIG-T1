@@ -1,7 +1,7 @@
 function AnimationData(id, time)
 {
 	this.id = id;
-	this.time = time*1000;
+	this.time = time;
 }
 
 AnimationData.prototype = Object.create(Object.prototype);

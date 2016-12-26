@@ -21,6 +21,8 @@ serialInclude([
 	'DataClasses/Animations/AnimationData.js',
 	'EngineDataClasses/Animations/CircularAnimation.js',
 	'DataClasses/Animations/CircularAnimationData.js',
+	'EngineDataClasses/Animations/EllipticAnimation.js',
+	'DataClasses/Animations/EllipticAnimationData.js',
 	'EngineDataClasses/Animations/LinearAnimation.js',
 	'DataClasses/Animations/LinearAnimationData.js',
 	'DataClasses/Primitives/Primitive.js',
@@ -28,6 +30,7 @@ serialInclude([
 	'DataClasses/Primitives/ChessboardPrimitive.js',
 	'GraphicPrimitives/MyCylinder.js',
 	'DataClasses/Primitives/CylinderPrimitive.js',
+	'DataClasses/Primitives/GamePrimitive.js',
     'GraphicPrimitives/MyHexagon.js',
     'DataClasses/Primitives/HexagonPrimitive.js',
 	'GraphicPrimitives/MyPatch.js',
@@ -36,6 +39,7 @@ serialInclude([
 	'DataClasses/Primitives/PlanePrimitive.js',
 	'GraphicPrimitives/MyRectangle.js',
 	'DataClasses/Primitives/RectanglePrimitive.js',
+	'DataClasses/Primitives/ScoreboardPrimitive.js',
 	'GraphicPrimitives/MySphere.js',
 	'DataClasses/Primitives/SpherePrimitive.js',
 	'GraphicPrimitives/MyTorus.js',
@@ -59,6 +63,14 @@ serialInclude([
 	'EngineDataClasses/Animations/AnimationCluster.js',
 	'EngineDataClasses/Texture.js',
 	'EngineDataClasses/Component.js',
+	'GameClasses/Game.js',
+	'GameClasses/GameBoard.js',
+	'GameClasses/Piece.js',
+	'GameClasses/PieceHolder.js',
+	'GameClasses/Play.js',
+	'GameClasses/PlaySequence.js',
+	'GameClasses/Scoreboard.js',
+	'GameClasses/Tile.js',
                main = function()
                {
 	               // Standard application, scene and interface setup
@@ -74,10 +86,6 @@ serialInclude([
 	               app.setInterface(userInterface);
 
 	               userInterface.setActiveCamera(engine.camera);
-
-	               let filename = getUrlVars()['file'] || "scene.dsx";
-
-	               let myGraph = new Parser(filename, engine);
 
 	               app.run();
                }
