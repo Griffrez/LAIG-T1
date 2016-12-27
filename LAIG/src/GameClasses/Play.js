@@ -4,13 +4,12 @@ function Play(tile)
 	this.piece = this.tile.piece;
 }
 
-Play.prototype.play = function()
+Play.prototype.getTile = function()
 {
-	this.piece.move(this.tile.offset);
+	return this.tile;
 };
 
-Play.prototype.undo = function()
+Play.prototype.getPiece = function()
 {
-	let originalOffset = this.piece.originalOffset;
-	this.piece.move(originalOffset);
+	return this.piece;
 };

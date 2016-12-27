@@ -16,6 +16,11 @@ function Scoreboard(game, scene)
 			Scoreboard.prototype.numberAppearances.push(appearance);
 		}
 	}
+	let backClockPrim = new CylinderPrimitive("", 1, 0.8, 0.2, 8, 8);
+	this.backClockPlate = new MyCylinder(scene, backClockPrim);
+
+	let clockPtrPrim = new CylinderPrimitive("", 0.05, 0, 0.7, 4, 4);
+	this.clockPointer = new MyCylinder(scene, clockPtrPrim);
 }
 
 Scoreboard.prototype = Object.create(CGFobject.prototype);
@@ -26,6 +31,14 @@ Scoreboard.prototype.display = function()
 	let score2 = this.game.player2Score;
 
 	this.backPlate.display();
+	this.backClockPlate.display();
+
+	this.scene.pushMatrix();
+		this.scene.translate(0, 0, 0.25);
+		this.scene.rotate(Math.PI*2*(this.game.timeDone/this.game.timeToPlay), 0, 0, 1);
+		this.scene.rotate(-Math.PI/2, 1, 0, 0);
+		this.clockPointer.display();
+	this.scene.popMatrix();
 
 	this.scene.pushMatrix();
 		Scoreboard.prototype.numberAppearances[score1].apply();

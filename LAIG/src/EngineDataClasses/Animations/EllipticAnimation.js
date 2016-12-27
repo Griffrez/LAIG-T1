@@ -19,11 +19,14 @@ EllipticAnimation.prototype = Object.create(Animation.prototype);
 
 EllipticAnimation.prototype.getPosition=function(deltaT)
 {
-	this.time += deltaT;
-
-	if(this.time >= this.span)
+	if(!this.finished)
 	{
-		this.finished = true;
+		this.time += deltaT;
+
+		if (this.time >= this.span)
+		{
+			this.finished = true;
+		}
 	}
 
 	if(this.finished)

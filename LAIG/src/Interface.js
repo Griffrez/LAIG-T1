@@ -16,8 +16,16 @@ Interface.prototype.init = function(application)
 
 	this.options = this.GUI.addFolder("Options");
 	this.options.add(this.scene, 'changeScene');
-	this.options.add(this.scene.game, 'incPlayer1');
-	this.options.add(this.scene.game, 'incPlayer2');
+	this.options.add(this.scene.game, 'start');
+	this.options.add(this.scene.game, 'newMatch');
+	this.options.add(this.scene.game, 'undo');
+	let modes = ['player', 'easy', 'hard'];
+	this.options.add(this.scene.game, 'player1mode', modes);
+	this.options.add(this.scene.game, 'player2mode', modes);
+	this.options.add(this.scene.game, 'scoreToWin', 1, 9).step(1);
+	this.options.add(this.scene.game, 'timeToPlay');
+	this.options.add(this.scene, 'changePerspective');
+	this.options.add(this.scene.game, 'showGameSequence');
 
 	this.lights = this.GUI.addFolder("Lights");
 

@@ -39,8 +39,21 @@ function PieceHolder(scene, isWhite, offset)
 
 PieceHolder.prototype.display = function()
 {
-	for(let i = 0; i < this.pieceCount; i++)
+	for(let piece of this.pieces)
 	{
-		this.pieces[i].display();
+		piece.display();
+	}
+};
+
+PieceHolder.prototype.reset = function()
+{
+	for(let piece of this.pieces)
+	{
+		if(piece.tile !== null)
+		{
+			piece.tile.setPiece(null);
+			piece.tile = null;
+		}
+		piece.offset = piece.originalOffset;
 	}
 };

@@ -58,3 +58,44 @@ GameBoard.prototype.display = function()
 		}
 	}
 };
+
+GameBoard.prototype.toString = function()
+{
+	let string = "[";
+	for(let i = 0; i < this.tiles.length; i++)
+	{
+		let line = this.tiles[i];
+		if(i !== 0)
+		{
+			string += ",";
+		}
+		string += "[";
+		for(let j = 0; j < line.length; j++)
+		{
+			let tile = line[j];
+			if(j !== 0)
+			{
+				string += ",";
+			}
+			if(tile.piece === null)
+			{
+				string += "0";
+			}
+			else
+			{
+				let piece = tile.piece;
+				if(piece.isWhite)
+				{
+					string += "1";
+				}
+				else
+				{
+					string += "2";
+				}
+			}
+		}
+		string += "]"
+	}
+	string += "]";
+	return string;
+};

@@ -106,7 +106,7 @@ Piece.prototype.clickEvent = function()
 
 Piece.prototype.move = function(newOffset)
 {
-	let animationData = new EllipticAnimationData("", 3, this.offset, newOffset);
+	let animationData = new EllipticAnimationData("", 0.25, this.offset, newOffset);
 	let animation = new EllipticAnimation(animationData);
 	return [this, animation, newOffset];
 };

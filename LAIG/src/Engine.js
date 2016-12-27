@@ -50,7 +50,7 @@ Engine.prototype = Object.create(CGFscene.prototype);
 
 Engine.prototype.constructor = Engine;
 
-Engine.prototype.sceneFileNames = ["scene.dsx", "scene2.dsx"];
+Engine.prototype.sceneFileNames = ["scene.dsx", "scene2.dsx", "scene3.dsx"];
 
 Engine.prototype.init = function(application)
 {
@@ -108,20 +108,27 @@ Engine.prototype.perspectivesInit = function()
 	let perspectives = this.graph.elements.getPerspectives();
 
 	this.cameras = [];
+	this.perspectives = [];
 
 	this.cameraIndex = 0;
+	this.perspectiveIndex = 0;
 
 	for (let perspective of perspectives)
 	{
-		let near = perspective.getNear();
-		let far  = perspective.getFar();
-		let fov  = perspective.getAngle();
+		let type = perspective.getType();
 		let from = perspective.getFrom();
 		let to   = perspective.getTo();
-
-		let camera = new CGFcamera(fov, near, far, from, to);
-
-		this.cameras.push(camera);
+		if(type === "camera")
+		{
+			let near = perspective.getNear();
+			let far  = perspective.getFar();
+			let fov  = perspective.getAngle();
+			this.cameras.push(new Camera(fov, near, far, from, to, this.interface));
+		}
+		else
+		{
+			this.perspectives.push([from, to]);
+		}
 	}
 
 	let defaultCamera = this.cameras[this.graph.elements.getDefaultPerspective()];
@@ -566,6 +573,8 @@ Engine.prototype.update = function(currTime)
 		this.game.update(deltaTime);
 	}
 
+	this.camera.update(deltaTime);
+
 	this.oldCurrTime = currTime;
 };
 
@@ -596,3 +605,17 @@ Engine.prototype.changeScene = function()
 	new Parser(this.sceneFileNames[this.sceneIndex], this);
 };
 
+Engine.prototype.test = function()
+{
+	this.camera.goTo([2, 2, 2, 1], [0, 0, 0, 1]);
+};
+
+Engine.prototype.changePerspective = function()
+{
+	if(this.perspectives.length > 0)
+	{
+		let perspective = this.perspectives[this.perspectiveIndex++];
+		this.perspectiveIndex %= this.perspectives.length;
+		this.camera.goTo(perspective[0], perspective[1]);
+	}
+};

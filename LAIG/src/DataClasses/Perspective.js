@@ -9,7 +9,7 @@
  * @param {float} from Position
  * @param {float} to Target
  */
-function Perspective(id, near, far, angle, from, to)
+function Perspective(id, near, far, angle, from, to, type)
 {
 	this.id    = id;
 	this.near  = near;
@@ -17,6 +17,7 @@ function Perspective(id, near, far, angle, from, to)
 	this.angle = angle;
 	this.from  = from;
 	this.to    = to;
+	this.type  = type;
 }
 
 Perspective.prototype.constructor = Perspective;
@@ -49,4 +50,9 @@ Perspective.prototype.getFrom = function()
 Perspective.prototype.getTo = function()
 {
 	return this.to;
+};
+
+Perspective.prototype.getType = function()
+{
+	return this.type;
 };

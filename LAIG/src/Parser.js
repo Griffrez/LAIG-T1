@@ -223,6 +223,8 @@ Parser.prototype.parseView = function(rootElement)
 		return "Error Parsing Views, no Perspectives";
 	}
 
+	let cameraCount = 0;
+
 	// Parse Perspectives
 	for (let i = 0; i < perspectiveCount; i++)
 	{
@@ -238,42 +240,6 @@ Parser.prototype.parseView = function(rootElement)
 		{
 			return "Error Parsing perspective, id doesn't exist.";
 		}
-
-		let near = this.reader.getFloat(currentPerspective, 'near');
-		if (near === null)
-		{
-			return "Error Parsing perspective, near doesn't exist or not a float."
-		}
-		if (near < 0)
-		{
-			return "Error Parsing perspective, near must be non-negative.";
-		}
-
-		let far = this.reader.getFloat(currentPerspective, 'far');
-		if (far === null)
-		{
-			return "Error Parsing perspective, far doesn't exist or not a float."
-		}
-		if (far < 0)
-		{
-			return "Error Parsing perspective, far must be non-negative.";
-		}
-		if (!(far > near))
-		{
-			return "Error Parsing perspective, far must be greater than near.";
-		}
-
-		let angle = this.reader.getFloat(currentPerspective, 'angle');
-		if (angle === null)
-		{
-			return "Error Parsing perspective, far doesn't exist or not a float."
-		}
-		if (angle < 0)
-		{
-			return "Error Parsing perspective, far must be non-negative.";
-		}
-
-		// To and From
 
 		if (currentPerspective.children.length != 2)
 		{
@@ -296,7 +262,7 @@ Parser.prototype.parseView = function(rootElement)
 
 		if (id === defaultViewID)
 		{
-			this.elements.setDefaultPerspective(i);
+			this.elements.setDefaultPerspective(cameraCount);
 		}
 
 		let from = vec3.fromValues((this.reader.getFloat(fromElems[0], 'x'))
@@ -307,9 +273,57 @@ Parser.prototype.parseView = function(rootElement)
 			, (this.reader.getFloat(toElems[0], 'y'))
 			, (this.reader.getFloat(toElems[0], 'z')));
 
-		// Add perspective
+		let type = this.reader.getString(currentPerspective, 'type');
+		if(type === null)
+		{
+			type = "camera";
+		}
 
-		let perspective = new Perspective(id, near, far, deg2rad(angle), from, to);
+		let perspective;
+		if(type === "camera")
+		{
+			let near = this.reader.getFloat(currentPerspective, 'near');
+			if (near === null)
+			{
+				return "Error Parsing perspective, near doesn't exist or not a float."
+			}
+			if (near < 0)
+			{
+				return "Error Parsing perspective, near must be non-negative.";
+			}
+
+			let far = this.reader.getFloat(currentPerspective, 'far');
+			if (far === null)
+			{
+				return "Error Parsing perspective, far doesn't exist or not a float."
+			}
+			if (far < 0)
+			{
+				return "Error Parsing perspective, far must be non-negative.";
+			}
+			if (!(far > near))
+			{
+				return "Error Parsing perspective, far must be greater than near.";
+			}
+
+			let angle = this.reader.getFloat(currentPerspective, 'angle');
+			if (angle === null)
+			{
+				return "Error Parsing perspective, far doesn't exist or not a float."
+			}
+			if (angle < 0)
+			{
+				return "Error Parsing perspective, far must be non-negative.";
+			}
+
+			perspective = new Perspective(id, near, far, deg2rad(angle), from, to, type);
+			cameraCount++;
+		}
+		else
+		{
+			perspective = new Perspective(id, null, null, null, from, to, type);
+		}
+
 		let error       = this.elements.addPerspective(perspective);
 		if (error != null)
 		{
