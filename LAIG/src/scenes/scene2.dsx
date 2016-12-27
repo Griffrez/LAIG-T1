@@ -6,6 +6,26 @@
             <from x="6" y="3" z="6" />
             <to x="0" y="0" z="0" />
         </perspective>
+		
+		<perspective id="board_general" type="perspective">
+            <from x="0" y="6" z="3" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+		
+		<perspective id="board_above" type="perspective">
+            <from x="0.01" y="8" z="0.01" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+		
+        <perspective id="board_player1" type="perspective">
+            <from x="5" y="6" z="0" />
+            <to x="0" y="1" z="0" />
+        </perspective>
+		
+        <perspective id="board_player2" type="perspective">
+            <from x="-5" y="6" z="0" />
+            <to x="0" y="1" z="0" />
+        </perspective>
     </views>
 
     <illumination doublesided="0" local="0">
